@@ -1,0 +1,33 @@
+[{
+  "id":1,
+  "text": "天津",
+  "state":"open",
+  "children":[{
+    "id":11,
+    "text":"天津视频会议室"
+  }]
+},{
+  "id":2,
+  "text": "深圳",
+  "state":"open",
+  "children":[{
+    "id":21,
+    "text":"黄埔视频会议室"
+  }]
+},{
+  "id":3,
+  "text": "青岛",
+  "state":"open",
+  "children":[{
+    "id":31,
+    "text":"青岛视频会议室"
+  }]
+},{
+  "id":4,
+  "text": "宁波",
+  "state":"open",
+  "children":[{
+    "id":41,
+    "text":"宁波视频会议室"
+  }]
+}]

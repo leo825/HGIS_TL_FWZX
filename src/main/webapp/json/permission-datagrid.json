@@ -1,0 +1,28 @@
+{
+  "total":6,
+  "rows":[{
+      "id":1,
+      "role":"管理员",
+      "description":"管理员"
+  },{
+    "id":2,
+    "role":"系统管理员",
+    "description":"系统管理员"
+  },{
+    "id":3,
+    "role":"视频会议运维",
+    "description":"视频会议运维"
+  },{
+    "id":4,
+    "role":"会议室管理员",
+    "description":"会议室管理员"
+  },{
+    "id":5,
+    "role":"普通用户",
+    "description":"普通用户"
+  },{
+    "id":6,
+    "role":"超级管理员",
+    "description":"超级管理员"
+  }]
+}

@@ -1,0 +1,18 @@
+@CHARSET "UTF-8";
+.m-table .btn-td{
+    width: 60px;
+}
+.m-table .btn-td .btn{
+    width: 100%;
+}
+.js-usage .m-table,
+.js-usage-user .m-table{
+    margin-bottom: 10px;
+}
+.p-add-org .org-modal-con{
+    margin-top: 30px;
+}
+
+.js-org {
+    width: 175px;
+}

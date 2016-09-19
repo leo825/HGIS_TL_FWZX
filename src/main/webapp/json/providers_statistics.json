@@ -1,0 +1,16 @@
+{ 
+ "chat1":{
+                    "title":"2016年内应用个数",
+                    "data0":[1,1,1,2,2,3,3,3,3,4,2,2],
+                    "data1":[1,1,1,2,2,3,3,3,3,4,2,2]
+   },
+ "chat2":{
+ 			"title":"2016年提供比例",
+ 			                    "data" :[{"name": "company1" , "y": 56.33},
+                       {"name": "company2" , "y": 24.03, "sliced": true , "selected": true},
+                       {"name": "company3" ,"y": 10.38},
+                       {"name": "company4" ,"y": 4.77},
+                       {"name": "company5" ,"y": 0.91},
+                       {"name": "其他" ,"y": 0.2}]
+ 			}         
+}

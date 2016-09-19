@@ -1,0 +1,74 @@
+html,body {
+	padding-right: 0px;
+	padding-left: 0px;
+	background: url(../images/login//background.png) #226cc5 repeat-x 50%
+		top;
+	padding-bottom: 0px;
+	margin: 110px 0px 0px;
+	font: 14px/150% arial, helvetica, sans-serif;
+	padding-top: 0px;
+	text-decoration: none
+}
+
+.m-table {
+	width: 572px;
+	height: 315px;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+	background-image: url("../images/login/table-background.png");
+	border-spacing: 0px;
+	background-repeat: no-repeat;
+}
+
+.td-account {
+	width: 179px;
+	height: 37px;
+	text-align: right;
+}
+
+.account-input {
+	border-top-width: 0px;
+	padding-left: 25px;
+	border-left-width: 0px;
+	border-bottom-width: 0px;
+	width: 180px;
+	line-height: 24px;
+	height: 26px;
+	border-right-width: 0px;
+}
+
+.submit-input {
+	background: url(../images/login/submit.png) no-repeat;
+	width: 83px;
+	height: 83px;
+	border-top-width: 0px;
+	border-left-width: 0px;
+	border-bottom-width: 0px;
+	border-right-width: 0px;
+}
+
+.td-password {
+	text-align: right;
+}
+
+.password-input {
+	border-top-width: 0px;
+	padding-left: 25px;
+	border-left-width: 0px;
+	border-bottom-width: 0px;
+	width: 180px;
+	line-height: 24px;
+	height: 26px;
+	border-right-width: 0px;
+}
+
+.td-bottom {
+	height: 50px;
+	text-align: -webkit-right;
+}
+
+.login-div {
+	padding-left: 30%;
+}

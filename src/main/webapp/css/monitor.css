@@ -1,0 +1,28 @@
+@CHARSET "UTF-8";
+.m-table .btn-td{
+    width: 60px;
+}
+.m-table .btn-td .btn{
+    width: 100%;
+}
+.js-mointor .m-table,
+.js-mointor-user .m-table{
+    margin-bottom: 10px;
+}
+.p-add-org .org-modal-con{
+    margin-top: 30px;
+}
+
+.js-org {
+    width: 175px;
+}
+
+.js-monitor-manage-left{
+	width:50%;
+	float:left;
+}
+
+.js-monitor-manage-right{
+	width:50%;
+	float:left;
+}

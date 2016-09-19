@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="HGIS_TL_FWZX:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="HGIS_TL_FWZX.war">
+      <element id="artifact" artifact-name="HGIS_TL_FWZX:war exploded" />
+    </root>
+  </artifact>
+</component>

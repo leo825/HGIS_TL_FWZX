@@ -1,0 +1,49 @@
+.dp-choose {
+    color: #555;
+}
+
+.dp-choose .easyui-layout {
+    width: 100%;
+    height: 100%;
+}
+
+.dp-choose .dp-side-left {
+    width: 30%;
+    height: 100%;
+}
+
+.dp-side-left .dp-org {
+    height: 95%;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+/*.dp-side-left ul li{
+    line-height: 25px;
+    display: block;
+    padding: 0 10px;
+    cursor: pointer;
+    background-color: #E1E2E9;
+    margin-bottom: 1px;
+}
+.dp-side-left ul li:hover,.dp-side-left ul li.active{
+    font-weight: bold;
+    background-color: #BFECFF;
+}*/
+.dp-choose .dp-content {
+    width: 70%;
+    height: 100%;
+    padding: 10px;
+}
+
+.dp-content .dp-result-tabs {
+    margin-top: 10px;
+}
+
+.dp-ok {
+    margin-left: 10px;
+}
+
+.dp-choose .p-dialog-content {
+    padding: 0;
+}

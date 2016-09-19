@@ -1,0 +1,32 @@
+<div class="js-p-permission">
+    <div>
+        <table class="m-table">
+            <tbody>
+            <tr>
+                <td class="th">用户名</td>
+                <td>
+                    <input type="text" class="js-account"/>
+                </td>
+                <td class="th">昵称</td>
+                <td>
+                 <input type="text" class="js-nickname"/>
+                </td>
+                <td class="th btn-td">
+                    <input class="btn" type="button" value="查询" onclick="UserManage.loadData();"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-table-title">
+        <label>查询列表</label>
+        <div class="a-btn-group fl-rt">
+            <a href="javascript:void(0);" onclick="PermissionManage.add();" class="a-btn">增加</a>
+            <!--<a href="javascript:void(0);" onclick="System.export();" class="a-btn">导出</a>-->
+        </div>
+    </div>
+    <div class="box-content">
+        <table class="js-user-role-table"></table>
+    </div>
+
+</div>

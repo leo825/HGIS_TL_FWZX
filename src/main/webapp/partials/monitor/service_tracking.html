@@ -1,0 +1,45 @@
+<div class="js-service-tracking">
+    <div>
+        <table class="m-table">
+            <tbody>
+                <tr>
+                    <td class="th">访问结果</td>
+                    <td>
+                         <select name="th" class="js-result">
+                            <option value="">全部</option>
+                            <option value="失败">失败</option>
+                        </select>
+                    </td>
+                    <td class="th">应用名称</td>
+                    <td>
+                         <select name="th" class="js-project">
+                            <option value="">全部</option>
+                            <option value="GIS">GIS</option>
+                        </select>
+                    </td>
+                    
+                    <td class="th">起始时间</td>
+                    <td>
+                    	 <input type="text" class="laydate-icon" id="start" style="width:200px; margin-right:10px;"/>
+                    </td>
+                    <td class="th">结束时间</td>
+                    <td>
+                    	 <input type="text" class="laydate-icon" id="end" style="width:200px;"/>
+                    </td>
+                    <td class="th btn-td">
+                        <input class="btn" type="button" value="查询" onclick="ServiceTracking.loadData();"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-table-title">
+        <label>查询列表</label>
+        <div class="a-btn-group fl-rt">
+           <!--  <a href="javascript:void(0);" onclick="DeviceMaintain.export();" class="a-btn">导出</a> -->
+        </div>
+    </div>
+    <div class="box-content">
+        <table class="js-monitor-table"></table>
+    </div>
+</div>

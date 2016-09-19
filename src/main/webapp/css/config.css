@@ -1,0 +1,16 @@
+.js-config .m-table .th{
+    width: 140px;
+}
+.js-config select,
+.js-ahead-time{
+    width: 60px;
+}
+
+.js-p-pwd .m-table input[type="password"] {
+    width: 80%;
+}
+
+.js-config {
+/*    width: 175px;
+    height: 40px;*/
+}

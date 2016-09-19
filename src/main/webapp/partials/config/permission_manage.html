@@ -1,0 +1,38 @@
+<div class="js-p-permission">
+    <div>
+        <table class="m-table">
+            <tbody>
+            <tr>
+                <td class="th">角色描述</td>
+                <td>
+                    <input type="text" class="js-description"/>
+                </td>
+                <td class="th">角色</td>
+                <td>
+                    <select class="js-name">
+                        <option value="">请选择</option>
+                        <option value="管理员">管理员</option>
+                        <option value="视频会议运维">视频会议运维</option>
+                        <option value="视频会议运维">会议室管理员</option>
+                        <option value="普通用户">普通用户</option>
+                    </select>
+                </td>
+                <td class="th btn-td">
+                    <input class="btn" type="button" value="查询" onclick="PermissionManage.loadData();"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-table-title">
+        <label>查询列表</label>
+        <div class="a-btn-group fl-rt">
+            <a href="javascript:void(0);" onclick="PermissionManage.add();" class="a-btn">增加</a>
+            <!--<a href="javascript:void(0);" onclick="System.export();" class="a-btn">导出</a>-->
+        </div>
+    </div>
+    <div class="box-content">
+        <table class="js-user-role-table"></table>
+    </div>
+
+</div>

@@ -1,0 +1,36 @@
+<div class="js-sys-user">
+    <div>
+        <table class="m-table">
+            <tbody>
+            <tr>
+                <td class="th">部门</td>
+                <td>
+                    <select name="" class="js-org">
+                        <option value="">全部</option>
+                        <option value="天津">天津</option>
+                        <option value="厦门">厦门</option>
+                        <option value="深圳">深圳</option>
+                    </select>
+                </td>
+                <td class="th">用户名</td>
+                <td>
+                    <input type="text" class="js-username"/>
+                </td>
+                <td class="th btn-td">
+                    <input class="btn" type="button" value="查询" onclick="UserManage.loadData();"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-table-title">
+        <label>查询列表</label>
+        <div class="a-btn-group fl-rt">
+            <a href="javascript:void(0);" onclick="UserManage.add();" class="a-btn">增加</a>
+            <!--  <a href="javascript:void(0);" onclick="DeviceMaintain.export();" class="a-btn">导出</a> -->
+        </div>
+    </div>
+    <div class="box-content">
+        <table class="js-user-table"></table>
+    </div>
+</div>

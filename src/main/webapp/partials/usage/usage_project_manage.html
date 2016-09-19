@@ -1,0 +1,38 @@
+<div class="js-usage-manage">
+    <div>
+        <table class="m-table">
+            <tbody>
+                <tr>
+                    <td class="th">调用方ip</td>
+                    <td>
+                        <input type="text" class="js-ip"/>
+                    </td>
+                    <td class="th">ip归属</td>
+                    <td>
+                        <input type="text" class="js-name"/>
+                    </td>
+                    <td class="th">应用名称</td>
+                    <td>
+                        <select name="" class="js-provider">
+                            <option value="">全部</option>
+                            <option value="合伙人">合伙人</option>
+                        </select>
+                    </td>
+                    <td class="th btn-td">
+                        <input class="btn" type="button" value="查询" onclick="UsageProjectManage.loadData();"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-table-title">
+        <label>查询列表</label>
+        <div class="a-btn-group fl-rt">
+           <!--  <a href="javascript:void(0);" onclick="UsageProjectManage.add();" class="a-btn">增加</a> -->
+           <!--  <a href="javascript:void(0);" onclick="DeviceMaintain.export();" class="a-btn">导出</a> -->
+        </div>
+    </div>
+    <div class="box-content">
+        <table class="js-usage-table"></table>
+    </div>
+</div>

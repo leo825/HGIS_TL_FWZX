@@ -1,0 +1,22 @@
+{
+  "total":2,
+  "rows":[{
+    "id":1,
+    "name":"HGJS",
+    "createTime":"2014-10-15",
+    "pattern":"个人模式",
+    "mcuName":"海关缉私局MCU",
+    "mcuIp":"10.5.64.221",
+    "mcuTemplateId":11,
+    "mcuTemplateName":"HGJS"
+  },{
+    "id":2,
+    "name":"HGJS2",
+    "createTime":"2014-10-16",
+    "pattern":"个人模式",
+    "mcuName":"海关缉私局MCU2",
+    "mcuIp":"10.5.64.22",
+    "mcuTemplateId":12,
+    "mcuTemplateName":"HGJS2"
+  }]
+}

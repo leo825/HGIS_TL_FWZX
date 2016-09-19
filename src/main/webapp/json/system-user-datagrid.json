@@ -1,0 +1,14 @@
+{
+  "total":2,
+  "rows":[{
+    "id":1,
+    "username":"admin",
+    "name":"超级管理员",
+    "organization":""
+  },{
+    "id":2,
+    "username": "zhangsan",
+    "name":"张三",
+    "organization":""
+  }]
+}

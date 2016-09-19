@@ -1,0 +1,408 @@
+/*.header,
+.content{
+    min-width: 100%;
+}*/
+.content {
+    width: 100%;
+    height: 100%;
+}
+.header{
+    background-color: #2E3A4C;
+    color: #d7d7d7;
+    height: 117px;
+    line-height: 30px;
+    background: url("../images/logo-header-bg.png");
+    overflow: hidden;
+    position: relative;
+}
+.header div{
+    display: inline-block;
+}
+.header-left{
+    width: 576px;
+    height: 117px;
+    background: url("../images/logo-header-left.png") no-repeat;
+}
+.header-right{
+    width: 434px;
+    height: 117px;
+    /*background: url("../images/logo-header-right.png") no-repeat;*/
+    float: right;
+}
+.header-menu{
+    z-index: 999;
+    position: absolute;
+    bottom: 4px;
+    color: #FFF;
+}
+.header-menu ul li {
+    display: inline-block;
+}
+.header-menu ul li a{
+    display: inline-block;
+    padding: 0px 10px;
+    background-color: #2A81EA;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.header-menu ul li.active a{
+    background-color: #5DB8CB;
+}
+
+.header .title{
+    padding-left: 30px;
+    padding-right: 10px;
+    float: left;
+}
+.header .user-info{
+	margin-right: 100px;
+    margin-top: 80px;
+    float: right;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+}
+.user-info .js-logout{
+    color: #FB9337;
+    margin-left: 10px;
+}
+.link-group,
+.color-theme{
+    float: right;
+}
+.color-theme{
+    vertical-align: middle;
+    background-color: #3B4F68;
+    padding: 6px 10px;
+    border: 1px solid #526279;
+    margin-left: 10px;
+}
+.color-theme select{
+    background-color: #3B4F68;
+    color: #DDD;
+}
+.link-group{
+    background-color: #3B4F68;
+    padding: 0 10px;
+    border: 1px solid #526279;
+}
+.link-group ul li {
+    border-left: 1px solid #ddd;
+    padding: 0 0px 0 4px;
+    line-height: 1em;
+    height: 1em;
+    display: inline-block;
+}
+.link-group ul li.first{
+    border-left: none;
+}
+#main{
+    width: 100%;
+    height: 100%;
+    /*margin-top: 50px;*/
+    /*padding-top: 50px;*/
+}
+#layout-notrh{
+    height: 117px;
+}
+#side-left{
+    width: 260px;
+}
+.m-menu{
+    position: relative;
+    background: #455875;
+    color: #d7d7d7;
+}
+.m-menu li{
+    display: inline-block;
+    height: 100%;
+    line-height: 100%;
+    vertical-align: middle;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-right: 1px solid #666F7B;
+    cursor: pointer;
+}
+.m-menu li.active{
+    background-color: #1A263D;
+}
+.m-menu .icon {
+    display: block;
+    font-size: 30px;
+    text-align: center;
+    margin: 10px 0;
+}
+.side-menu {
+    color: #3E4E67;
+    font-weight: 700;
+}
+.side-menu li a {
+    padding: 10px 0;
+    border-bottom: 1px solid #D8D8D8;
+    display: block;
+}
+.side-menu li.active{
+    color: #FB963B;
+}
+.side-menu li .icon {
+    padding: 0 20px 0 10px;
+}
+
+.side-menu li .icon.service-icon-project-manage {
+    background: url("../images/meet/icon-create-meet.png") no-repeat;
+}
+
+.side-menu li .icon.service-icon-server-manage {
+    background: url("../images/meet/icon-meet-manage.png") no-repeat;
+}
+
+.side-menu li .icon.meet-icon-template-manage {
+    background: url("../images/meet/icon-meet-manage.png") no-repeat;
+}
+
+.side-menu li .icon.meet-icon-mine-meet {
+    background: url("../images/meet/icon-meet-manage.png") no-repeat;
+}
+
+.side-menu li .icon.meet-icon-meet-calendar {
+    background: url("../images/meet/icon-meet-calendar.png") no-repeat;
+}
+
+.side-menu li .icon.meet-icon-meet-control {
+    background: url("../images/meet/icon-meet-calendar.png") no-repeat;
+}
+
+.side-menu li .icon.meet-icon-device-control {
+    background: url("../images/meet/icon-device-control.png") no-repeat;
+}
+
+.side-menu li .icon.control-icon-meet-control {
+    background: url("../images/control/icon-meet-control.png") no-repeat;
+}
+
+.side-menu li .icon.control-icon-device-maintain {
+    background: url("../images/control/icon-device-maintain.png") no-repeat;
+}
+
+.side-menu li .icon.device-icon-whiteboard {
+    background: url("../images/device/icon-whiteboard.png") no-repeat;
+}
+
+.side-menu li .icon.device-icon-file-control {
+    background: url("../images/device/icon-file-control.png") no-repeat;
+}
+
+.side-menu li .icon.system-icon-boardroom-manage{
+    background: url("../images/system/icon-boardroom-manage.png") no-repeat;
+}
+
+.side-menu li .icon.system-icon-user-manage{
+    background: url("../images/system/icon-user-manage.png") no-repeat;
+}
+
+.side-menu li .icon.system-icon-org-manage{
+    background: url("../images/system/icon-org-manage.png") no-repeat;
+}
+
+.side-menu li .icon.system-icon-network{
+    background: url("../images/system/icon-network.png") no-repeat;
+}
+
+.side-menu li .icon.config-icon-system{
+    background: url("../images/config/icon-system.png") no-repeat;
+}
+
+.side-menu li .icon.config-icon-password{
+    background: url("../images/config/icon-password.png") no-repeat;
+}
+
+.side-menu li .icon.config-icon-meet{
+    background: url("../images/config/icon-meet.png") no-repeat;
+}
+
+.side-menu li .icon.config-icon-control{
+    background: url("../images/config/icon-control.png") no-repeat;
+}
+
+.side-menu li .icon.config-icon-permission{
+    background: url("../images/config/icon-permission.png") no-repeat;
+}
+
+.navigation{
+    padding: 5px 10px;
+    color: #7287AB;
+    border-bottom: 1px solid #E7E7E7;
+    font-weight: bold;
+}
+#main-view{
+    /*padding: 10px;*/
+    margin: 10px;
+}
+.key{
+    color: #FC2B2B;
+}
+.btn{
+    cursor: pointer;
+    border: 1px solid #CDD0C8;
+    padding: 5px 8px;
+    border-radius: 3px;
+}
+.orange{
+    background-color: #FB9337;
+    color: #FFF;
+}
+.op-div{
+    padding: 10px;
+    text-align: right;
+}
+.mg-lf{
+    margin-left: 10px;
+}
+
+
+.disabled{
+    cursor: default;
+    color: #BBB0B0;
+}
+.grid-box{
+    display: inline-block;
+    width: 48%;
+    border: 3px solid #ddd;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.grid-box .title,
+.grid-icon-box .title{
+    padding: 10px;
+    text-align: center;
+}
+.grid-box ul li{
+    padding: 5px 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90px;
+    display: inline-block;
+    background-color: #44ACF8;
+    margin: 5px;
+    cursor: pointer;
+}
+.grid-icon-box-group{
+    border: 3px solid #ddd;
+}
+.grid-icon-box{
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+    border-left: 1px dashed #DDD;
+}
+.grid-icon-box-group .grid-icon-box:first-child{
+    border-left: none;
+}
+.grid-icon-box ul li{
+    padding: 5px 10px;
+    display: inline-block;
+    margin: 5px;
+    width: 24px;
+    height: 28px;
+}
+.fl-lt{
+    float: left;
+}
+
+.grid-icon-box .icon-volume-high{
+    background: url("../images/meet/icon-volume-high.png") no-repeat;
+}
+
+.grid-icon-box .icon-mic-a{
+    background: url("../images/meet/icon-mic-a.png") no-repeat;
+}
+
+.grid-icon-box .icon-person-add{
+    background: url("../images/meet/icon-person-add.png") no-repeat;
+}
+
+.grid-icon-box .icon-close-circled{
+    background: url("../images/meet/icon-close-circled.png") no-repeat;
+}
+
+.fl-rt{
+    float: right;
+}
+.a-btn {
+    padding-left: 5px;
+    padding-right: 5px;
+    /*color: #0000EE;*/
+}
+.a-btn-group{
+    display: flex;
+}
+.a-btn-group .a-btn:first-child {
+    border-left: none;
+}
+.a-btn-group .a-btn {
+    border-left: 1px solid #000;
+}
+.m-table{
+    font-size: 12px;
+    color: #000;
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.m-table td,
+.m-table th {
+    border: 1px solid #CECECE;
+    padding: 5px;
+}
+.m-table .th{
+    background-color: #EEE;
+    width: 100px;
+    text-align: right;
+}
+.m-table input[type="text"]{
+    border-color: #DDD;
+}
+.mg-tp-h{
+    margin-top: 5px;
+}
+.green{
+    color: #2B9636;
+}
+.text-rt{
+    text-align: right;
+}
+.required{
+    color: #ff0000;
+    margin-right: 2px;
+}
+.p-dialog-content{
+    padding: 10px;
+}
+.p-dialog-content label{
+    width: 45px;
+    display: inline-block;
+    text-align: right;
+    padding-right: 10px;
+}
+.messager-button{
+    padding-bottom: 10px;
+}
+.f-fitm{
+    margin-bottom: 5px;
+}
+.f-fitm label{
+    width: 60px;
+    float: left;
+}
+
+.f-fitm div{
+	display: inline-block;
+    color: red;
+}
+
+.blue {
+    color: #0000EE;
+}
+

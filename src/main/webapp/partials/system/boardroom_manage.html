@@ -1,0 +1,35 @@
+<div class="js-boardroom">
+    <div>
+        <table class="m-table">
+            <tbody>
+                <tr>
+                    <td class="th">会议室名称</td>
+                    <td>
+                        <input type="text" class="js-name"/>
+                    </td>
+                    <td class="th">会议室类型</td>
+                    <td>
+                        <select name="" class="js-type">
+                            <option value="">全部</option>
+                            <option value="视频会议室">视频会议室</option>
+                            <option value="会议室">会议室</option>
+                        </select>
+                    </td>
+                    <td class="th btn-td">
+                        <input class="btn" type="button" value="查询" onclick="BoardroomManage.loadData();"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-table-title">
+        <label>查询列表</label>
+        <div class="a-btn-group fl-rt">
+            <a href="javascript:void(0);" onclick="BoardroomManage.add();" class="a-btn">增加</a>
+            <!--  <a href="javascript:void(0);" onclick="DeviceMaintain.export();" class="a-btn">导出</a> -->
+        </div>
+    </div>
+    <div class="box-content">
+        <table class="js-sys-table"></table>
+    </div>
+</div>
