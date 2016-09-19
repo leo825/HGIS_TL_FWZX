@@ -24,8 +24,6 @@ import cn.geobeans.fwzx.model.ProjectModel;
 import cn.geobeans.fwzx.model.RouteModel;
 import cn.geobeans.fwzx.service.ProjectService;
 import cn.geobeans.fwzx.service.RouteService;
-import cn.geobeans.fwzx.task.AddOperationLogThread;
-import cn.geobeans.fwzx.task.CheckProjectStateThread;
 import cn.geobeans.fwzx.util.HttpUtil;
 import cn.geobeans.fwzx.util.StringUtil;
 import cn.geobeans.fwzx.util.XmlJsonUtil;

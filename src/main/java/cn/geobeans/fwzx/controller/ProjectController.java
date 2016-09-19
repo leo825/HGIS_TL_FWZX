@@ -34,7 +34,6 @@ import cn.geobeans.common.model.JsonResponse;
 import cn.geobeans.common.util.ProjectUtil;
 import cn.geobeans.fwzx.model.ProjectModel;
 import cn.geobeans.fwzx.service.ProjectService;
-import cn.geobeans.fwzx.task.CheckProjectStateThread;
 import cn.geobeans.fwzx.util.HttpUtil;
 import cn.geobeans.fwzx.util.StringUtil;
 
