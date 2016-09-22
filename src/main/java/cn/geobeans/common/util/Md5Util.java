@@ -28,7 +28,7 @@ public class Md5Util {
     }
 
     public static String md5Encode(String origin) {
-        if(origin == null){
+        if (origin == null) {
             return null;
         }
         String charsetname = "UTF-8";

@@ -52,7 +52,7 @@ public class TaskJob {
     /**
      * 检测应用状态的任务
      * */
-    @Scheduled(cron = "*/5 * * * * ?")
+    @Scheduled(cron = "*/30 * * * * ?")
     public void chekckProjectStateTask() {
         try {
             List<ProjectModel> projectList = projectService.findList();

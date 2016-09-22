@@ -1,7 +1,10 @@
 package cn.geobeans.fwzx.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -27,6 +30,7 @@ import cn.geobeans.fwzx.service.RouteService;
 import cn.geobeans.fwzx.util.HttpUtil;
 import cn.geobeans.fwzx.util.StringUtil;
 import cn.geobeans.fwzx.util.XmlJsonUtil;
+import cn.geobeans.fwzx.init.InitApplicationMethod;
 
 /**
  * @author liuxi E-mail:15895982509@163.com
@@ -41,16 +45,13 @@ public class HttpRequestController {
     private RouteService routeService;
     @Resource
     private ProjectService projectService;
-    @Resource
-    private DataSource dataSource;
+
     @Resource
     private TaskJob taskJob;
 
-    private static final String INIT_DATA = ProjectUtil.getProperty("initData");//文件上传目录
+    @Resource
+    private InitApplicationMethod initApplicationMethod;
 
-    private static final String REPORTS_PATH = ProjectUtil.getProperty("file.reports");//报告上传目录
-
-    private static final String FILE_PATH = ProjectUtil.getProperty("file.upload");//文件上传目录
 
 
     /**
@@ -60,20 +61,10 @@ public class HttpRequestController {
     public void init() {
 
         try {
-            if ("yes".equals(INIT_DATA)) {
 
-                Connection conn = dataSource.getConnection();
-                ScriptRunner runner = new ScriptRunner(conn, false, false);//初始化数据库表和数据
-                runner.runScript(Resources.getResourceAsReader("table.sql"));
-                logger.info("初始化数据库表和数据完成.");
-                conn.close();
-            }
-
-            if (StringUtil.checkDir(REPORTS_PATH) && StringUtil.checkDir(FILE_PATH)) {
-                logger.info("初始化上传目录成功.");
-            } else {
-                logger.error("初始化上传目录失败!!!");
-            }
+            initApplicationMethod.initDataBase();//初始化数据库数据
+            initApplicationMethod.initFileDirectory();//初始化文件目录
+            initApplicationMethod.initRoutes();//初始化路由信
 
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -168,7 +159,7 @@ public class HttpRequestController {
                             out.close();
                         }
                         if (dataReturnType.equals("xml")) {
-                            String json = HttpUtil.getJsonDocByPostUTF8(serverAddr, remoteParams);
+                            String json = HttpUtil.getStringByPost(serverAddr, remoteParams, "UTF-8");
                             PrintWriter out = response.getWriter();
                             out.write(XmlJsonUtil.json2Xml(json));
                             out.flush();
@@ -181,5 +172,6 @@ public class HttpRequestController {
             logger.error(e);
         }
     }
+
 
 }

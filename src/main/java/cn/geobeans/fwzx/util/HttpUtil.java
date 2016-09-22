@@ -78,26 +78,6 @@ public class HttpUtil {
         return doc;
     }
 
-    /**
-     * 通过get方法来发送http请求来获取String类型数据,并且对请求的数据进行编码
-     *
-     * @param url      String类型的远程请求地址
-     * @param encoding String类型的数据编码方式
-     * @return String类型字符串
-     */
-    public static String getHTMLByGet(String url, String encoding) throws IOException {
-        URL u = new URL(url);
-        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-        conn.setDoOutput(true);
-        StringBuffer data = new StringBuffer();
-        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), encoding));
-        String line;
-        while ((line = rd.readLine()) != null) {
-            data.append(line);
-        }
-        rd.close();
-        return data.toString();
-    }
 
     /**
      * 通过get方法来发送http请求来获取Document对象
@@ -232,28 +212,7 @@ public class HttpUtil {
         return dods;
     }
 
-    /**
-     * 通过get方法来发送http请求来获取Document对象,请求数据进行编码
-     *
-     * @param url    String类型远程请求地址
-     * @param encode String类型对请求数据进行编码
-     * @return Document类型对象
-     */
-    public static String getStringByGet(String url, String encode) throws DocumentException, IOException {
-        URL u = new URL(url);
-        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setDoOutput(true);
 
-        StringBuffer data = new StringBuffer();
-        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), encode));
-        String line;
-        while ((line = rd.readLine()) != null) {
-            data.append(line);
-        }
-        rd.close();
-        return data.toString();
-    }
 
     /**
      * 通过post方法来发送http请求来获取json字符串对象
@@ -392,13 +351,37 @@ public class HttpUtil {
     }
 
     /**
+     * 通过get方法来发送http请求来获取数据,请求数据进行编码
+     *
+     * @param url    String类型远程请求地址
+     * @param encode String类型对请求数据进行编码
+     * @return Document类型对象
+     */
+    public static String getStringByGet(String url, String encode) throws DocumentException, IOException {
+        URL u = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setDoOutput(true);
+
+        StringBuffer data = new StringBuffer();
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), encode));
+        String line;
+        while ((line = rd.readLine()) != null) {
+            data.append(line);
+        }
+        rd.close();
+        return data.toString();
+    }
+
+    /**
      * 通过post方法发送http请求,并且请求结果采用UTF-8编码
      *
      * @param url    String类型远程请求地址
      * @param params String类型的请求参数
+     * @param encode String类型请求参数
      * @return Json类型的字符串
      */
-    public static String getJsonDocByPostUTF8(String url, String params) throws IOException {
+    public static String getStringByPost(String url, String params,String encode) throws IOException {
         URL u = new URL(url);
         HttpURLConnection conn = (HttpURLConnection) u.openConnection();
         conn.setRequestMethod("POST");
@@ -408,7 +391,7 @@ public class HttpUtil {
         out.close();
 
         StringBuffer data = new StringBuffer();
-        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), encode));
         String line;
         while ((line = rd.readLine()) != null) {
             data.append(line);
@@ -416,5 +399,6 @@ public class HttpUtil {
         rd.close();
         return data.toString();
     }
+
 
 }
