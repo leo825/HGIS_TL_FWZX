@@ -9,7 +9,9 @@ package cn.geobeans.fwzx.init;
 
 import cn.geobeans.common.util.ProjectUtil;
 import cn.geobeans.fwzx.model.ProjectModel;
+import cn.geobeans.fwzx.model.RouteModel;
 import cn.geobeans.fwzx.service.ProjectService;
+import cn.geobeans.fwzx.service.RouteService;
 import cn.geobeans.fwzx.util.HttpUtil;
 import cn.geobeans.fwzx.util.StringUtil;
 import com.ibatis.common.jdbc.ScriptRunner;
@@ -25,7 +27,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
-import javax.xml.ws.ServiceMode;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -54,9 +55,11 @@ public class InitApplicationMethod {
     @Resource
     private DataSource dataSource;
     @Resource
-    private  CamelContext camelContext;
+    private CamelContext camelContext;
     @Resource
     private ProjectService projectService;
+    @Resource
+    private RouteService routeService;
 
     public void buildRoute(ProjectModel project) {
         try {
@@ -72,20 +75,25 @@ public class InitApplicationMethod {
                         from("jetty:" + jettyURL)
                                 .process(new Processor() {
                                     @Override
-                                    public void process(Exchange exchange) throws Exception {
-                                        HttpServletRequest request = exchange.getIn(HttpMessage.class).getRequest();
-                                        String realRequestUrI = request.getRequestURI();
-                                        if ("GET".equals(request.getMethod())) {
-                                            String requestUrl = "http://" + project.getIp() + ":" + project.getPort() + realRequestUrI + "?" + request.getQueryString();
-                                            if ("PGIS_S_TileMapServer".equals(project.getName())) {
-                                                exchange.getOut().setBody("<html><body><img src='" + requestUrl + "'></body></html>");
+                                    public void process(Exchange exchange) {
+
+                                        try {
+                                            HttpServletRequest request = exchange.getIn(HttpMessage.class).getRequest();
+                                            String realRequestUrI = request.getRequestURI();
+                                            if ("GET".equals(request.getMethod())) {
+                                                String requestUrl = "http://" + project.getIp() + ":" + project.getPort() + realRequestUrI + "?" + request.getQueryString();
+                                                if ("PGIS_S_TileMapServer".equals(project.getName())) {
+                                                    exchange.getOut().setBody("<html><body><img src='" + requestUrl + "'></body></html>");
+                                                } else {
+                                                    exchange.getOut().setBody(HttpUtil.getStringByGet(requestUrl, "UTF-8"));
+                                                }
                                             } else {
-                                                exchange.getOut().setBody(HttpUtil.getStringByGet(requestUrl, "UTF-8"));
+                                                String params = exchange.getIn().getBody(String.class);
+                                                String requestUrl = "http://" + project.getIp() + ":" + project.getPort() + realRequestUrI;
+                                                exchange.getOut().setBody(HttpUtil.getStringByPost(requestUrl, params, "UTF-8"));
                                             }
-                                        } else {
-                                            String params = exchange.getIn().getBody(String.class);
-                                            String requestUrl = "http://" + project.getIp() + ":" + project.getPort() + realRequestUrI;
-                                            exchange.getOut().setBody(HttpUtil.getStringByPost(requestUrl, params, "UTF-8"));
+                                        } catch (Exception e) {
+                                            logger.error(e);
                                         }
                                     }
                                 });
@@ -97,7 +105,6 @@ public class InitApplicationMethod {
             logger.error(e);
         }
     }
-
 
 
     /**
@@ -152,6 +159,51 @@ public class InitApplicationMethod {
             }
         } catch (Exception e) {
             logger.error(e);
+        }
+    }
+
+
+    /**
+     * 初始化接口路由
+     */
+    public void initServletRoutes() {
+        try {
+            List<RouteModel> routesList = routeService.findList();
+            if (!StringUtil.isListEmpty(routesList)) {
+                for (RouteModel tempRoute : routesList) {
+                    RouteBuilder route = new RouteBuilder() {
+                        public void configure() throws Exception {
+                            from("servlet:///" + tempRoute.getServerName())
+                                    .process(new Processor() {
+                                                 @Override
+                                                 public void process(Exchange exchange) {
+                                                     String params = null;
+                                                     try {
+                                                         HttpServletRequest request = exchange.getIn(HttpMessage.class).getRequest();
+                                                         if ("GET".equals(request.getMethod())) {
+                                                             params = request.getQueryString();
+                                                             exchange.getOut().setHeader(Exchange.HTTP_QUERY, constant(params));
+                                                         } else {
+                                                             params = exchange.getIn().getBody(String.class);
+                                                             exchange.getOut().setHeader(Exchange.HTTP_METHOD, constant("POST"));
+                                                             exchange.getOut().setHeader(Exchange.HTTP_QUERY, constant(params));
+                                                         }
+                                                     } catch (Exception e) {
+                                                         e.printStackTrace();
+                                                     }
+                                                 }
+                                             }
+
+                                    ).to(tempRoute.getServerAddr());
+                        }
+                    };
+                    camelContext.addRoutes(route);
+                }
+            } else {
+                logger.info("路由路径为空。");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
