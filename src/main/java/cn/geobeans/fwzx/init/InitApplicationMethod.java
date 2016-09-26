@@ -21,6 +21,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.http.HttpMessage;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -28,9 +30,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.cert.PolicyNode;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+
+import static org.apache.camel.builder.Builder.constant;
 
 /**
  * Created by Administrator on 2016/9/22.
@@ -124,7 +130,6 @@ public class InitApplicationMethod {
         } catch (IOException e) {
             logger.error(e);
         } finally {
-
             try {
                 if (conn != null) conn.close();
             } catch (Exception e) {
@@ -174,27 +179,9 @@ public class InitApplicationMethod {
                     RouteBuilder route = new RouteBuilder() {
                         public void configure() throws Exception {
                             from("servlet:///" + tempRoute.getServerName())
-                                    .process(new Processor() {
-                                                 @Override
-                                                 public void process(Exchange exchange) {
-                                                     String params = null;
-                                                     try {
-                                                         HttpServletRequest request = exchange.getIn(HttpMessage.class).getRequest();
-                                                         if ("GET".equals(request.getMethod())) {
-                                                             params = request.getQueryString();
-                                                             exchange.getOut().setHeader(Exchange.HTTP_QUERY, constant(params));
-                                                         } else {
-                                                             params = exchange.getIn().getBody(String.class);
-                                                             exchange.getOut().setHeader(Exchange.HTTP_METHOD, constant("POST"));
-                                                             exchange.getOut().setHeader(Exchange.HTTP_QUERY, constant(params));
-                                                         }
-                                                     } catch (Exception e) {
-                                                         e.printStackTrace();
-                                                     }
-                                                 }
-                                             }
-
-                                    ).to(tempRoute.getServerAddr());
+                                    .process(new ProcessBegin())
+                                    .to(tempRoute.getServerAddr())
+                                    .process(new ProcessEnd());
                         }
                     };
                     camelContext.addRoutes(route);
@@ -203,7 +190,43 @@ public class InitApplicationMethod {
                 logger.info("路由路径为空。");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
+        }
+    }
+
+
+    private class ProcessBegin implements Processor {
+        @Override
+        public void process(Exchange exchange) {
+            String params = null;
+            try {
+                HttpServletRequest request = exchange.getIn(HttpMessage.class).getRequest();
+                if ("GET".equals(request.getMethod())) {
+                    params = request.getQueryString();
+                    exchange.getOut().setHeader(Exchange.HTTP_QUERY, constant(params));
+                } else {
+                    params = exchange.getIn().getBody(String.class);
+                    exchange.getOut().setHeader(Exchange.HTTP_METHOD, constant("POST"));
+                    exchange.getOut().setHeader(Exchange.HTTP_QUERY, constant(params));
+                }
+            } catch (Exception e) {
+                logger.error(e);
+            }
+
+        }
+    }
+
+    private class ProcessEnd implements Processor {
+        @Override
+        public void process(Exchange exchange) {
+            String data = null;
+            try {
+                InputStream inputStream = (InputStream) exchange.getIn().getBody();
+                data = IOUtils.toString(inputStream);
+                exchange.getOut().setBody(data);
+            } catch (Exception e) {
+                logger.error(e);
+            }
         }
     }
 }
