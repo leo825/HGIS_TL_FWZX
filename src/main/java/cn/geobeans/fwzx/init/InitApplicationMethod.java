@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
@@ -194,7 +195,9 @@ public class InitApplicationMethod {
         }
     }
 
-
+    /**
+     * 开始的processor处理
+     */
     private class ProcessBegin implements Processor {
         @Override
         public void process(Exchange exchange) {
@@ -212,20 +215,24 @@ public class InitApplicationMethod {
             } catch (Exception e) {
                 logger.error(e);
             }
-
         }
     }
 
+    /**
+     * 结束的processor处理
+     */
     private class ProcessEnd implements Processor {
         @Override
         public void process(Exchange exchange) {
             String data = null;
             try {
                 InputStream inputStream = (InputStream) exchange.getIn().getBody();
-                data = IOUtils.toString(inputStream);
-                exchange.getOut().setBody(data);
-//                byte[] b = IOUtils.toByteArray(inputStream);
-
+                HttpServletResponse response = exchange.getOut(HttpMessage.class).getResponse();
+                byte[] bytes = new byte[2048];
+                int len;
+                while ((len = inputStream.read(bytes)) != -1) {
+                    response.getOutputStream().write(bytes);//经过测试可以将图片流输出
+                }
             } catch (Exception e) {
                 logger.error(e);
             }
