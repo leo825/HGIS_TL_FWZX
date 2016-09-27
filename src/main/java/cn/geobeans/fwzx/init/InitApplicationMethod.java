@@ -224,6 +224,8 @@ public class InitApplicationMethod {
                 InputStream inputStream = (InputStream) exchange.getIn().getBody();
                 data = IOUtils.toString(inputStream);
                 exchange.getOut().setBody(data);
+//                byte[] b = IOUtils.toByteArray(inputStream);
+
             } catch (Exception e) {
                 logger.error(e);
             }
