@@ -83,22 +83,19 @@ public class InitApplicationMethod {
                                 .process(new Processor() {
                                     @Override
                                     public void process(Exchange exchange) {
-
+                                        InputStream inputStream = null;
                                         try {
                                             HttpServletRequest request = exchange.getIn(HttpMessage.class).getRequest();
                                             String realRequestUrI = request.getRequestURI();
                                             if ("GET".equals(request.getMethod())) {
                                                 String requestUrl = "http://" + project.getIp() + ":" + project.getPort() + realRequestUrI + "?" + request.getQueryString();
-                                                if ("PGIS_S_TileMapServer".equals(project.getName())) {
-                                                    exchange.getOut().setBody("<html><body><img src='" + requestUrl + "'></body></html>");
-                                                } else {
-                                                    exchange.getOut().setBody(HttpUtil.getStringByGet(requestUrl, "UTF-8"));
-                                                }
+                                                inputStream = HttpUtil.getInputStreamsByGet(requestUrl);
                                             } else {
                                                 String params = exchange.getIn().getBody(String.class);
                                                 String requestUrl = "http://" + project.getIp() + ":" + project.getPort() + realRequestUrI;
-                                                exchange.getOut().setBody(HttpUtil.getStringByPost(requestUrl, params, "UTF-8"));
+                                                inputStream = HttpUtil.getInputStreamByPost(requestUrl, params);
                                             }
+                                            exchange.getOut().setBody(IOUtils.toByteArray(inputStream));
                                         } catch (Exception e) {
                                             logger.error(e);
                                         }
@@ -224,15 +221,14 @@ public class InitApplicationMethod {
     private class ProcessEnd implements Processor {
         @Override
         public void process(Exchange exchange) {
-            String data = null;
             try {
                 InputStream inputStream = (InputStream) exchange.getIn().getBody();
-                HttpServletResponse response = exchange.getOut(HttpMessage.class).getResponse();
-                byte[] bytes = new byte[2048];
-                int len;
-                while ((len = inputStream.read(bytes)) != -1) {
-                    response.getOutputStream().write(bytes);//经过测试可以将图片流输出
-                }
+                byte[] bytes = IOUtils.toByteArray(inputStream);
+                //注释掉的部分会报空指针异常,原因是将转换成response的时候转换会抛出异常
+//              HttpServletResponse response = exchange.getOut(HttpMessage.class).getResponse();
+//              response.getOutputStream().write(bytes);
+//              response.getOutputStream().close();
+                exchange.getOut().setBody(bytes);
             } catch (Exception e) {
                 logger.error(e);
             }

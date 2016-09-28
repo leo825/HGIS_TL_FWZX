@@ -1,10 +1,7 @@
 package cn.geobeans.fwzx.util;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -14,6 +11,7 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -398,6 +396,42 @@ public class HttpUtil {
         }
         rd.close();
         return data.toString();
+    }
+
+
+
+    /**
+     * 通过get方法来发送http请求来获取数据,请求数据进行编码
+     *
+     * @param url    String类型远程请求地址
+     * @return Document类型对象
+     */
+    public static InputStream getInputStreamsByGet(String url) throws DocumentException, IOException {
+        URL u = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setDoOutput(true);
+        StringBuffer data = new StringBuffer();
+        return conn.getInputStream();
+    }
+
+
+    /**
+     * 通过post方法发送http请求,并且请求结果采用UTF-8编码
+     *
+     * @param url    String类型远程请求地址
+     * @param params String类型的请求参数
+     * @return Json类型的字符串
+     */
+    public static InputStream getInputStreamByPost(String url, String params) throws IOException {
+        URL u = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        PrintWriter out = new PrintWriter(conn.getOutputStream());
+        out.print(params);
+        out.close();
+        return conn.getInputStream();
     }
 
 
