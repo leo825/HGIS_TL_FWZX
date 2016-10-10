@@ -26,10 +26,11 @@ import com.ibatis.common.resources.Resources;
 import net.sf.json.JSONObject;
 import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.http.HttpEndpoint;
 import org.apache.camel.component.http.HttpMessage;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+
+import org.springframework.stereotype.*;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -42,7 +43,6 @@ import java.util.Date;
 import java.util.List;
 
 import static org.apache.camel.builder.Builder.constant;
-import static org.apache.camel.builder.Builder.sendTo;
 
 /**
  * Created by Administrator on 2016/9/22.
@@ -172,9 +172,9 @@ public class InitApplicationMethod {
 
     /**
      * 动态增加一个servlet路由
-     *
-     * */
-    public void addServletRoute(RouteModel routeModel){
+     */
+    public int addServletRoute(RouteModel routeModel) {
+        int result = -1;
         try {
             final ProjectModel tempProject = projectService.get(routeModel.getProjectId());
             RouteBuilder route = new RouteBuilder() {
@@ -182,24 +182,52 @@ public class InitApplicationMethod {
                     from("servlet:///" + routeModel.getServerName()).process(new ProcessBegin(routeModel.getServerName(), tempProject.getName()))
                             .choice()
                             .when(header("rightful").isEqualTo(false)).process(new ProcessLegal())
-                            .otherwise().to(routeModel.getServerAddr()+"?throwExceptionOnFailure=false").process(new ProcessEnd());//throwExceptionOnFailure=false，如果后表面不加上这个条件则会抛出异常导致下面无法执行，无法捕捉404异常
+                            .otherwise().to(routeModel.getServerAddr() + "?throwExceptionOnFailure=false").process(new ProcessEnd());//throwExceptionOnFailure=false，如果后表面不加上这个条件则会抛出异常导致下面无法执行，无法捕捉404异常
                 }
             };
             camelContext.addRoutes(route);
-        } catch (Exception e) {
-           logger.error(e);
-        }
-    }
-
-
-    public void deleteServletRoute(RouteModel routeModel){
-        try {
-            camelContext.removeRoute("d");
+            result = 1;
         } catch (Exception e) {
             logger.error(e);
         }
+        return result;
     }
 
+    /**
+     * 根据Endpoint找到相应的route，先停止再删除
+     */
+    public int deleteServletRoute(RouteModel routeModel) {
+        int result = -1;
+        try {
+            String endPoint = "Endpoint[servlet:///" + routeModel.getServerName() + "]";
+            List<Route> routeList = camelContext.getRoutes();
+            for (Route route : routeList) {
+                if (endPoint.equals(route.getEndpoint().toString())) {
+                    camelContext.stopRoute(route.getId());
+                    camelContext.removeRoute(route.getId());
+                    result = 1;
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+        return result;
+    }
+    /**
+     * 更新一个路由设置
+     *
+     * */
+    public int updateServletRoute(RouteModel oldRoute,RouteModel newRoute){
+        int result = -1;
+        try{
+            deleteServletRoute(oldRoute);
+            addServletRoute(newRoute);
+            result = 1;
+        }catch (Exception e){
+            logger.error(e);
+        }
+        return result;
+    }
 
 
     /**
@@ -298,32 +326,6 @@ public class InitApplicationMethod {
     }
 
     /**
-     * 请求路径无法访问的processor处理
-     */
-    private class ProcessResponse implements Processor {
-        @Override
-        public void process(Exchange exchange) {
-            JSONObject json = new JSONObject();
-            String ip = (String) exchange.getIn().getHeader("ip");
-            String serverName = (String) exchange.getIn().getHeader("serverName");
-            String projectName = (String) exchange.getIn().getHeader("projectName");
-            String userName = (String) exchange.getIn().getHeader("userName");
-
-            String operateResult = OperateResultEnum.FAILD.toString();
-            String operateDescription = OperateDescriptionEnum.REQUEST_UNREACHABLE.toString();
-            addOperationLog(ip, serverName, projectName, operateResult, userName, operateDescription);
-            try {
-                json.put("result", operateResult);
-                json.put("data", operateDescription);
-                exchange.getOut().setBody(json);
-            } catch (Exception e) {
-                logger.error(e);
-            }
-        }
-    }
-
-
-    /**
      * 结束的processor处理
      */
     private class ProcessEnd implements Processor {
@@ -352,7 +354,7 @@ public class InitApplicationMethod {
                     json.put("result", false);
                     json.put("data", responseCode);
                     exchange.getOut().setBody(json);
-                    addOperationLog(ip, serverName, projectName, OperateResultEnum.FAILD.toString(), userName, OperateDescriptionEnum.RESPONSE_DATA_ERROR.toString());
+                    addOperationLog(ip, serverName, projectName, OperateResultEnum.FAILD.toString(), userName, String.valueOf(responseCode));
                 }
             } catch (Exception e) {
                 logger.error(e);
@@ -364,7 +366,7 @@ public class InitApplicationMethod {
      * 添加日志
      */
     public void addOperationLog(String ip, String serverName, String projectName, String result, String userName, String description) {
-        OperationModel operation = new OperationModel(ip, serverName, projectName, userName, result, description);
+        OperationModel operation = new OperationModel(ip, serverName, projectName, result, userName, description);
         operationService.insert(operation);
         if (OperateResultEnum.FAILD.toString().equals(result)) {
             addFailLogToReport(operation);
@@ -379,7 +381,7 @@ public class InitApplicationMethod {
         String date = CalendarUtil.getDateFormatYMDstr(new Date());
         filePath = InitApplicationMethod.REPORTS_PATH + File.separator + date + "运行报告.log";
         try {
-            String str = logStringFormate(operation.getOperateTime(), operation.getResult(), operation.getIp(), operation.getUserName(), operation.getServerName(), operation.getProjectName());
+            String str = logStringFormate(operation.getOperateTime(), operation.getResult(), operation.getIp(), operation.getUserName(), operation.getServerName(), operation.getProjectName(), operation.getDescription());
             File dest = new File(filePath);
             if (!dest.exists()) {
                 dest.createNewFile();
@@ -393,8 +395,8 @@ public class InitApplicationMethod {
         }
     }
 
-    public static String logStringFormate(String operateTime, String result, String ip, String userName, String serverName, String projectName) {
-        return "[" + operateTime + "]" + " " + "[" + result + "]" + "ip=" + ip + ",userName=" + userName + ",serverName=" + serverName + ",projectName=" + projectName;
+    public static String logStringFormate(String operateTime, String result, String ip, String userName, String serverName, String projectName, String description) {
+        return "[" + operateTime + "]" + " " + "[" + result + "]" + "ip=" + ip + ",用户=" + userName + ",接口=" + serverName + ",应用服务=" + projectName + ",异常描述=" + description;
     }
 
 }

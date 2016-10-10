@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import cn.geobeans.fwzx.init.InitApplicationMethod;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Route;
@@ -30,6 +31,9 @@ public class RouteServiceTest {
 
     @Resource
     private CamelContext camelContext;
+
+    @Resource
+    private InitApplicationMethod initApplicationMethod;
 
 //    @Test
 //    public void testInsert() throws Exception {
@@ -75,11 +79,19 @@ public class RouteServiceTest {
 
         System.out.println("11111111111111----------------"+camelContext.getRoutes().size());
 
-        Endpoint endpoint = (Endpoint) camelContext.getEndpoint("servlet:///test");
+        for (Route route: camelContext.getRoutes()){
+            System.out.println(route.getEndpoint().toString());
+        }
 
-        camelContext.stopRoute("route32");
+
+        RouteModel routeModel = service.get("cb2da3f70b614b5fb3c6a3afadf58fbf");
+
+        initApplicationMethod.deleteServletRoute(routeModel);
 
         System.out.println("22222222222222-----------------"+camelContext.getRoutes().size());
+        for (Route route: camelContext.getRoutes()){
+            System.out.println(route.getEndpoint().toString());
+        }
 
     }
 	
