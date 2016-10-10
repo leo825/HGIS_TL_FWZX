@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.geobeans.fwzx.init.InitApplicationMethod;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
@@ -56,8 +57,6 @@ public class OpreationController {
     private static final String GET_OPERATION_REPORT = "/operation/get_opreation_report";
     private static final String GET_DOWNLOAD = "/operation/download_report";
 
-    private static final String REPORTS_PATH = ProjectUtil.getProperty("file.reports");
-
 
     @Resource
     private OperationService service;
@@ -65,16 +64,6 @@ public class OpreationController {
     @Resource
     private ProjectService projectService;
 
-
-    /**
-     * 初始化方法，启动进程
-     */
-    @PostConstruct
-    public void init() {
-        if (!StringUtil.checkDir(REPORTS_PATH)) {
-            logger.error("文件上传目录创建失败");
-        }
-    }
 
     /**
      * 添加操作记录
@@ -217,7 +206,7 @@ public class OpreationController {
         List<JSONObject> list = new ArrayList<JSONObject>();
         int total = 0;
         try {
-            File directory = new File(REPORTS_PATH);
+            File directory = new File(InitApplicationMethod.REPORTS_PATH);
             if (directory.exists()) {
                 File[] files = directory.listFiles();
                 total = files.length;
@@ -251,12 +240,11 @@ public class OpreationController {
     @ResponseBody
     public JsonResponse download(HttpServletRequest request, HttpServletResponse response) {
         try {
-
             String fileName = request.getParameter("fileName");
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
             response.setHeader("Content-Disposition", "attachment;fileName=" + new String(fileName.getBytes("utf-8"), "ISO8859-1"));
-            String path = REPORTS_PATH + File.separator + fileName;
+            String path = InitApplicationMethod.REPORTS_PATH + File.separator + fileName;
             InputStream inputStream = new FileInputStream(new File(path));
 
             OutputStream os = response.getOutputStream();

@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.geobeans.fwzx.init.InitApplicationMethod;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -62,8 +63,6 @@ public class ProjectController {
     private static final String CHECK_PROJECT = "/project/check_project/{id}";
     private static final String GET_PROJECT_TREE = "/project/get_project_tree";
 
-    private static final String FILE_PATH = ProjectUtil.getProperty("file.upload");
-
     @Resource
     private ProjectService service;
 
@@ -103,7 +102,7 @@ public class ProjectController {
         try {
             String id = request.getParameter("id");
             ProjectModel model = service.get(id);
-            String fileDir = FILE_PATH + File.separator + model.getName();
+            String fileDir = InitApplicationMethod.FILE_PATH + File.separator + model.getName();
             String fileName = "";
             String fullPath = "";
             // 创建一个通用的多部分解析器

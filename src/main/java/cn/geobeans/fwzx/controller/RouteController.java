@@ -44,10 +44,8 @@ public class RouteController {
     private static final String GET_BY_ID = "/service/{id}";
     private static final String GET_EASYUI_QUERY = "/service/easyui_query";
     
-    
 	@Resource
 	private RouteService service;
-	
 	@Resource
 	private ProjectService projectService;
 	/**

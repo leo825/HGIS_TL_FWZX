@@ -48,7 +48,20 @@ public class OperationModel extends IdModel{;
 	 * 操作描述
 	 * */
 	private String description;
-	
+
+
+	public OperationModel() {
+	}
+
+	public OperationModel(String ip, String serverName, String projectName, String result, String userName, String description) {
+		this.ip = ip;
+		this.serverName = serverName;
+		this.projectName = projectName;
+		this.result = result;
+		this.userName = userName;
+		this.description = description;
+	}
+
 	public String getDescription() {
 		return description;
 	}

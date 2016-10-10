@@ -45,13 +45,10 @@ public class HttpRequestController {
     private RouteService routeService;
     @Resource
     private ProjectService projectService;
-
     @Resource
     private TaskJob taskJob;
-
     @Resource
     private InitApplicationMethod initApplicationMethod;
-
 
 
     /**
@@ -59,9 +56,7 @@ public class HttpRequestController {
      */
     @PostConstruct
     public void init() {
-
         try {
-
             initApplicationMethod.initDataBase();//初始化数据库数据
             initApplicationMethod.initFileDirectory();//初始化文件目录
             initApplicationMethod.initRoutes();//初始化路由信
@@ -72,59 +67,59 @@ public class HttpRequestController {
         }
     }
 
-    /**
-     * 转发get请求
-     */
-    @RequestMapping(value = "/redirect", method = {RequestMethod.GET, RequestMethod.POST})
-    public String redirectGet(HttpServletRequest request, HttpServletResponse response) {
-        /**
-         * 获取项目名称 progectName 获取接口名称 serviceName 获取参数类型 serviceParms http://210.72.239.121:8088/SSIL/department.do?userid=jiangsudiaodu&username=江苏调度
-         * http://localhost:8080/HGIS_TL_FWZX/http/redirect?projectName=SSIL&serverName=department&userid=jiangsudiaodu&username=江苏调度
-         * */
-        String projectName = request.getParameter("projectName");// 获取服务的名称
-        String serverName = request.getParameter("serverName");// 获取服务的接口
-        String serverAddr = "";
-        String remoteParams = "";
-        JSONObject json = new JSONObject();
-
-        try {
-            if (!StringUtil.isNull(projectName) && !StringUtil.isNull(serverName)) {
-                ProjectModel project = projectService.getProjectByName(projectName);
-
-                if (project != null) {
-                    RouteModel route = routeService.get(project.getId(), serverName);
-                    if (route != null) {
-                        serverAddr = route.getServerAddr();
-                        String parms = request.getQueryString();// 获取请求的所有参数
-                        int positon = StringUtil.getCharacterPosition(parms, 2, "&") + 1;// 是否有参数传递过来，并且计算参数的位置
-                        if (positon != 0) {
-                            remoteParams = parms.substring(positon, parms.length());// 获取需要转发的请求的参数
-                        }
-                        taskJob.addOperationLog(HttpUtil.getRemoteHost(request), serverName, projectName, "成功", "访问成功");// 写入日志
-                        response.setHeader("Location", serverAddr + "?" + remoteParams);
-                        if ("GET".equals(request.getMethod())) {
-                            response.setStatus(302);
-                            return null;
-                        }
-                        if ("POST".equals(request.getMethod())) {
-                            response.setStatus(307);
-                            return null;
-                        }
-                    }
-                }
-            }
-            taskJob.addOperationLog(HttpUtil.getRemoteHost(request), serverName, projectName, "失败", "访问失败了");// 写入日志
-            json.put("result", false);
-            json.put("data", "projectName or serviceName is not exist");
-            PrintWriter out = response.getWriter();
-            out.write(json.toString());
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            logger.error(e);
-        }
-        return null;
-    }
+//    /**
+//     * 转发get请求
+//     */
+//    @RequestMapping(value = "/redirect", method = {RequestMethod.GET, RequestMethod.POST})
+//    public String redirectGet(HttpServletRequest request, HttpServletResponse response) {
+//        /**
+//         * 获取项目名称 progectName 获取接口名称 serviceName 获取参数类型 serviceParms http://210.72.239.121:8088/SSIL/department.do?userid=jiangsudiaodu&username=江苏调度
+//         * http://localhost:8080/HGIS_TL_FWZX/http/redirect?projectName=SSIL&serverName=department&userid=jiangsudiaodu&username=江苏调度
+//         * */
+//        String projectName = request.getParameter("projectName");// 获取服务的名称
+//        String serverName = request.getParameter("serverName");// 获取服务的接口
+//        String serverAddr = "";
+//        String remoteParams = "";
+//        JSONObject json = new JSONObject();
+//
+//        try {
+//            if (!StringUtil.isNull(projectName) && !StringUtil.isNull(serverName)) {
+//                ProjectModel project = projectService.getProjectByName(projectName);
+//
+//                if (project != null) {
+//                    RouteModel route = routeService.get(project.getId(), serverName);
+//                    if (route != null) {
+//                        serverAddr = route.getServerAddr();
+//                        String parms = request.getQueryString();// 获取请求的所有参数
+//                        int positon = StringUtil.getCharacterPosition(parms, 2, "&") + 1;// 是否有参数传递过来，并且计算参数的位置
+//                        if (positon != 0) {
+//                            remoteParams = parms.substring(positon, parms.length());// 获取需要转发的请求的参数
+//                        }
+//                        InitApplicationMethod.(HttpUtil.getRemoteHost(request), serverName, projectName, "成功", "访问成功");// 写入日志
+//                        response.setHeader("Location", serverAddr + "?" + remoteParams);
+//                        if ("GET".equals(request.getMethod())) {
+//                            response.setStatus(302);
+//                            return null;
+//                        }
+//                        if ("POST".equals(request.getMethod())) {
+//                            response.setStatus(307);
+//                            return null;
+//                        }
+//                    }
+//                }
+//            }
+//            taskJob.addOperationLog(HttpUtil.getRemoteHost(request), serverName, projectName, "失败", "访问失败了");// 写入日志
+//            json.put("result", false);
+//            json.put("data", "projectName or serviceName is not exist");
+//            PrintWriter out = response.getWriter();
+//            out.write(json.toString());
+//            out.flush();
+//            out.close();
+//        } catch (Exception e) {
+//            logger.error(e);
+//        }
+//        return null;
+//    }
 
     /**
      * 数据格式的转换
@@ -148,7 +143,6 @@ public class HttpRequestController {
                         remoteParams = parms.substring(positon, parms.length());// 获取需要转发的请求的参数
                     }
                     if (route.getDataReturnType().equals(dataReturnType)) {
-                        taskJob.addOperationLog(HttpUtil.getRemoteHost(request), serverName, projectName, "失败", "数据返回格式与之前相同");// 写入日志
                         response.sendRedirect(serverAddr + "?" + remoteParams);// 重定向到apage.jsp
                     } else {
                         if (dataReturnType.equals("json")) {

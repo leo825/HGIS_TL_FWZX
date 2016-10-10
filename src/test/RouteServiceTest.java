@@ -8,6 +8,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.Endpoint;
+import org.apache.camel.Route;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,6 +27,9 @@ public class RouteServiceTest {
 
 	@Resource
     private RouteService service;
+
+    @Resource
+    private CamelContext camelContext;
 
 //    @Test
 //    public void testInsert() throws Exception {
@@ -63,5 +69,18 @@ public class RouteServiceTest {
 //			System.out.println("name="+map.get("name"));
 //		}
 //	}
+
+    @Test
+    public void testServletRoute() throws Exception {
+
+        System.out.println("11111111111111----------------"+camelContext.getRoutes().size());
+
+        Endpoint endpoint = (Endpoint) camelContext.getEndpoint("servlet:///test");
+
+        camelContext.stopRoute("route32");
+
+        System.out.println("22222222222222-----------------"+camelContext.getRoutes().size());
+
+    }
 	
 }

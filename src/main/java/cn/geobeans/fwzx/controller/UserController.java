@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,14 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import cn.geobeans.common.enums.JsonResponseStatusEnum;
 import cn.geobeans.common.model.JsonResponse;
-import cn.geobeans.fwzx.model.ProjectModel;
-import cn.geobeans.fwzx.model.ResourceModel;
 import cn.geobeans.fwzx.model.RoleModel;
 import cn.geobeans.fwzx.model.UserModel;
-import cn.geobeans.fwzx.service.ProjectService;
 import cn.geobeans.fwzx.service.RoleService;
 import cn.geobeans.fwzx.service.UserRoleService;
 import cn.geobeans.fwzx.service.UserService;

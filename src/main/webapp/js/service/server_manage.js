@@ -39,14 +39,14 @@ ServerManage.loadData = function () {
         pageSize: Public.LIMIT,
         columns:[[
             {field:'id',title:'ID',hidden:true},
-            {field:'name',title:'服务名称',width:200},
-            {field:'serverAddress',title:'服务地址',width:300, formatter: function(value, row){
+            {field:'name',title:'接口名称',width:200},
+            {field:'serverAddress',title:'接口地址',width:300, formatter: function(value, row){
                 var serverAddress = row.serverAddress;
                 return serverAddress != null ? serverAddress : '';
             }},
             {field:'project',title:'应用名称',width:100},
             {field:'dataReturnType',title:'返回数据类型',width:100},
-            {field:'description',title:'服务描述',width:200},
+            {field:'description',title:'接口描述',width:200},
             {field:'operate',title:'操作',width:200, formatter: function(value, row){
                 if(Public.isInArray("add", RESOURCES)){
                 	$("#addBtn").show();
@@ -100,10 +100,10 @@ ServerManage.pagerFilter = function(data){
 };
 
 /**
- * 增加服务信息
+ * 增加接口信息
  */
 ServerManage.add = function () {
-    Public.createDialog('添加服务', '', 'p-add-service', 400, 300);
+    Public.createDialog('添加接口', '', 'p-add-service', 400, 300);
     $('.p-add-service .p-dialog-content').load('partials/service/add_service.html', function () {
     	ServerManage.initFormData();
     });
@@ -122,11 +122,11 @@ ServerManage.add = function () {
     });
 };
 /**
- * 修改服务
+ * 修改接口
  */
 ServerManage.update = function (id, e) {
     Public.stopPropagation(e);
-    Public.createDialog('修改服务', '', 'p-add-service', 400, 300);
+    Public.createDialog('修改接口', '', 'p-add-service', 400, 300);
     $('.p-add-service .p-dialog-content').load('partials/service/update_service.html', function () {
         ServerManage.showServiceInfo(id);
     });
@@ -146,18 +146,18 @@ ServerManage.update = function (id, e) {
     });
 };
 /**
- * 查看服务信息
+ * 查看接口信息
  */
 ServerManage.show = function(){
 	var message = 'message';
 	return message;
 };
 /**
- * 删除服务信息
+ * 删除接口信息
  */
 ServerManage.deletes = function (id, name, e) {
     Public.stopPropagation(e);
-    Public.comfirm('确定要删除服务信息' + name + '吗', function () {
+    Public.comfirm('确定要删除接口信息' + name + '吗', function () {
         Public.deleteRest('/service/' + id, null, function () {
             Public.msg('删除成功');
             ServerManage.loadData();
@@ -193,16 +193,16 @@ ServerManage.checkServiceForm = function () {
     var dataReturnType = $('.p-add-service input[name="dataReturnType"]').val();
     var description = $('.p-add-service input[name="description"]').val();
     if(Public.isNull(serverName)){
-        Public.alert('服务名称不能为空');
+        Public.alert('接口名称不能为空');
         return null;
     }else if(Public.isNull(projectId)){
         Public.alert('应用不能为空');
         return null;
     }else if(Public.isNull(serverAddr)){
-    	Public.alert("服务地址不能为空");
+    	Public.alert("接口地址不能为空");
     	return null;
     }else if(Public.isNull(dataReturnType)){
-    	Public.alert("服务返回类型不能为空");
+    	Public.alert("接口返回类型不能为空");
     	return null;
     }else{
         var obj = {};
