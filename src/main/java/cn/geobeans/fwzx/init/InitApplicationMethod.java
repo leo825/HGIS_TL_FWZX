@@ -21,6 +21,7 @@ import cn.geobeans.fwzx.service.RouteService;
 import cn.geobeans.fwzx.service.UsageService;
 import cn.geobeans.fwzx.util.HttpUtil;
 import cn.geobeans.fwzx.util.StringUtil;
+import cn.geobeans.fwzx.util.XmlJsonUtil;
 import com.ibatis.common.jdbc.ScriptRunner;
 import com.ibatis.common.resources.Resources;
 import net.sf.json.JSONObject;
@@ -213,17 +214,17 @@ public class InitApplicationMethod {
         }
         return result;
     }
+
     /**
      * 更新一个路由设置
-     *
-     * */
-    public int updateServletRoute(RouteModel oldRoute,RouteModel newRoute){
+     */
+    public int updateServletRoute(RouteModel oldRoute, RouteModel newRoute) {
         int result = -1;
-        try{
+        try {
             deleteServletRoute(oldRoute);
             addServletRoute(newRoute);
             result = 1;
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e);
         }
         return result;
@@ -275,6 +276,7 @@ public class InitApplicationMethod {
                 exchange.getOut().setHeader("ip", ip);
                 exchange.getOut().setHeader("serverName", this.serverName);
                 exchange.getOut().setHeader("projectName", this.projectName);
+                exchange.getOut().setHeader("dataReturnType", request.getParameter("dataReturnType"));//返回数据类型
                 //此时ip不存在系统中因此ip不合法
                 if (u == null) {
                     exchange.getOut().setHeader("rightful", false);
@@ -338,17 +340,28 @@ public class InitApplicationMethod {
                 String operateResult = OperateResultEnum.SUCCESS.toString();
                 String userName = (String) exchange.getIn().getHeader("userName");
                 String operateDescription = OperateDescriptionEnum.OPERATE_SUCCESS.toString();
+                String dataReturnType = (String) exchange.getIn().getHeader("dataReturnType");
+
                 int responseCode = (int) exchange.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE);//是否200返回
                 JSONObject json = new JSONObject();
                 if (responseCode == 200) {
                     InputStream inputStream = (InputStream) exchange.getIn().getBody();
-                    byte[] bytes = IOUtils.toByteArray(inputStream);
-
-//                  注释掉的部分会报空指针异常,原因是将转换成response的时候转换会抛出异常
-//                  HttpServletResponse response = exchange.getOut(HttpMessage.class).getResponse();
-//                  response.getOutputStream().write(bytes);
-//                  response.getOutputStream().close();
-                    exchange.getOut().setBody(bytes);
+                    if ("xml".equals(dataReturnType)) {
+                        String jsonStr = IOUtils.toString(inputStream);
+                        String xmlStr = XmlJsonUtil.json2Xml("{\"document\":" + jsonStr + "}");
+                        exchange.getOut().setBody(xmlStr);
+                    } else if ("json".equals(dataReturnType)) {
+                        String xmlStr = IOUtils.toString(inputStream);
+                        String jsonStr = XmlJsonUtil.xml2Json(xmlStr);
+                        exchange.getOut().setBody(jsonStr);
+                    } else {
+                        byte[] bytes = IOUtils.toByteArray(inputStream);
+//                      注释掉的部分会报空指针异常,原因是将转换成response的时候转换会抛出异常
+//                      HttpServletResponse response = exchange.getOut(HttpMessage.class).getResponse();
+//                      response.getOutputStream().write(bytes);
+//                      response.getOutputStream().close();
+                        exchange.getOut().setBody(bytes);
+                    }
                     addOperationLog(ip, serverName, projectName, operateResult, userName, operateDescription);
                 } else {
                     json.put("result", false);
