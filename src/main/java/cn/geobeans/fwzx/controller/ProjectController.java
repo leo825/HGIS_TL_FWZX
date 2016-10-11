@@ -97,7 +97,7 @@ public class ProjectController {
      */
     @RequestMapping(value = ADD_FILE, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public JsonResponse addFile(HttpServletRequest request, HttpServletResponse response) {
+    public JsonResponse addFile(HttpServletRequest request) {
 
         try {
             String id = request.getParameter("id");
@@ -122,17 +122,14 @@ public class ProjectController {
                         // 如果名称不为“”,说明该文件存在，否则说明该文件不存在
                         if (myFileName.trim() != "") {
                             fileName = file.getOriginalFilename();
-                            // 定义上传路径
-                            if (StringUtil.checkDir(fileDir)) {
-                                fullPath = fileDir + File.separator + fileName;
-                                File localFile = new File(fullPath);
-                                file.transferTo(localFile);
-                                model.setFileName(fileName);
-                                model.setFilePath(fullPath);
-                                int result = service.update(model);
-                                if (result > -1) {
-                                    return new JsonResponse(model);
-                                }
+                            fullPath = fileDir + File.separator + fileName;
+                            File localFile = new File(fullPath);
+                            file.transferTo(localFile);
+                            model.setFileName(fileName);
+                            model.setFilePath(fullPath);
+                            int result = service.update(model);
+                            if (result > -1) {
+                                return new JsonResponse(model);
                             }
                         }
                     }

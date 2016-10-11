@@ -84,13 +84,13 @@ public class XmlJsonUtil {
      */
     @SuppressWarnings("unchecked")
     private static Map iterateElement(Element element) {
-        List jiedian = element.getChildren();
+        List elementChildren = element.getChildren();
         Element et = null;
         Map obj = new HashMap();
         List list = null;
-        for (int i = 0; i < jiedian.size(); i++) {
+        for (int i = 0; i < elementChildren.size(); i++) {
             list = new LinkedList();
-            et = (Element) jiedian.get(i);
+            et = (Element) elementChildren.get(i);
             if (et.getTextTrim().equals("")) {
                 if (et.getChildren().size() == 0)
                     continue;
@@ -197,12 +197,8 @@ public class XmlJsonUtil {
                 "  }]\n" +
                 "}";
 
-       String xmlStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><document><total>7</total><rows><rows><id>1</id><name>天津会议室中控</name><category>智能中控</category><ip>10.92.173.253</ip><boardroom>天津视频会议室</boardroom><status>正常</status></rows><rows><id>2</id><name>天津海关缉私局1</name><category>终端</category><ip>10.92.173.247</ip><boardroom>天津视频会议室</boardroom><status>正常</status></rows><rows><id>3</id><name>天津海关缉私局2</name><category>终端</category><ip>10.92.173.248</ip><boardroom>天津视频会议室</boardroom><status>正常</status></rows><rows><id>4</id><name>宁波会议室中控</name><category>智能中控</category><ip>10.119.21.184</ip><boardroom>宁波视频会议室</boardroom><status>正常</status></rows><rows><id>5</id><name>宁波海关缉私局</name><category>终端</category><ip>10.119.21.180</ip><boardroom>宁波视频会议室</boardroom><status>正常</status></rows><rows><id>6</id><name>广州备用</name><category>终端</category><ip>10.40.249.212</ip><boardroom>广州视频会议室</boardroom><status>正常</status></rows><rows><id>7</id><name>广州海关缉私局1</name><category>终端</category><ip>10.40.131.13</ip><boardroom>广州视频会议室</boardroom><status>正常</status></rows></rows></document>\n";
-
-
-
+        String xmlStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><document><total>7</total><rows><rows><id>1</id><name>天津会议室中控</name><category>智能中控</category><ip>10.92.173.253</ip><boardroom>天津视频会议室</boardroom><status>正常</status></rows><rows><id>2</id><name>天津海关缉私局1</name><category>终端</category><ip>10.92.173.247</ip><boardroom>天津视频会议室</boardroom><status>正常</status></rows><rows><id>3</id><name>天津海关缉私局2</name><category>终端</category><ip>10.92.173.248</ip><boardroom>天津视频会议室</boardroom><status>正常</status></rows><rows><id>4</id><name>宁波会议室中控</name><category>智能中控</category><ip>10.119.21.184</ip><boardroom>宁波视频会议室</boardroom><status>正常</status></rows><rows><id>5</id><name>宁波海关缉私局</name><category>终端</category><ip>10.119.21.180</ip><boardroom>宁波视频会议室</boardroom><status>正常</status></rows><rows><id>6</id><name>广州备用</name><category>终端</category><ip>10.40.249.212</ip><boardroom>广州视频会议室</boardroom><status>正常</status></rows><rows><id>7</id><name>广州海关缉私局1</name><category>终端</category><ip>10.40.131.13</ip><boardroom>广州视频会议室</boardroom><status>正常</status></rows></rows></document>\n";
         System.out.println(json2Xml("{\"document\":"+jsonStr+"}"));
-
         System.out.println(xml2Json(xmlStr));
     }
 

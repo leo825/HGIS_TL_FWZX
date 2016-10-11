@@ -17,6 +17,7 @@
 
         <camel.version>2.15.0</camel.version>
         <jackson.version>2.6.4</jackson.version>
+        <poi.version>3.12</poi.version>
     </properties>
 
     <dependencies>
@@ -338,6 +339,19 @@
             <version>1.0.0</version>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -371,12 +385,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.16</version>
-                <configuration>
+                <configuration>POIUtil
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </build>
 

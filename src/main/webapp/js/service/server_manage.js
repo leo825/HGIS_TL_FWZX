@@ -121,6 +121,35 @@ ServerManage.add = function () {
         }
     });
 };
+
+/**
+ * 批量导入接口信息
+ *
+ * */
+ServerManage.batchAdd = function () {
+
+    $("#excelToUpload").click();
+    $("#excelToUpload").change(function(){
+        var url = URI+'/rest/service/batch_add';
+        if ($("#excelToUpload").val().length > 0) {
+            $.ajaxFileUpload({
+                url : url, //用于文件上传的服务器端请求地址
+                secureuri : false, //是否需要安全协议，一般设置为false
+                fileElementId : 'excelToUpload', //文件上传域的ID
+                dataType : 'json', //返回值类型 一般设置为json
+                success : function(data) //服务器成功响应处理函数
+                {
+                    ServerManage.loadData();
+                }
+            });
+        }
+    });
+};
+
+
+
+
+
 /**
  * 修改接口
  */

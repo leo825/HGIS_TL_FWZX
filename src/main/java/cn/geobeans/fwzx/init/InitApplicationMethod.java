@@ -56,6 +56,8 @@ public class InitApplicationMethod {
     private static final String INIT_DATA = ProjectUtil.getProperty("initData");//是否初始化数据
     public static final String REPORTS_PATH = ProjectUtil.getProperty("file.reports");//报告上传目录
     public static final String FILE_PATH = ProjectUtil.getProperty("file.upload");//文件上传目录
+    public static final String EXCEL_PATH = ProjectUtil.getProperty("file.excel");//excel上传目录
+
     private static final String JETTY_HOST = ProjectUtil.getProperty("jetty.host");//jetty的host
     private static final String JETTY_PORT = ProjectUtil.getProperty("jetty.port");//jetty的端口
     private static final int MAX_PATH_LEVEL = Integer.parseInt(ProjectUtil.getProperty("max_path_level"));//获取web应用中最深路径
@@ -145,7 +147,7 @@ public class InitApplicationMethod {
      * 初始化文件目录
      */
     public void initFileDirectory() {
-        if (StringUtil.checkDir(REPORTS_PATH) && StringUtil.checkDir(FILE_PATH)) {
+        if (StringUtil.checkDir(REPORTS_PATH) && StringUtil.checkDir(FILE_PATH) && StringUtil.checkDir(EXCEL_PATH)) {
             logger.info("初始化上传目录成功.");
         } else {
             logger.error("初始化上传目录失败!!!");

@@ -10,34 +10,39 @@ import cn.geobeans.common.util.CalendarUtil;
 
 /**
  * 路由
- * */
+ */
 
 public class RouteModel extends IdModel {
 
     /**
      * 所在的工程id
-     * */
+     */
     private String projectId;
 
     /**
      * 服务的接口名
-     * */
+     */
     private String serverName;
 
     /**
      * 所影射的远程路径
-     * */
+     */
     private String serverAddr;
 
     /**
      * 接口描述
-     * */
+     */
     private String description;
+
+    /**
+     * 接口返回数据类型
+     */
+    private String dataReturnType;
 
 
     /**
      * 服务注册时间
-     * */
+     */
     private String regTime = CalendarUtil.getDataTimeStr();
 
     public String getDescription() {
@@ -56,10 +61,6 @@ public class RouteModel extends IdModel {
         this.serverAddr = serverAddr;
     }
 
-    /**
-     * 接口返回数据类型
-     * */
-    private String dataReturnType;
 
     public String getProjectId() {
         return projectId;

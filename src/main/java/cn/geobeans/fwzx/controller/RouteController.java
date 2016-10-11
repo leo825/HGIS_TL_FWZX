@@ -1,16 +1,23 @@
 package cn.geobeans.fwzx.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import cn.geobeans.fwzx.init.InitApplicationMethod;
+import cn.geobeans.fwzx.util.POIUtil;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +33,9 @@ import cn.geobeans.fwzx.model.RouteModel;
 import cn.geobeans.fwzx.service.ProjectService;
 import cn.geobeans.fwzx.service.RouteService;
 import cn.geobeans.fwzx.util.StringUtil;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 /**
  * @author liuxi
@@ -45,6 +55,7 @@ public class RouteController {
     private static final String GET_ALL = "/service";
     private static final String GET_BY_ID = "/service/{id}";
     private static final String GET_EASYUI_QUERY = "/service/easyui_query";
+    private static final String BATCH_ADD = "/service/batch_add";
 
     @Resource
     private RouteService service;
@@ -196,4 +207,89 @@ public class RouteController {
         jsonResult.put("rows", rows);
         return jsonResult;
     }
+
+
+    /**
+     * 上传文件
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = BATCH_ADD, method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public JsonResponse addExcelFile(HttpServletRequest request) {
+        try {
+            String fileName = "";
+            String fullPath = "";
+            // 创建一个通用的多部分解析器
+            CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+            // 判断 request 是否有文件上传,即多部分请求
+            if (multipartResolver.isMultipart(request)) {
+                // 转换成多部分request
+                MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+                // 取得request中的所有文件名
+                Iterator<String> iter = multiRequest.getFileNames();
+                while (iter.hasNext()) {
+                    // 取得上传文件
+                    MultipartFile file = multiRequest.getFile(iter.next());
+                    if (file != null) {
+                        // 取得当前上传文件的文件名称
+                        String myFileName = file.getOriginalFilename();
+                        // 如果名称不为“”,说明该文件存在，否则说明该文件不存在
+                        if (myFileName.trim() != "") {
+                            fileName = file.getOriginalFilename();
+                            fullPath = InitApplicationMethod.EXCEL_PATH + File.separator + fileName;
+                            File localFile = new File(fullPath);
+                            file.transferTo(localFile);
+                            return new JsonResponse(JsonResponseStatusEnum.SUCCESS, "文件上传成功");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return new JsonResponse(JsonResponseStatusEnum.ERROR, "文件上传失败");
+    }
+
+
+/***
+ * 此处是批量添加接口路由的方法
+ * @param fileName 就是应用的名称
+ *
+ * */
+    private int batchAdd(String fileName){
+        int result = -1;
+        String fullPath = InitApplicationMethod.EXCEL_PATH + File.separator + fileName;
+        Sheet sheet = POIUtil.checkSheetvalidity(fullPath);
+        String projectName = fileName.split("\\.")[0];//由于.是转义字符所以必须加\\
+
+        ProjectModel projectModel = projectService.getProjectByName(projectName);
+
+        if (sheet != null) {
+            //获得所有数据
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                //获得第i行对象
+                Row row = sheet.getRow(i);
+                try {
+                    RouteModel routeModel = new RouteModel();
+                    routeModel.setServerName(String.valueOf(row.getCell(0)));
+                    routeModel.setServerAddr(String.valueOf(row.getCell(1)));
+                    routeModel.setDescription(String.valueOf(row.getCell(2)));
+                    routeModel.setDataReturnType(String.valueOf(row.getCell(3)));
+
+                    logger.info( "接口名称：" + row.getCell(0) + ",接口地址：" + row.getCell(1) + ",接口描述：" + row.getCell(2) + ",返回值类型：" + row.getCell(3));
+                    service.insert(routeModel);
+                } catch (Exception e) {
+                    logger.error("获取单元格错误");
+                }
+            }
+        } else {
+            logger.error("exls读取数据异常");
+        }
+
+        return result;
+    }
+
 }
