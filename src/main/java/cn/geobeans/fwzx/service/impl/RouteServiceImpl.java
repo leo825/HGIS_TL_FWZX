@@ -32,7 +32,7 @@ public class RouteServiceImpl implements RouteService {
         String sql = "INSERT INTO FWZX_ROUTE(ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,REG_TIME) VALUES(?,?,?,?,?,?,TO_DATE(?,'yyyy-mm-dd hh24:mi:ss'))";
         int result = -1;
         try {
-            if (get(model.getProjectId(), model.getServerName()) == null) {
+            if (getByServerName(model.getServerName()) == null) {
                 result = jdbcTemplate.update(sql, new PreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps) throws SQLException {
@@ -91,11 +91,12 @@ public class RouteServiceImpl implements RouteService {
         return list;
     }
 
-    public RouteModel get(String projectId, String serverName) {
-        String sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE PROJECT_ID=? AND SERVER_NAME=?";
+    @Override
+    public RouteModel getByServerName(String serverName) {
+        String sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE SERVER_NAME=?";
         RouteModel model = null;
         try {
-            model = jdbcTemplate.queryForObject(sql, new Object[]{projectId, serverName}, new BeanPropertyRowMapper<RouteModel>(RouteModel.class));
+            model = jdbcTemplate.queryForObject(sql, new Object[]{serverName}, new BeanPropertyRowMapper<RouteModel>(RouteModel.class));
         } catch (Exception e) {
             return null;
         }

@@ -38,13 +38,12 @@ public interface RouteService {
 	 * @return int
 	 * */
 	public int update(RouteModel model);
-	
+
 	/**
-	 * 通过projectId和serverName来确定一个对象
-	 * @return RouteModel
+	 * 通过serverName来确定一个对象
+	 *
 	 * */
-	public RouteModel get(String projectId, String serverName);
-	
+	public RouteModel getByServerName(String serverName);
 	/**
 	 * 查找所有的对象
 	 * @return List < RouteModel >

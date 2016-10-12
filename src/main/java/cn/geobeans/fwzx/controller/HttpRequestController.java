@@ -134,7 +134,7 @@ public class HttpRequestController {
         try {
             if (!StringUtil.isNull(projectName) && !StringUtil.isNull(serverName)) {
                 ProjectModel project = projectService.getProjectByName(projectName);
-                RouteModel route = routeService.get(project.getId(), serverName);
+                RouteModel route = routeService.getByServerName( serverName);
                 if (route != null) {
                     serverAddr = route.getServerAddr();
                     String parms = request.getQueryString();// 获取请求的所有参数

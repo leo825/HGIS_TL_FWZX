@@ -219,9 +219,12 @@ public class RouteController {
     @RequestMapping(value = BATCH_ADD, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public JsonResponse addExcelFile(HttpServletRequest request) {
+        String fileName = "";
+        String fullPath = "";
+        String projectId = "";
         try {
-            String fileName = "";
-            String fullPath = "";
+            projectId = request.getParameter("projectId");
+
             // 创建一个通用的多部分解析器
             CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
             // 判断 request 是否有文件上传,即多部分请求
@@ -242,7 +245,10 @@ public class RouteController {
                             fullPath = InitApplicationMethod.EXCEL_PATH + File.separator + fileName;
                             File localFile = new File(fullPath);
                             file.transferTo(localFile);
-                            return new JsonResponse(JsonResponseStatusEnum.SUCCESS, "文件上传成功");
+                            int result = batchAdd(projectId, fullPath);
+                            if (result > -1) {
+                                return new JsonResponse(JsonResponseStatusEnum.SUCCESS, "文件上传成功");
+                            }
                         }
                     }
                 }
@@ -254,19 +260,14 @@ public class RouteController {
     }
 
 
-/***
- * 此处是批量添加接口路由的方法
- * @param fileName 就是应用的名称
- *
- * */
-    private int batchAdd(String fileName){
+    /***
+     * 此处是批量添加接口路由的方法
+     *
+     * @param projectId 就是应用ID
+     */
+    private int batchAdd(String projectId, String fullPath) {
         int result = -1;
-        String fullPath = InitApplicationMethod.EXCEL_PATH + File.separator + fileName;
         Sheet sheet = POIUtil.checkSheetvalidity(fullPath);
-        String projectName = fileName.split("\\.")[0];//由于.是转义字符所以必须加\\
-
-        ProjectModel projectModel = projectService.getProjectByName(projectName);
-
         if (sheet != null) {
             //获得所有数据
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
@@ -274,21 +275,21 @@ public class RouteController {
                 Row row = sheet.getRow(i);
                 try {
                     RouteModel routeModel = new RouteModel();
+                    routeModel.setProjectId(projectId);
                     routeModel.setServerName(String.valueOf(row.getCell(0)));
                     routeModel.setServerAddr(String.valueOf(row.getCell(1)));
                     routeModel.setDescription(String.valueOf(row.getCell(2)));
                     routeModel.setDataReturnType(String.valueOf(row.getCell(3)));
-
-                    logger.info( "接口名称：" + row.getCell(0) + ",接口地址：" + row.getCell(1) + ",接口描述：" + row.getCell(2) + ",返回值类型：" + row.getCell(3));
                     service.insert(routeModel);
+
                 } catch (Exception e) {
                     logger.error("获取单元格错误");
                 }
             }
+            result = 1;
         } else {
             logger.error("exls读取数据异常");
         }
-
         return result;
     }
 
