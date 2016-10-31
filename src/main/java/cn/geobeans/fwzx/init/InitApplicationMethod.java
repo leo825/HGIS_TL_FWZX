@@ -76,7 +76,7 @@ public class InitApplicationMethod {
     private UsageService usageService;
 
 
-    public void buildRoute(ProjectModel project) {
+    public void buildRoute(final ProjectModel project) {
         try {
             for (int i = 1; i <= MAX_PATH_LEVEL; i++) {
                 final int contextPage = i;
@@ -176,7 +176,7 @@ public class InitApplicationMethod {
     /**
      * 动态增加一个servlet路由
      */
-    public int addServletRoute(RouteModel routeModel) {
+    public int addServletRoute(final RouteModel routeModel) {
         int result = -1;
         try {
             final ProjectModel tempProject = projectService.get(routeModel.getProjectId());
