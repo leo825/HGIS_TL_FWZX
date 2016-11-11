@@ -251,7 +251,6 @@ UsageProjectManage.initFormData = function (initBoardroomTypeValue, initNetworkV
  */
 UsageProjectManage.loadProjectsCheckData = function () {
     Public.getRest('/project', function (dicts) {
-        console.log(dicts);
         if (dicts != null && dicts.length > 0) {
             var html = [];
             for (var i = 0, j = dicts.length; i < j; i++) {
@@ -303,14 +302,11 @@ UsageProjectManage.showUsageProjectInfo = function (id,projectId) {
         var projectList = usage.projectList;
 
         for(var i = 0; i < projectList.length; i++){
-            console.log( projectList[i]);
             if(projectId == projectList[i].id){
                 projectName = projectList[i].name;
                 break;
             }
         }
-
-        console.log(projectName);
         $('.p-add-project input[name="ip"]').val(ip);
         $('.p-add-project input[name="name"]').val(projectName);
     });

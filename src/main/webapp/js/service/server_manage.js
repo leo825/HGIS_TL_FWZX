@@ -141,7 +141,6 @@ ServerManage.batchAdd = function () {
     $('.p-add-service .js-ok').unbind('click').bind('click', function () {
         var obj = {};
         var projectId = $('.p-add-service select[name="projectName"]').val();
-        console.log("projectId:" + projectId);
         if (projectId != null) {
             obj.projectId = projectId;
             var url = URI + '/rest/service/batch_add';
@@ -157,7 +156,6 @@ ServerManage.batchAdd = function () {
                         Public.msg('添加成功，等待数据更新...');
                         $('.p-add-project').dialog('destroy');
                         ServerManage.loadData();
-                        console.log(data);
                         ServerManage.loadData();
                     }
                 });

@@ -74,7 +74,6 @@ UsagesStatistics.render = function(){
  */
 UsagesStatistics.loadData = function () {
     Public.getRest('/project/get_usages_statistics', function(chat){
-    	console.log(chat);
         if(chat != null){
         	UsagesStatistics.chatOptions.title.text = chat.title;
         	UsagesStatistics.chatOptions.series[0].data = chat.data;

@@ -174,7 +174,6 @@
 //		 		rd.forward(request, response);
 			}
 		%>
-		console.log(RESOURCES);
 		
 	    if (Public.isInArray("system", RESOURCES)) {
 			$("#system").show();

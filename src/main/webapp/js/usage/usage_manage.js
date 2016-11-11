@@ -285,7 +285,6 @@ UsageManage.loadProjectsCheckData = function(){
  */
 UsageManage.showUsageInfo = function (id) {
     Public.getRest('/usage/'+id, function(usage){
-    	console.log(usage);
         var id = usage.id;
         var ip = usage.ip;
         var name = usage.name;

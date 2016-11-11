@@ -250,7 +250,6 @@ UserManage.addRole = function (id,e) {
     //保存用户
     $('.p-add-role .js-ok').unbind('click').bind('click', function () {
         var obj = UserManage.checkRoles(id);
-        console.log(obj);
         if (obj != null) {
             Public.postRest('/user/add_role', obj, function (resp) {
                 Public.msg('用户更改成功,现在一共'+resp.total+'个用户');

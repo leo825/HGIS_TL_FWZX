@@ -36,7 +36,6 @@ var RealtimeMonitoring = {
 														+ projectId,
 												function(dicts) {
 													var projectName = dicts.projectName;
-													console.log(dicts);
 													if (!Public
 															.isNull(projectName)) {
 														RealtimeMonitoring.chatOptions.title.text = projectName
@@ -224,7 +223,6 @@ RealtimeMonitoring.getCoordinate = function() {
 	Public.getRest('/operation/get_coordinate?projectId=' + projectId,
 			function(dicts) {
 				var projectName = dicts.projectName;
-				console.log(dicts);
 				if (!Public.isNull(projectName)) {
 					RealtimeMonitoring.chatOptions.title.text = projectName
 							+ "实时访问数据";
