@@ -1,3 +1,6 @@
+<%@ page import="cn.geobeans.fwzx.model.*" %>
+<%@ page import="java.util.List" %>
+<%@ page import="cn.geobeans.fwzx.service.impl.UserServiceImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
@@ -21,11 +24,11 @@
     <link rel="stylesheet" href="${ctx}/libs/jquery-easyui-1.3.2/themes/default/easyui.css"/>
     <link rel="stylesheet" href="${ctx}/libs/jquery-easyui-1.3.2/themes/icon.css"/>
     <link rel="stylesheet" href="${ctx}/libs/colpick-2.0.2/css/colpick.css"/>
-<!--     <link rel="stylesheet" href="${ctx}/libs/fullcalendar-2.6.1/lib/cupertino/jquery-ui.min.css"/> -->
-<!--     <link rel="stylesheet" href="${ctx}/libs/fullcalendar-2.6.1/fullcalendar.min.css"/> -->
-<!--     <link rel="stylesheet" href="${ctx}/libs/fullcalendar-2.6.1/fullcalendar.print.css"/> -->
+    <!--     <link rel="stylesheet" href="${ctx}/libs/fullcalendar-2.6.1/lib/cupertino/jquery-ui.min.css"/> -->
+    <!--     <link rel="stylesheet" href="${ctx}/libs/fullcalendar-2.6.1/fullcalendar.min.css"/> -->
+    <!--     <link rel="stylesheet" href="${ctx}/libs/fullcalendar-2.6.1/fullcalendar.print.css"/> -->
 
-    
+
     <link rel="stylesheet" href="${ctx}/css/common-init.css"/>
     <link rel="stylesheet" href="${ctx}/css/myicons.css"/>
     <link rel="stylesheet" href="${ctx}/css/index.css"/>
@@ -35,12 +38,38 @@
     <link rel="stylesheet" href="${ctx}/css/system.css"/>
     <link rel="stylesheet" href="${ctx}/css/config.css"/>
     <link rel="stylesheet" href="${ctx}/css/choose-user.css"/>
+    <link rel="stylesheet" href="${ctx}/css/login.css" />
     <!-- end: CSS -->
 
 </head>
 
 <body>
-<div class="content">
+<div class="login-div" style="display: none;">
+    <table class="m-table-login">
+        <tbody>
+        <tr>
+            <td colspan="4" align="center"><h1>服务总线后台管理系统</h1></td>
+        </tr>
+        <tr>
+            <td class="td-account">账&nbsp;&nbsp;号：</td>
+            <td><input class="account-input" type="text" name="account" tabIndex=1/>
+            </td>
+            <td rowspan="2"><button class="submit-input" type="button" onclick="Login.submit()"></button></td>
+        </tr>
+        <tr>
+            <td class="td-password">密&nbsp;&nbsp;码：</td>
+            <td><input class="password-input" type="password" name="password" tabIndex=2/></td>
+        </tr>
+        <tr>
+            <td class="td-bottom">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="content" >
+
     <div class="easyui-layout" id="main">
         <div region="north" border="false" id="layout-notrh">
 
@@ -54,7 +83,7 @@
                         <li id="monitor" style="display:none;">
                             <a href="#/monitor">运行监控</a>
                         </li>
-                        <li  id="usage" style="display:none;">
+                        <li id="usage" style="display:none;">
                             <a href="#/usage">调用管理</a>
                         </li>
                         <li id="system" style="display:none;">
@@ -144,59 +173,66 @@
 <script src="${ctx}/js/config/config.js"></script>
 <script src="${ctx}/js/config/permission_manage.js"></script>
 <script src="${ctx}/js/config/user_manage.js"></script>
+<script src="${ctx}/js/login/login.js"></script>
 
 <!-- end: JavaScript-->
 
 
-
 <script>
     var URI = '${ctx}';
-    var RESOURCES=[];//记录资源
-    $(function(){
+    var RESOURCES = [];//记录资源
+    $(function () {
         //初始化系统
         Index.init();
         <%
-			String[] resources = null;
+			List<ResourceModel> resources = null;
+			UserModel user = null;
 			String nickname = null;
 			String id = null;
 			try{
-				id = request.getParameter("id");
-		 		nickname = request.getParameter("nickname");
-		 		resources =  request.getParameterValues("resources");//获取资源
-        		for(int i = 0; i < resources.length; i++){
-        %>		
-        		RESOURCES.push("<%=resources[i]%>");
-       	<%
-        		}
+			    user = (UserModel) session.getAttribute("user");
+			    if (user != null){
+                id = user.getId();
+                nickname = user.getNickname();
+                resources =  (List<ResourceModel>) session.getAttribute("resources");//获取资源
+                for(int i = 0; i < resources.size(); i++){
+                %>
+                        RESOURCES.push("<%=resources.get(i).getName()%>");
+                <%
+                    }
+                }else{
+                    System.out.println("用户为空");
+                    %>
+                        $(".login-div").css('display','block');
+					    $(".content").css('display','none');
+                    <%
+                }
+         }catch(Exception e){
 
-			}catch(Exception e){
-//		 		RequestDispatcher rd=request.getRequestDispatcher("/login.jsp");
-//		 		rd.forward(request, response);
-			}
-		%>
-		
-	    if (Public.isInArray("system", RESOURCES)) {
-			$("#system").show();
-		}
-		if (Public.isInArray("usage", RESOURCES)) {
-			$("#usage").show();
-		}
-		if (Public.isInArray("config", RESOURCES)) {
-			$("#config").show();
-		}
-		if (Public.isInArray("monitor", RESOURCES)) {
-			$("#monitor").show();
-		}
-		if (Public.isInArray("service", RESOURCES)) {
-			$("#service").show();
-		}
+         }
+     %>
 
-		$(".user-info").find("span:first-child").html("<%=nickname%>");
-        $(".user-info").find("span:first-child").attr("id","<%=id%>");
+        if (Public.isInArray("system", RESOURCES)) {
+            $("#system").show();
+        }
+        if (Public.isInArray("usage", RESOURCES)) {
+            $("#usage").show();
+        }
+        if (Public.isInArray("config", RESOURCES)) {
+            $("#config").show();
+        }
+        if (Public.isInArray("monitor", RESOURCES)) {
+            $("#monitor").show();
+        }
+        if (Public.isInArray("service", RESOURCES)) {
+            $("#service").show();
+        }
+
+        $(".user-info").find("span:first-child").html("<%=nickname%>");
+        $(".user-info").find("span:first-child").attr("id", "<%=id%>");
 
     });
 </script>
-
 
 
 </body>

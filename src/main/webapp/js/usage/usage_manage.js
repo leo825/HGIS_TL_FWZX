@@ -62,7 +62,7 @@ UsageManage.loadData = function () {
         onLoadSuccess: function (data) {
             if (data.total == 0) {
                 //添加一个新数据行，第一列的值为你需要的提示信息
-                $(this).datagrid('appendRow', { ip: '<div style="text-align:center;color:red">没有相关记录！</div>' }).datagrid('mergeCells', { index: 0, field: 'ip', colspan: 5 });
+                $(this).datagrid('appendRow', { ip: '<div style="text-align:center;color:red">没有相关记录！</div>' }).datagrid('mergeCells', { index: 0, field: 'ip', colspan: 4 });
                 $(this).closest('div.datagrid-wrap').find('div.datagrid-pager').hide();
             }
         }

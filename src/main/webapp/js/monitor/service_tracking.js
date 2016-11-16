@@ -88,7 +88,7 @@ ServiceTracking.loadData = function () {
                 	  var id = row.id;
                 	  var html = [];
                 	  html.push('<div class="a-btn-group">');
-                	  html.push('<a href="javascript:void(0)" class="a-btn" onclick="ServiceTracking.show(\''+id+'\');">查看</a>');
+                	  //html.push('<a href="javascript:void(0)" class="a-btn" onclick="ServiceTracking.show(\''+id+'\');">查看</a>');
                 	  html.push('<a href="javascript:void(0)" class="a-btn" onclick="ServiceTracking.deletes(\''+id+'\',\'' + row.ip + '\');">删除</a>');
                 	  html.push('</div>');
                 	  return html.join('');

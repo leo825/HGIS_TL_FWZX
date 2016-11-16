@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import cn.geobeans.fwzx.model.ProjectModel;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,7 +33,7 @@ public class RouteServiceImpl implements RouteService {
         String sql = "INSERT INTO FWZX_ROUTE(ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,REG_TIME) VALUES(?,?,?,?,?,?,TO_DATE(?,'yyyy-mm-dd hh24:mi:ss'))";
         int result = -1;
         try {
-            if (getByServerName(model.getServerName()) == null) {
+            if (getListByNameOrProjectName(model.getServerName(),model.getProjectId()).size() == 0) {
                 result = jdbcTemplate.update(sql, new PreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps) throws SQLException {
@@ -131,10 +132,10 @@ public class RouteServiceImpl implements RouteService {
         List<Map<String, Object>> list = null;
         try {
             if (!StringUtil.isNull(name) && !StringUtil.isNull(projectId)) {
-                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE NAME=? AND PROJECT_ID=?";
+                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE SERVER_NAME=? AND PROJECT_ID=?";
                 list = jdbcTemplate.queryForList(sql, new Object[]{name, projectId});
             } else if (!StringUtil.isNull(name)) {
-                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE NAME=?";
+                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE SERVER_NAME=?";
                 list = jdbcTemplate.queryForList(sql, new Object[]{name});
             } else if (!StringUtil.isNull(projectId)) {
                 sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE PROJECT_ID=?";

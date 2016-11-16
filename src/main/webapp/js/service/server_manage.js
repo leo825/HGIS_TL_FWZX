@@ -55,7 +55,7 @@ ServerManage.loadData = function () {
                 var id = row.id;
                 var html = [];
                 html.push('<div class="a-btn-group">');
-                html.push('<a href="javascript:void(0)" class="a-btn" onclick="ServerManage.show(\'' + id + '\');">查看</a>');
+                //html.push('<a href="javascript:void(0)" class="a-btn" onclick="ServerManage.show(\'' + id + '\');">查看</a>');
                 html.push('<a href="javascript:void(0)" class="a-btn" onclick="ServerManage.update(\'' + id + '\');">修改</a>');
                 html.push('<a href="javascript:void(0)" class="a-btn" onclick="ServerManage.deletes(\'' + id + '\',\'' + row.name + '\');">删除</a>');
                 html.push('</div>');
@@ -141,25 +141,33 @@ ServerManage.batchAdd = function () {
     $('.p-add-service .js-ok').unbind('click').bind('click', function () {
         var obj = {};
         var projectId = $('.p-add-service select[name="projectName"]').val();
-        if (projectId != null) {
+        if (!Public.isNull(projectId)) {
             obj.projectId = projectId;
             var url = URI + '/rest/service/batch_add';
-            if ($("#excelToUpload").val().length > 0) {
+            if ($("#excelToUpload").val().length > 0 && projectId != null) {
                 $.ajaxFileUpload({
+                    fileElementId: 'excelToUpload', //文件上传域的ID
                     url: url, //用于文件上传的服务器端请求地址
                     secureuri: false, //是否需要安全协议，一般设置为false
                     data: obj,
-                    fileElementId: 'excelToUpload', //文件上传域的ID
-                    dataType: 'json', //返回值类型 一般设置为json
-                    success: function (data) //服务器成功响应处理函数
+                    async: true,
+                    dataType: 'json', //返回值类型 一般设置为text,如果是json，会有问题"<pre style="word-wrap: break-word; white-space: pre-wrap;"></pre>"
+                    success: function (resp) //服务器成功响应处理函数
                     {
-                        Public.msg('添加成功，等待数据更新...');
-                        $('.p-add-project').dialog('destroy');
-                        ServerManage.loadData();
+                        $('.p-add-service').dialog('destroy');
+                        if (resp != null) {
+                            var data = JSON.parse(resp);
+                            Public.msg('一共需要添加' + data.total + '个接口,其中' + data.failed + '个接口添加失败！！');
+                        } else {
+                            Public.msg('批量添加接口失败,文件解析失败,文件类型应该为excel');
+                        }
                         ServerManage.loadData();
                     }
                 });
             }
+        } else {
+            Public.alert("应用名称不能为空");
+            return null;
         }
     });
 

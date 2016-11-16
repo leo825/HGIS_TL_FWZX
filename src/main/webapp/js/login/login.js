@@ -21,7 +21,8 @@ Login.submit = function() {
 			contentType : 'application/json',
 			success : function(resp) {
 				if (resp != null && resp.status == 'success') {
-					Login.redirect(resp.data);
+					self.location.reload();
+
 				} else {
 					var errMsg;
 					var msg = errMsg != null ? errMsg : '用户名或者密码不正确';
@@ -30,39 +31,6 @@ Login.submit = function() {
 				}
 			}
 		});
-	}
-
-};
-
-Login.redirect = function(user) {
-	var userId = user.id;
-	if (!Public.isNull(userId)) {
-		var reqUrl = URI + '/rest/login/resource/' + userId;
-		$.ajax({
-					type : 'GET',
-					async : false,
-					url : reqUrl,
-					contentType : 'application/json',
-					success : function(resp) {
-						if (resp != null && resp.status == 'success') {
-							var resources = resp.data;
-							//根据角色来获取权
-							document.write("<form action='index.jsp' method='post' name='form1' style='display:none'>");
-							document.write("<input type='text' name='id' value='"+ user.id + "'</input>");
-							document.write("<input type='text' name='nickname' value='"+ user.nickname + "'</input>");
-							for ( var i = 0; i < resources.length; i++) {
-								document.write("<input type='text' name='resources' value='"+ resources[i].name + "'</input>");
-							}
-							document.write("</form>");
-							document.form1.submit();
-						} else {
-							var errMsg;
-							var msg = errMsg != null ? errMsg : '用户名或者密码不正确';
-							Public.alert(msg);
-							Public.debug('获取资源权限失败：' + reqUrl);
-						}
-					}
-				});
 	}
 
 };
@@ -91,7 +59,23 @@ Login.checkLoginForm = function() {
 
 Login.logout = function() {
 
-	window.location.href = "login.jsp";
+	var reqUrl = URI + '/rest/logOut';
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : reqUrl,
+		contentType : 'application/json',
+		success : function(resp) {
+			if (resp != null && resp.status == 'success') {
+				self.location.reload();
+			} else {
+				var errMsg;
+				var msg = errMsg != null ? errMsg : '注销失败了';
+				Public.alert(msg);
+				Public.debug('获取失败：' + reqUrl);
+			}
+		}
+	});
 };
 
 document.onkeydown = function(event) {

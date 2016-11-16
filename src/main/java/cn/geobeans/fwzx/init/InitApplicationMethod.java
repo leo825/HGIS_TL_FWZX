@@ -182,7 +182,7 @@ public class InitApplicationMethod {
             final ProjectModel tempProject = projectService.get(routeModel.getProjectId());
             RouteBuilder route = new RouteBuilder() {
                 public void configure() throws Exception {
-                    from("servlet:///" + routeModel.getServerName()).process(new ProcessBegin(routeModel.getServerName(), tempProject.getName()))
+                    from("servlet:///" + tempProject.getName() + "/" + routeModel.getServerName()).process(new ProcessBegin(routeModel.getServerName(), tempProject.getName()))
                             .choice()
                             .when(header("rightful").isEqualTo(false)).process(new ProcessLegal())
                             .otherwise().to(routeModel.getServerAddr() + "?throwExceptionOnFailure=false").process(new ProcessEnd());//throwExceptionOnFailure=false，如果后表面不加上这个条件则会抛出异常导致下面无法执行，无法捕捉404异常
@@ -201,8 +201,9 @@ public class InitApplicationMethod {
      */
     public int deleteServletRoute(RouteModel routeModel) {
         int result = -1;
+        ProjectModel project = projectService.get(routeModel.getProjectId());
         try {
-            String endPoint = "Endpoint[servlet:///" + routeModel.getServerName() + "]";
+            String endPoint = "Endpoint[servlet:///" + project.getName() + "/" + routeModel.getServerName() + "]";
             List<Route> routeList = camelContext.getRoutes();
             for (Route route : routeList) {
                 if (endPoint.equals(route.getEndpoint().toString())) {

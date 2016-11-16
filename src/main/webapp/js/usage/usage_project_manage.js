@@ -16,7 +16,7 @@ UsageProjectManage.init = function () {
  */
 UsageProjectManage.render = function () {
     UsageProjectManage.loadData();
-    UsageProjectManage.loadAllProvidersForm();
+    UsageProjectManage.loadProjects();
 };
 /**
  * 加载数据
@@ -126,7 +126,7 @@ UsageProjectManage.add = function () {
 
     //保存应用信息
     $('.p-add-usage .js-ok').unbind('click').bind('click', function () {
-        var project = UsageProjectManage.checkBoardroomForm();
+        var project = UsageProjectManage.checkProjectForm();
         if (project != null) {
             Public.postRest('/usage', project, function (resp) {
                 Public.msg('添加成功');
@@ -149,7 +149,7 @@ UsageProjectManage.update = function (id, projectId, e) {
 
     //修改应用信息
     $('.p-add-project .js-ok').unbind('click').bind('click', function () {
-        var boardroom = UsageProjectManage.checkBoardroomForm();
+        var boardroom = UsageProjectManage.checkProjectForm();
         if (boardroom != null) {
             boardroom.id = id;
             Public.putRest('/boardroom', boardroom, function (resp) {
@@ -210,7 +210,7 @@ UsageProjectManage.getSearchParams = function () {
 /**
  * 检查应用表单，并获取数据
  */
-UsageProjectManage.checkBoardroomForm = function () {
+UsageProjectManage.checkProjectForm = function () {
     var name = $('.p-add-project input[name="name"]').val();
     var ip = $('.p-add-project input[name="ip"]').val();
     var port = $('.p-add-project input[name="port"]').val();
@@ -315,8 +315,8 @@ UsageProjectManage.showUsageProjectInfo = function (id,projectId) {
 /**
  * 获取查询表单中的应用类型
  */
-UsageProjectManage.loadTypeDataOfForm = function () {
-    Public.getRest('/dictionary/query?group=BOARDROOM_TYPE', function (dicts) {
+UsageProjectManage.loadProjects = function () {
+    Public.getRest('/project', function (dicts) {
         if (dicts != null && dicts.length > 0) {
             var html = [];
             html.push('<option value="">全部</option>');
@@ -324,9 +324,9 @@ UsageProjectManage.loadTypeDataOfForm = function () {
                 var dict = dicts[i];
                 html.push('<option value="' + dict.id + '">' + dict.name + '</option>');
             }
-            $('.js-project-manage .js-type').html(html.join(""));
+            $('.js-usage-manage .js-project').html(html.join(""));
         } else {
-            $('.js-project-manage .js-type').html('');
+            $('.js-usage-manage .js-project').html('');
         }
     });
 };

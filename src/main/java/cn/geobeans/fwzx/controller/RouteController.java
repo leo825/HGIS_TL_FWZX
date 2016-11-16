@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.geobeans.common.util.CalendarUtil;
 import cn.geobeans.fwzx.init.InitApplicationMethod;
 import cn.geobeans.fwzx.util.POIUtil;
 import net.sf.json.JSONObject;
@@ -103,7 +104,7 @@ public class RouteController {
             int count1 = service.delete(id);
             int count2 = initApplicationMethod.deleteServletRoute(routeModel);
             if (count1 > -1 && count2 > -1) {
-                return new JsonResponse();
+                return new JsonResponse(JsonResponseStatusEnum.SUCCESS, "删除成功");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -218,10 +219,11 @@ public class RouteController {
      */
     @RequestMapping(value = BATCH_ADD, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public JsonResponse addExcelFile(HttpServletRequest request) {
+    public String addExcelFile(HttpServletRequest request) {
         String fileName = "";
         String fullPath = "";
         String projectId = "";
+        JSONObject result = null;
         try {
             projectId = request.getParameter("projectId");
 
@@ -242,13 +244,12 @@ public class RouteController {
                         // 如果名称不为“”,说明该文件存在，否则说明该文件不存在
                         if (myFileName.trim() != "") {
                             fileName = file.getOriginalFilename();
-                            fullPath = InitApplicationMethod.EXCEL_PATH + File.separator + fileName;
+
+                            fullPath = InitApplicationMethod.EXCEL_PATH + File.separator + addTimeStampTofile(fileName);
                             File localFile = new File(fullPath);
                             file.transferTo(localFile);
-                            int result = batchAdd(projectId, fullPath);
-                            if (result > -1) {
-                                return new JsonResponse(JsonResponseStatusEnum.SUCCESS, "文件上传成功");
-                            }
+                            result = batchAdd(projectId, fullPath);
+                            return result.toString();
                         }
                     }
                 }
@@ -256,7 +257,7 @@ public class RouteController {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return new JsonResponse(JsonResponseStatusEnum.ERROR, "文件上传失败");
+        return result.toString();
     }
 
 
@@ -265,9 +266,10 @@ public class RouteController {
      *
      * @param projectId 就是应用ID
      */
-    private int batchAdd(String projectId, String fullPath) {
-        int result = -1;
+    private JSONObject batchAdd(String projectId, String fullPath) {
+        int faileCount = 0;
         Sheet sheet = POIUtil.checkSheetvalidity(fullPath);
+        JSONObject result = new JSONObject();
         if (sheet != null) {
             //获得所有数据
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
@@ -280,17 +282,26 @@ public class RouteController {
                     routeModel.setServerAddr(String.valueOf(row.getCell(1)));
                     routeModel.setDescription(String.valueOf(row.getCell(2)));
                     routeModel.setDataReturnType(String.valueOf(row.getCell(3)));
-                    service.insert(routeModel);
-
+                    if (service.insert(routeModel) == -1) {
+                        logger.error("增加[ " + routeModel.getServerName() + " ]接口失败了，因为在系统中已经存在了！！");
+                        faileCount++;
+                    }
                 } catch (Exception e) {
                     logger.error("获取单元格错误");
                 }
             }
-            result = 1;
+            result.put("total", sheet.getLastRowNum());
+            result.put("failed", faileCount);
         } else {
             logger.error("exls读取数据异常");
         }
         return result;
     }
 
+
+    private String addTimeStampTofile(String fileName) {
+        String[] tempArray = fileName.split("\\.");
+        String newFileName = tempArray[0] + "_" + CalendarUtil.getTimeStr() + "." + tempArray[1];
+        return newFileName;
+    }
 }
