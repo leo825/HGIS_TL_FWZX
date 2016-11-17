@@ -256,6 +256,10 @@ ServerManage.checkServiceForm = function () {
         Public.alert("接口返回类型不能为空");
         return null;
     } else {
+        if(Public.isApi(serverAddr)){
+            Public.alert("接口返回类型不能为空");
+            return null;
+        }
         var obj = {};
         obj.serverName = serverName;
         obj.projectId = projectId;

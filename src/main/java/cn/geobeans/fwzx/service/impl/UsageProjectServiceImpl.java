@@ -155,7 +155,7 @@ public class UsageProjectServiceImpl implements UsageProjectService {
 
             for (int i = 0; !StringUtil.isListEmpty(list) && i < list.size(); i++) {
                 String temp_sql = projectSql+"?";
-                projectList = jdbcTemplate.query(projectSql ,new Object[]{list.get(i).getId()}, new BeanPropertyRowMapper<ProjectModel>(ProjectModel.class));
+                projectList = jdbcTemplate.query(temp_sql ,new Object[]{list.get(i).getId()}, new BeanPropertyRowMapper<ProjectModel>(ProjectModel.class));
                 if (!StringUtil.isListEmpty(projectList)) {
                     list.get(i).setProjectList(projectList);
                 }
@@ -164,6 +164,6 @@ public class UsageProjectServiceImpl implements UsageProjectService {
             return null;
         }
         return list;
-    }
-
 }
+
+        }

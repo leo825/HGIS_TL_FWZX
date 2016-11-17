@@ -70,7 +70,7 @@
 </div>
 <div class="content" >
 
-    <div class="easyui-layout" id="main">
+    <div class="easyui-layout" id="main" >
         <div region="north" border="false" id="layout-notrh">
 
             <div class="header">
@@ -201,7 +201,6 @@
                 <%
                     }
                 }else{
-                    System.out.println("用户为空");
                     %>
                         $(".login-div").css('display','block');
 					    $(".content").css('display','none');

@@ -209,6 +209,20 @@ Public.isIp = function(str) {
 };
 
 /**
+ * 判断字符串是否符合接口格式。例如：http://www.runoob.com:80/html/html-tutorial.html
+ *@param str
+ * */
+Public.isApi = function(str){
+	var re = /(\w+):\/\/([^/:]+)(:\d*)?([^# ]*)/;
+	if(re.test(str)){
+		return true;
+	}
+	return false;
+}
+
+
+
+/**
  *创建弹出对话框
  * @param {Object} title    对话框标题
  * @param {Object} content  对话框内容

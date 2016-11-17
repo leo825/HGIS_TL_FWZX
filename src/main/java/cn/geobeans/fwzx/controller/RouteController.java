@@ -285,6 +285,9 @@ public class RouteController {
                     if (service.insert(routeModel) == -1) {
                         logger.error("增加[ " + routeModel.getServerName() + " ]接口失败了，因为在系统中已经存在了！！");
                         faileCount++;
+                    }else{
+                        initApplicationMethod.addServletRoute(routeModel);//接口在数据库中添加成功之后将其加入路由中
+                        logger.error("增加[ " + routeModel.getServerName() + " ]成功！！");
                     }
                 } catch (Exception e) {
                     logger.error("获取单元格错误");

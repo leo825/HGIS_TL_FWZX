@@ -2,7 +2,9 @@
  * 应用管理
  * @type {{}}
  */
-var UsageProjectManage = {};
+var UsageProjectManage = {
+
+};
 /**
  * 初始化
  */
@@ -308,7 +310,7 @@ UsageProjectManage.showUsageProjectInfo = function (id,projectId) {
             }
         }
         $('.p-add-project input[name="ip"]').val(ip);
-        $('.p-add-project input[name="name"]').val(projectName);
+        $('.p-add-project input[name="name"]').val(name);
     });
 };
 

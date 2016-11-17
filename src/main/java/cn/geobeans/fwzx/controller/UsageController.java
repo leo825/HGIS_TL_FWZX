@@ -129,22 +129,20 @@ public class UsageController {
     @RequestMapping(value = BATCH_ADD_PROJECT, method = RequestMethod.POST)
     @ResponseBody
     public JsonResponse batchAddProject(@RequestBody JSONObject model) {
+        int successed = 0;
+        UsageModel usage = null;
+        ProjectModel project = null;
+        String usageString;
+        String projectString;
         try {
+            JSONObject resultJson = new JSONObject();
             String ipPrefix = model.getString("ipPrefix");
             String start = model.getString("start");
             String end = model.getString("end");
             String projectNames[] = (model.getString("projectNames")).split(",");
-
             int total = Integer.parseInt(end) - Integer.parseInt(start) + 1;
-            int successed = 0;
-            JSONObject resultJson = new JSONObject();
-            UsageModel usage = null;
-            ProjectModel project = null;
-            String usageString;
-            String projectString;
 
             for (int i = Integer.parseInt(start); i <= Integer.parseInt(end); i++) {
-
                 usage = service.getByIp(ipPrefix + i);
                 if (usage != null) {
                     for (int j = 0; j < projectNames.length; j++) {
@@ -161,7 +159,6 @@ public class UsageController {
                         } else {
                             logger.error(usageString + "用户已经存在应用 " + projectString);
                         }
-
                     }
                 }
             }

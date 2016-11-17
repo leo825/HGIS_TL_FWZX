@@ -38,7 +38,7 @@ public class HttpRequestController {
         try {
             initApplicationMethod.initDataBase();//初始化数据库数据
             initApplicationMethod.initFileDirectory();//初始化文件目录
-            initApplicationMethod.initRoutes();//初始化路由信
+//          initApplicationMethod.initRoutes();//初始化路由信
             initApplicationMethod.initServletRoutes();//路由所有接口
 
         } catch (Exception e) {
