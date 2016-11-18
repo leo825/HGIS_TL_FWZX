@@ -182,7 +182,7 @@ public class InitApplicationMethod {
             final ProjectModel tempProject = projectService.get(routeModel.getProjectId());
             RouteBuilder route = new RouteBuilder() {
                 public void configure() throws Exception {
-                    from("servlet:///" + tempProject.getName() + "/" + routeModel.getServerName()).process(new ProcessBegin(routeModel.getServerName(), tempProject.getName()))
+                    from("servlet:///" + tempProject.getName() + "/" + routeModel.getServerName()).process(new ProcessBegin(routeModel.getServerName(), tempProject.getName(), routeModel.getDataReturnType()))
                             .choice()
                             .when(header("rightful").isEqualTo(false)).process(new ProcessLegal())
                             .otherwise().to(routeModel.getServerAddr() + "?throwExceptionOnFailure=false").process(new ProcessEnd());//throwExceptionOnFailure=false，如果后表面不加上这个条件则会抛出异常导致下面无法执行，无法捕捉404异常
@@ -259,13 +259,15 @@ public class InitApplicationMethod {
 
         private String serverName;
         private String projectName;
+        private String dataReturnType;
 
         public ProcessBegin() {
         }
 
-        public ProcessBegin(String serverName, String projectName) {
+        public ProcessBegin(String serverName, String projectName, String dataReturnType) {
             this.serverName = serverName;
             this.projectName = projectName;
+            this.dataReturnType = dataReturnType;
         }
 
         @Override
@@ -279,7 +281,8 @@ public class InitApplicationMethod {
                 exchange.getOut().setHeader("ip", ip);
                 exchange.getOut().setHeader("serverName", this.serverName);
                 exchange.getOut().setHeader("projectName", this.projectName);
-                exchange.getOut().setHeader("dataReturnType", request.getParameter("dataReturnType"));//返回数据类型
+                exchange.getOut().setHeader("dataReturnType", this.dataReturnType);
+                exchange.getOut().setHeader("dataTransformType", request.getParameter("dataTransformType"));//返回数据类型
                 //此时ip不存在系统中因此ip不合法
                 if (u == null) {
                     exchange.getOut().setHeader("rightful", false);
@@ -340,20 +343,21 @@ public class InitApplicationMethod {
                 String ip = (String) exchange.getIn().getHeader("ip");
                 String serverName = (String) exchange.getIn().getHeader("serverName");
                 String projectName = (String) exchange.getIn().getHeader("projectName");
+                String dataReturnType = (String) exchange.getIn().getHeader("dataReturnType");
                 String operateResult = OperateResultEnum.SUCCESS.toString();
                 String userName = (String) exchange.getIn().getHeader("userName");
                 String operateDescription = OperateDescriptionEnum.OPERATE_SUCCESS.toString();
-                String dataReturnType = (String) exchange.getIn().getHeader("dataReturnType");
+                String dataTransformType = (String) exchange.getIn().getHeader("dataTransformType");
 
                 int responseCode = (int) exchange.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE);//是否200返回
                 JSONObject json = new JSONObject();
                 if (responseCode == 200) {
                     InputStream inputStream = (InputStream) exchange.getIn().getBody();
-                    if ("xml".equals(dataReturnType)) {
+                    if ("xml".equals(dataTransformType) && "json".equals(dataReturnType)) {
                         String jsonStr = IOUtils.toString(inputStream);
                         String xmlStr = XmlJsonUtil.json2Xml("{\"document\":" + jsonStr + "}");
                         exchange.getOut().setBody(xmlStr);
-                    } else if ("json".equals(dataReturnType)) {
+                    } else if ("json".equals(dataTransformType) && "xml".equals(dataReturnType)) {
                         String xmlStr = IOUtils.toString(inputStream);
                         String jsonStr = XmlJsonUtil.xml2Json(xmlStr);
                         exchange.getOut().setBody(jsonStr);

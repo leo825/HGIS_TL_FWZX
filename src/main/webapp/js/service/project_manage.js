@@ -365,6 +365,7 @@ ProjectManage.showProjectInfo = function (id) {
         $('.p-add-project input[name="description"]').val(project.description);
         $('.p-add-project input[name="provider"]').val(project.provider);
         $('.p-add-project input[name="testUrl"]').val(project.testUrl);
+        return project;
     });
 };
 

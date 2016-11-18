@@ -165,6 +165,7 @@ public class ProjectServiceImpl implements ProjectService {
                 sql = sql + " AND PROVIDER=?";
                 params.add(provider);
             }
+            sql = sql + " ORDER BY REG_TIME DESC";
             list = jdbcTemplate.queryForList(sql, params.toArray());
         } catch (Exception e) {
             return null;

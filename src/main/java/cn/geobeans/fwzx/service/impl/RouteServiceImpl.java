@@ -132,16 +132,16 @@ public class RouteServiceImpl implements RouteService {
         List<Map<String, Object>> list = null;
         try {
             if (!StringUtil.isNull(name) && !StringUtil.isNull(projectId)) {
-                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE SERVER_NAME=? AND PROJECT_ID=?";
+                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE SERVER_NAME=? AND PROJECT_ID=? ORDER BY REG_TIME DESC";
                 list = jdbcTemplate.queryForList(sql, new Object[]{name, projectId});
             } else if (!StringUtil.isNull(name)) {
-                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE SERVER_NAME=?";
+                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE SERVER_NAME=? ORDER BY REG_TIME DESC";
                 list = jdbcTemplate.queryForList(sql, new Object[]{name});
             } else if (!StringUtil.isNull(projectId)) {
-                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE PROJECT_ID=?";
+                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE PROJECT_ID=? ORDER BY REG_TIME DESC";
                 list = jdbcTemplate.queryForList(sql, new Object[]{projectId});
             } else {
-                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE";
+                sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE ORDER BY REG_TIME DESC";
                 list = jdbcTemplate.queryForList(sql, new Object[]{});
             }
         } catch (Exception e) {

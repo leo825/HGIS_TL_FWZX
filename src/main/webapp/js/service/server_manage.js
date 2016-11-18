@@ -37,7 +37,7 @@ ServerManage.loadData = function () {
         pageSize: Public.LIMIT,
         columns: [[
             {field: 'id', title: 'ID', hidden: true},
-            {field: 'name', title: '接口名称', width: 200},
+            {field: 'name', title: '接口名称', width: 200,sortable:true,sorter:'mysort'},
             {
                 field: 'serverAddress', title: '接口地址', width: 300, formatter: function (value, row) {
                 var serverAddress = row.serverAddress;
@@ -77,6 +77,12 @@ ServerManage.loadData = function () {
     });
     $('.js-service-table').datagrid({loadFilter: ServerManage.pagerFilter});
 };
+
+
+
+function mysort(a,b){
+    return (a > b ? 1 : -1);
+}
 
 /**
  * 分页过滤器
@@ -178,16 +184,21 @@ ServerManage.batchAdd = function () {
  * 修改接口
  */
 ServerManage.update = function (id, e) {
+    var oldService;
     Public.stopPropagation(e);
     Public.createDialog('修改接口', '', 'p-add-service', 400, 300);
     $('.p-add-service .p-dialog-content').load('partials/service/update_service.html', function () {
-        ServerManage.showServiceInfo(id);
+        oldService = ServerManage.showServiceInfo(id);
     });
 
     //修改应用信息
     $('.p-add-service .js-ok').unbind('click').bind('click', function () {
         var service = ServerManage.checkServiceForm();
         if (service != null) {
+            if(Public.compObj(service,oldService)){
+                Public.alert('没有做任何修改');
+                return null;
+            }
             service.id = id;
             Public.putRest('/service', service, function (resp) {
                 Public.msg('修改成功');
@@ -256,8 +267,8 @@ ServerManage.checkServiceForm = function () {
         Public.alert("接口返回类型不能为空");
         return null;
     } else {
-        if(Public.isApi(serverAddr)){
-            Public.alert("接口返回类型不能为空");
+        if(!Public.isApi(serverAddr)){
+            Public.alert("接口地址的格式应如下所示：http://192.168.0.101:7001/PGIS/XMLPort");
             return null;
         }
         var obj = {};
@@ -331,11 +342,20 @@ ServerManage.loadNetworkData = function (el, initValue) {
  * 加载所有应用
  *
  * */
-ServerManage.loadProjects = function () {
+ServerManage.loadProjects = function (projectId) {
     Public.getRest('/project', function (dicts) {
         if (dicts != null && dicts.length > 0) {
             var html = [];
-            html.push('<option value="">空</option>');
+            if(Public.isNull(projectId)){
+                html.push('<option value="">空</option>');
+            }else{
+                for (var i = 0, j = dicts.length; i < j; i++) {
+                    var dict = dicts[i];
+                    if(projectId == dict.id){
+                        html.push('<option value="' + dict.id + '">' + dict.name + '</option>');
+                    }
+                }
+            }
             for (var i = 0, j = dicts.length; i < j; i++) {
                 var dict = dicts[i];
                 html.push('<option value="' + dict.id + '">' + dict.name + '</option>');
@@ -364,8 +384,10 @@ ServerManage.showServiceInfo = function (id) {
         $('.p-add-service input[name="serverAddr"]').val(service.serverAddr);
         $('.p-add-service input[name="dataReturnType"]').val(service.dataReturnType);
         $('.p-add-service input[name="description"]').val(service.description);
+        ServerManage.loadProjects(projectId);
+        return service;
     });
-    ServerManage.loadProjects();
+
 };
 
 /**
