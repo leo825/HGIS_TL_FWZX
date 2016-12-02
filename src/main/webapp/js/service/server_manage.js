@@ -376,7 +376,6 @@ ServerManage.loadProjects = function (projectId) {
             $('.js-projects').html('');
         }
     });
-
 };
 
 

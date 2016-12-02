@@ -117,8 +117,8 @@ public class UsageProjectServiceImpl implements UsageProjectService {
     }
 
     @Override
-    public boolean isUsageProjectExist(UsageModel usage, ProjectModel project) {
-        String sql = "SELECT USAGE_ID,PROJECT_ID FROM FWZX_USAGE_PROJECT WHERE USAGE_ID='" + usage.getId() + "'" + " AND PROJECT_ID='" + project.getId() + "'";
+    public boolean isUsageProjectExist(String usageId, String projectId) {
+        String sql = "SELECT USAGE_ID,PROJECT_ID FROM FWZX_USAGE_PROJECT WHERE USAGE_ID='" + usageId + "'" + " AND PROJECT_ID='" + projectId + "'";
         List<Map<String, Object>> list = null;
         try {
             list = jdbcTemplate.queryForList(sql);
@@ -154,8 +154,8 @@ public class UsageProjectServiceImpl implements UsageProjectService {
             list = (List<UsageModel>) jdbcTemplate.query(sql, paramsSql.toArray(), new BeanPropertyRowMapper<UsageModel>(UsageModel.class));
 
             for (int i = 0; !StringUtil.isListEmpty(list) && i < list.size(); i++) {
-                String temp_sql = projectSql+"?";
-                projectList = jdbcTemplate.query(temp_sql ,new Object[]{list.get(i).getId()}, new BeanPropertyRowMapper<ProjectModel>(ProjectModel.class));
+                String temp_sql = projectSql + "?";
+                projectList = jdbcTemplate.query(temp_sql, new Object[]{list.get(i).getId()}, new BeanPropertyRowMapper<ProjectModel>(ProjectModel.class));
                 if (!StringUtil.isListEmpty(projectList)) {
                     list.get(i).setProjectList(projectList);
                 }
@@ -164,6 +164,8 @@ public class UsageProjectServiceImpl implements UsageProjectService {
             return null;
         }
         return list;
-}
+    }
 
-        }
+
+
+}

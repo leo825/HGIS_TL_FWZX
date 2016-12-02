@@ -1,10 +1,7 @@
 package cn.geobeans.fwzx.service;
 
 import java.util.List;
-
 import cn.geobeans.fwzx.model.ProjectModel;
-import cn.geobeans.fwzx.model.ResourceModel;
-import cn.geobeans.fwzx.model.RoleModel;
 import cn.geobeans.fwzx.model.UsageModel;
 
 /**
@@ -35,8 +32,6 @@ public interface UsageProjectService {
     /**
      * 更新使用者应用数据
      *
-     * @param usage
-     * @param project
      * @return int
      */
     public int update(UsageModel oldUsage, ProjectModel oldProject, UsageModel newUsage, ProjectModel newProject);
@@ -61,11 +56,11 @@ public interface UsageProjectService {
     /**
      * 查看数据库中是否存在此记录
      *
-     * @param usage
-     * @param project
+     * @param usageId
+     * @param projectId
      * @return boolean
      */
-    public boolean isUsageProjectExist(UsageModel usage, ProjectModel project);
+    public boolean isUsageProjectExist(String usageId, String projectId);
 
     /**
      * 通过参数获取所有UsagModel

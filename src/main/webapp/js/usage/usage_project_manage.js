@@ -2,9 +2,7 @@
  * 应用管理
  * @type {{}}
  */
-var UsageProjectManage = {
-
-};
+var UsageProjectManage = {};
 /**
  * 初始化
  */
@@ -132,7 +130,7 @@ UsageProjectManage.add = function () {
         if (project != null) {
             Public.postRest('/usage', project, function (resp) {
                 Public.msg('添加成功');
-                $('.p-add-project').dialog('destroy');
+                $('.p-update-usage').dialog('destroy');
                 //重新加载数据
                 UsageProjectManage.loadData();
             });
@@ -144,23 +142,27 @@ UsageProjectManage.add = function () {
  */
 UsageProjectManage.update = function (id, projectId, e) {
     Public.stopPropagation(e);
-    Public.createDialog('修改应用', '', 'p-add-project', 300, 300);
-    $('.p-add-project .p-dialog-content').load('partials/usage/add_usage_manage.html', function () {
-        UsageProjectManage.showUsageProjectInfo(id,projectId);
+    Public.createDialog('修改应用', '', 'p-update-usage', 300, 300);
+    $('.p-update-usage .p-dialog-content').load('partials/usage/update_usage_projects.html', function () {
+        UsageProjectManage.showUsageProjectInfo(id, projectId);
     });
 
     //修改应用信息
-    $('.p-add-project .js-ok').unbind('click').bind('click', function () {
-        var usge = UsageProjectManage.checkProjectForm();
-        if (usge != null) {
-            usge.id = id;
-            Public.putRest('/usage', usge, function (resp) {
+    $('.p-update-usage .js-ok').unbind('click').bind('click', function () {
+        var newProjectId = $('.p-update-usage select[name="projectName"]').val();
+        if (newProjectId != projectId) {
+            Public.getRest('/usage/update_usage_project?usageId=' + id + '&projectId=' + projectId+'&newProjectId='+newProjectId, function (resp) {
+
                 Public.msg('修改成功');
-                $('.p-add-project').dialog('destroy');
+                $('.p-update-usage').dialog('destroy');
                 //重新加载数据
                 UsageProjectManage.loadData();
             });
+        }else{
+            Public.alert("没有做任何修改");
+            return null;
         }
+
     });
 };
 /**
@@ -176,7 +178,7 @@ UsageProjectManage.show = function () {
 UsageProjectManage.deletes = function (id, ip, projectId, e) {
     Public.stopPropagation(e);
     Public.comfirm('确定要删除用户ip为' + ip + ',的信息吗', function () {
-        Public.deleteRest('/usage' + id + '?projectId=' + projectId, null, function () {
+        Public.deleteRest('/usage/' + id + '?projectId=' + projectId, null, function () {
             Public.msg('删除成功');
             UsageProjectManage.loadData();
         });
@@ -213,11 +215,11 @@ UsageProjectManage.getSearchParams = function () {
  * 检查应用表单，并获取数据
  */
 UsageProjectManage.checkProjectForm = function () {
-    var name = $('.p-add-project input[name="name"]').val();
-    var ip = $('.p-add-project input[name="ip"]').val();
-    var port = $('.p-add-project input[name="port"]').val();
-    var description = $('.p-add-project input[name="description"]').val();
-    var provider = $('.p-add-project input[name="provider"]').val();
+    var name = $('.p-update-usage input[name="name"]').val();
+    var ip = $('.p-update-usage input[name="ip"]').val();
+    var port = $('.p-update-usage input[name="port"]').val();
+    var description = $('.p-update-usage input[name="description"]').val();
+    var provider = $('.p-update-usage input[name="provider"]').val();
 
     if (Public.isNull(name)) {
         Public.alert('应用名称不能为空');
@@ -246,7 +248,7 @@ UsageProjectManage.checkProjectForm = function () {
  */
 UsageProjectManage.initFormData = function (initBoardroomTypeValue, initNetworkValue, initOrgValue) {
     //加载所有的应用名称
-    //UsageProjectManage.loadProjectNameData('.p-add-project .js-org-tree', initOrgValue);
+    //UsageProjectManage.loadProjectNameData('.p-update-usage .js-org-tree', initOrgValue);
 };
 
 /**
@@ -297,21 +299,24 @@ UsageProjectManage.loadOrgTreeData = function (el, initValue) {
  * 显示应用信息
  * @param id
  */
-UsageProjectManage.showUsageProjectInfo = function (id,projectId) {
+UsageProjectManage.showUsageProjectInfo = function (id, projectId) {
     Public.getRest('/usage/' + id, function (usage) {
         var ip = usage.ip;
         var name = usage.name;
+        var description = usage.description;
         var projectName;
         var projectList = usage.projectList;
 
-        for(var i = 0; i < projectList.length; i++){
-            if(projectId == projectList[i].id){
+        for (var i = 0; i < projectList.length; i++) {
+            if (projectId == projectList[i].id) {
                 projectName = projectList[i].name;
                 break;
             }
         }
-        $('.p-add-project input[name="ip"]').val(ip);
-        $('.p-add-project input[name="name"]').val(name);
+        $('.p-update-usage input[name="ip"]').val(ip);
+        $('.p-update-usage input[name="name"]').val(name);
+        $('.p-update-usage input[name="description"]').val(description);
+        UsageProjectManage.loadProjects(projectId);
     });
 };
 
@@ -348,6 +353,36 @@ UsageProjectManage.loadAllProvidersForm = function () {
             $('.js-usage-manage .js-provider').html(html.join(""));
         } else {
             $('.js-usage-manage .js-provider').html('');
+        }
+    });
+};
+
+
+/**
+ * 加载所有应用
+ *
+ * */
+UsageProjectManage.loadProjects = function (projectId) {
+    Public.getRest('/project', function (dicts) {
+        if (dicts != null && dicts.length > 0) {
+            var html = [];
+            if (Public.isNull(projectId)) {
+                html.push('<option value="">空</option>');
+            } else {
+                for (var i = 0, j = dicts.length; i < j; i++) {
+                    var dict = dicts[i];
+                    if (projectId == dict.id) {
+                        html.push('<option value="' + dict.id + '">' + dict.name + '</option>');
+                    }
+                }
+            }
+            for (var i = 0, j = dicts.length; i < j; i++) {
+                var dict = dicts[i];
+                html.push('<option value="' + dict.id + '">' + dict.name + '</option>');
+            }
+            $('.js-projects').html(html.join(""));
+        } else {
+            $('.js-projects').html('');
         }
     });
 };

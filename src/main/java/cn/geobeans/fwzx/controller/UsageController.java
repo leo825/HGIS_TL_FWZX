@@ -46,6 +46,7 @@ public class UsageController {
     private static final String GET_USAGES_EASYUI_QUERY = "/usage/usages_easyui_query";
     private static final String BATCH_ADD = "/usage/batch_add";
     private static final String BATCH_ADD_PROJECT = "/usage/batch_add_project";
+    private static final String Update_USAGE_PROJECT = "/usage/update_usage_project";
 
     @Resource
     private UsageService service;
@@ -149,7 +150,7 @@ public class UsageController {
                         project = projectService.getProjectByName(projectNames[j]);
                         usageString = JSONObject.fromObject(usage).toString();
                         projectString = JSONObject.fromObject(project).toString();
-                        if (!usageProjectService.isUsageProjectExist(usage, project)) {
+                        if (!usageProjectService.isUsageProjectExist(usage.getId(), project.getId())) {
                             int result = -1;
                             result = usageProjectService.insert(usage, project);
                             if (result > 0) {
@@ -325,5 +326,41 @@ public class UsageController {
         jsonResult.put("rows", rowsReturn);
         return jsonResult;
     }
+
+    /**
+     * 获取所有的使用者的信息
+     *
+     * @throws IOException
+     */
+    @RequestMapping(value = Update_USAGE_PROJECT, method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public JsonResponse updateUsageProject(@RequestParam(value = "usageId", required = false) String usageId,
+                                         @RequestParam(value = "projectId", required = false) String projectId,
+                                         @RequestParam(value = "newProjectId", required = false) String newProjectId) {
+        JSONObject jsonResult = new JSONObject();
+        try {
+            if (usageProjectService.isUsageProjectExist(usageId, newProjectId)) {
+                jsonResult.put("result", false);
+                jsonResult.put("data", "这个应用已经添加到使用者上了");
+            } else {
+                service.delete(usageId, projectId);
+                UsageModel usage = service.get(usageId);
+                ProjectModel project = projectService.get(newProjectId);
+                int result = -1;
+                result = usageProjectService.insert(usage, project);
+                if (result > 0) {
+                    logger.info(usage.getIp() + "用户成功修改了应用" + project.getName());
+                    jsonResult.put("result",true);
+                    jsonResult.put("data","修改成功");
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            jsonResult.put("result", false);
+            jsonResult.put("data", e.getMessage());
+        }
+        return new JsonResponse(jsonResult);
+    }
+
 
 }
