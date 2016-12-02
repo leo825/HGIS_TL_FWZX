@@ -123,14 +123,19 @@ public class ProjectController {
                         if (myFileName.trim() != "") {
                             fileName = file.getOriginalFilename();
                             fullPath = fileDir + File.separator + fileName;
-                            File localFile = new File(fullPath);
-                            file.transferTo(localFile);
-                            model.setFileName(fileName);
-                            model.setFilePath(fullPath);
-                            int result = service.update(model);
-                            if (result > -1) {
-                                return new JsonResponse(model);
+                            if (StringUtil.checkDir(fileDir)) {
+                                File localFile = new File(fullPath);
+                                file.transferTo(localFile);
+                                model.setFileName(fileName);
+                                model.setFilePath(fullPath);
+                                int result = service.update(model);
+                                if (result > -1) {
+                                    return new JsonResponse(model);
+                                }
+                            } else {
+                                logger.error("附件上传目录[" + fileDir + "]创建失败了！！！");
                             }
+
                         }
                     }
                 }
@@ -174,6 +179,11 @@ public class ProjectController {
     @ResponseBody
     public JsonResponse update(@RequestBody ProjectModel project) {
         try {
+            ProjectModel oldProject = service.get(project.getId());
+            if (StringUtil.isNull(project.getFileName())) {
+                project.setFileName(oldProject.getFileName());
+                project.setFilePath(oldProject.getFilePath());
+            }
             int result = service.update(project);
             if (result > -1) {
                 return new JsonResponse(project);
@@ -396,7 +406,7 @@ public class ProjectController {
         try {
             ProjectModel model = service.get(id);
             model.setCheckState("审核通过");
-            int count = service.update(model);
+            int count = service.updateProjectCheckState(model);
             if (count > -1) {
                 return new JsonResponse(model);
             }

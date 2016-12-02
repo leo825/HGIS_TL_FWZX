@@ -144,7 +144,7 @@ public class UsageProjectServiceImpl implements UsageProjectService {
                 sql = sql + " AND IP='" + ip + "'";
             }
             if (!StringUtil.isNull(name)) {
-                sql = sql + " AND NAME='" + name + "'";
+                sql = sql + " AND NAME LIKE '%" + name + "%'";
             }
 
             if (!StringUtil.isNull(projectId)) {

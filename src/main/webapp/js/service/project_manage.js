@@ -63,7 +63,7 @@ ProjectManage.loadData = function () {
                 return provider != null ? provider : '';
             }
             },
-            {field: 'fileName', title: '审核状态', hidden: true},
+            {field: 'fileName', title: '文件名称', hidden: true},
             {field: 'testUrl', title: '测试页面', width: 200},
             {
                 field: 'checkState', title: '审核状态', width: 100, formatter: function (value, row) {
@@ -75,33 +75,27 @@ ProjectManage.loadData = function () {
             }
             },
             {
-                field: 'operate', title: '操作', width: 200, formatter: function (value, row) {
+                field: 'operate', title: '操作', width: 240, formatter: function (value, row) {
 
                 var html = [];
                 html.push('<div class="a-btn-group">');
                 html.push('<a href="javascript:void(0)" class="a-btn" onclick="ProjectManage.test(\'' + row.ip + '\',\'' + row.port + '\');">测试</a>');
-
                 if (Public.isInArray("add", RESOURCES)) {
                     $("#addBtn").show();
                 }
-
                 if (Public.isInArray("update", RESOURCES)) {
                     html.push('<a href="javascript:void(0)" class="a-btn" onclick="ProjectManage.update(\'' + row.id + '\');">修改</a>');
                 }
-
                 if (Public.isInArray("delete", RESOURCES)) {
                     html.push('<a href="javascript:void(0)" class="a-btn" onclick="ProjectManage.deletes(\'' + row.id + '\',\'' + row.name + '\');">删除</a>');
                 }
-
                 if (Public.isInArray("check", RESOURCES)) {
                     html.push('<a href="javascript:void(0)" class="a-btn" onclick="ProjectManage.check(\'' + row.id + '\',\'' + row.name + '\');">审核</a>');
                 }
-
                 if (!Public.isNull(row.fileName)) {
                     var url = URI + '/rest/project/download_file?id=' + row.id;
-                    html.push('<a href="' + url + '" class="a-btn">文档资料</a>');
+                    html.push('<a href="' + url + '" class="a-btn">'+row.fileName+' </a>');
                 }
-
                 html.push('</div>');
                 return html.join('');
             }
@@ -164,7 +158,7 @@ ProjectManage.add = function () {
         var project = ProjectManage.checkProjectForm();
         if (project != null) {
             Public.postRest('/project', project, function (resp) {
-                ProjectManage.addFile(resp);
+                ProjectManage.addFile(resp,'fileToUpload');
                 Public.msg('添加成功,等待审核');
                 $('.p-add-project').dialog('destroy');
             });
@@ -172,13 +166,13 @@ ProjectManage.add = function () {
     });
 };
 
-ProjectManage.addFile = function (project) {
+ProjectManage.addFile = function (project,fileElementId) {
     var url = URI + '/rest/project/add_file';
     $.ajaxFileUpload({
         url: url, //用于文件上传的服务器端请求地址
         secureuri: false, //是否需要安全协议，一般设置为false
         data: project,
-        fileElementId: 'fileToUpload', //文件上传域的ID
+        fileElementId: fileElementId, //文件上传域的ID
         dataType: 'json', //返回值类型 一般设置为json
         success: function (data) //服务器成功响应处理函数
         {
@@ -193,7 +187,7 @@ ProjectManage.addFile = function (project) {
  */
 ProjectManage.update = function (id, e) {
     Public.stopPropagation(e);
-    Public.createDialog('修改应用', '', 'p-add-project', 300, 300);
+    Public.createDialog('修改应用', '', 'p-add-project', 300, 350);
     $('.p-add-project .p-dialog-content').load('partials/service/update_project.html', function () {
         ProjectManage.showProjectInfo(id);
     });
@@ -205,6 +199,7 @@ ProjectManage.update = function (id, e) {
             project.id = id;
             Public.putRest('/project', project, function (data) {
                 Public.msg('修改成功');
+                ProjectManage.addFile(data,'fileUpdateToUpload');
                 $('.p-add-project').dialog('destroy');
                 //重新加载数据
                 ProjectManage.loadData();
@@ -217,7 +212,6 @@ ProjectManage.update = function (id, e) {
 /**
  * 定时器
  * */
-
 ProjectManage.getState = function () {
     setInterval('ProjectManage.loadData()', 2000);
 };
@@ -357,6 +351,8 @@ ProjectManage.showProjectInfo = function (id) {
         var state = project.state;
         var description = project.description != null ? project.description : '';
         var provider = project.provider != null ? project.provider : '';
+        var fileName = project.fileName != null ? project.fileName : '';
+        var filePath = project.filePath != null ? project.filePath : '';
 
         $('.p-add-project input[name="name"]').val(project.name);
         $('.p-add-project input[name="ip"]').val(project.ip);
@@ -365,7 +361,7 @@ ProjectManage.showProjectInfo = function (id) {
         $('.p-add-project input[name="description"]').val(project.description);
         $('.p-add-project input[name="provider"]').val(project.provider);
         $('.p-add-project input[name="testUrl"]').val(project.testUrl);
-        return project;
+        $('.p-add-project input[name="fileName"]').val(project.fileName);
     });
 };
 

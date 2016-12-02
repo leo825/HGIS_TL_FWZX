@@ -4,7 +4,8 @@
     <groupId>cn.geobeans.fwzx</groupId>
     <artifactId>HGIS_TL_FWZX</artifactId>
     <packaging>war</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
+    <name>HGIS_TL_FWZX</name>
 
 
     <url>http://maven.apache.org</url>
@@ -361,7 +362,7 @@
                     <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <!-- 重点是这个配置 -->
-                    <warName>${project.artifactId}</warName>
+                    <warName>${project.name}</warName>
                 </configuration>
             </plugin>
 

@@ -282,4 +282,26 @@ public class ProjectServiceImpl implements ProjectService {
 
     }
 
+    /**
+     * 更新应用的审核状态
+     *
+     * @param model
+     */
+    @Override
+    public int updateProjectCheckState(final ProjectModel model) {
+        String sql = "UPDATE FWZX_PROJECT SET CHECK_STATE=? WHERE ID=?";
+        int result = -1;
+        try {
+            result = jdbcTemplate.update(sql, new PreparedStatementSetter() {
+                public void setValues(PreparedStatement ps) throws SQLException {
+                    ps.setString(1, model.getCheckState());
+                    ps.setString(2, model.getId());
+                }
+            });
+        } catch (Exception e) {
+            logger.error(e);
+        }
+        return result;
+    }
+
 }

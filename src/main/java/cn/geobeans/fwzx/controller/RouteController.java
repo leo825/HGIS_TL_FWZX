@@ -49,7 +49,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 public class RouteController {
     private static Logger logger = Logger.getLogger(RouteController.class);
 
-
     private static final String POST = "/service";
     private static final String DELETE = "/service/{id}";
     private static final String PUT = "/service";
@@ -57,6 +56,8 @@ public class RouteController {
     private static final String GET_BY_ID = "/service/{id}";
     private static final String GET_EASYUI_QUERY = "/service/easyui_query";
     private static final String BATCH_ADD = "/service/batch_add";
+
+    private static final String GET_ROUTE = "/service/get_route";
 
     @Resource
     private RouteService service;
@@ -77,9 +78,11 @@ public class RouteController {
     public JsonResponse save(@RequestBody RouteModel route) {
         try {
             int result1 = service.insert(route);
-            int result2 = initApplicationMethod.addServletRoute(route);
-            if (result1 > -1 && result2 > -1) {
-                return new JsonResponse(route);
+            if (result1 > -1) {
+                int result2 = initApplicationMethod.addServletRoute(route);
+                if (result2 > -1) {
+                    return new JsonResponse(route);
+                }
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -102,9 +105,11 @@ public class RouteController {
         try {
             routeModel = service.get(id);
             int count1 = service.delete(id);
-            int count2 = initApplicationMethod.deleteServletRoute(routeModel);
-            if (count1 > -1 && count2 > -1) {
-                return new JsonResponse(JsonResponseStatusEnum.SUCCESS, "删除成功");
+            if (count1 > -1) {
+                int count2 = initApplicationMethod.deleteServletRoute(routeModel);
+                if (count2 > -1) {
+                    return new JsonResponse(JsonResponseStatusEnum.SUCCESS, "删除成功");
+                }
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -127,10 +132,11 @@ public class RouteController {
         try {
             oldRoute = service.get(route.getId());
             int result1 = service.update(route);
-            int result2 = initApplicationMethod.updateServletRoute(oldRoute, route);
-
-            if (result1 > -1 && result2 > -1) {
-                return new JsonResponse(route);
+            if (result1 > -1) {
+                int result2 = initApplicationMethod.updateServletRoute(oldRoute, route);
+                if (result2 > -1) {
+                    return new JsonResponse(route);
+                }
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -261,7 +267,7 @@ public class RouteController {
     }
 
 
-    /***
+    /**
      * 此处是批量添加接口路由的方法
      *
      * @param projectId 就是应用ID
@@ -285,7 +291,7 @@ public class RouteController {
                     if (service.insert(routeModel) == -1) {
                         logger.error("增加[ " + routeModel.getServerName() + " ]接口失败了，因为在系统中已经存在了！！");
                         faileCount++;
-                    }else{
+                    } else {
                         initApplicationMethod.addServletRoute(routeModel);//接口在数据库中添加成功之后将其加入路由中
                         logger.error("增加[ " + routeModel.getServerName() + " ]成功！！");
                     }
@@ -300,6 +306,25 @@ public class RouteController {
         }
         return result;
     }
+
+    /**
+     * 根据路由名称和应用id查看路由是否存在
+     *
+     * @return
+     */
+    @RequestMapping(value = GET_ROUTE, method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResponse getRoute(@RequestParam(value = "serverName", required = false) String serverName,
+                                 @RequestParam(value = "projectId", required = false) String projectId) {
+        try {
+            List<Map<String, Object>> routes = service.getListByNameOrProjectName(serverName, projectId);
+            return new JsonResponse(routes);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return new JsonResponse(JsonResponseStatusEnum.ERROR, "查询失败");
+    }
+
 
 
     private String addTimeStampTofile(String fileName) {

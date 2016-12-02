@@ -10,7 +10,7 @@ var OperationReport = {
  * 初始化
  */
 OperationReport.init = function () {
-    $('#main-view').load('partials/system/report_control.html', function(){
+    $('#main-view').load('partials/system/report_control.html', function () {
         OperationReport.loadData();
     });
 };
@@ -23,13 +23,13 @@ OperationReport.loadData = function () {
     $('.js-file-table').datagrid({
         //url:'json/report-datagrid.json',
         url: url,
-        pagination:true,
-        rownumbers:true,
+        pagination: true,
+        rownumbers: true,
         singleSelect: true,
         pageSize: Public.LIMIT,
-        columns:[[
-            {field:'id',title:'ID',hidden:true},
-            {field:'name',title:'报告名称',width:200},
+        columns: [[
+            {field: 'id', title: 'ID', hidden: true},
+            {field: 'name', title: '报告名称', width: 200},
             {field: 'date', title: '报告时间', width: 200},
             {field: 'type', title: '类型', width: 100},
             {
@@ -39,9 +39,11 @@ OperationReport.loadData = function () {
                 var html = [];
                 html.push('<div class="a-btn-group">');
                 html.push('<a href="' + url + '" class="a-btn">下载</a>');
+                html.push('<a href="javascript:void(0)" class="a-btn" onclick="OperationReport.deletes(\'' + fileName + '\');">删除</a>');
                 html.push('</div>');
                 return html.join('');
-            }}
+            }
+            }
         ]],
         onLoadSuccess: function (data) {
             var total = data.total;
@@ -90,15 +92,16 @@ OperationReport.add = function () {
  * @param name
  * @param e
  */
-OperationReport.deletes = function (id, name, e) {
+OperationReport.deletes = function (fileName, e) {
     Public.stopPropagation(e);
-    Public.comfirm('确定要删除文件' + name + '吗', function () {
-        Public.deleteRest('/attachment/' + id, null, function () {
+    Public.comfirm('确定要删除文件 [' + decodeURIComponent(fileName) + '] 吗', function () {
+        Public.getRest('/operation/delete_report?fileName=' + fileName, function () {
             Public.msg('删除成功');
             OperationReport.loadData();
         });
     });
 };
+
 /**
  * 获取最新文件
  */

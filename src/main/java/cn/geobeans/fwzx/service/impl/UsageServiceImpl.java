@@ -158,7 +158,7 @@ public class UsageServiceImpl implements UsageService {
                 params.add(ip);
             }
             if (!StringUtil.isNull(name)) {
-                sql = sql + " AND NAME=?";
+                sql = sql + " AND NAME LIKE '%"+name+"%'";
                 params.add(name);
             }
             list = jdbcTemplate.query(sql, params.toArray(), new BeanPropertyRowMapper<UsageModel>(UsageModel.class));

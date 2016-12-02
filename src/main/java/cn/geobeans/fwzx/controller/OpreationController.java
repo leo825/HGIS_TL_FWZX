@@ -56,6 +56,7 @@ public class OpreationController {
     private static final String GET_COORDINATE = "/operation/get_coordinate";
     private static final String GET_OPERATION_REPORT = "/operation/get_opreation_report";
     private static final String GET_DOWNLOAD = "/operation/download_report";
+    private static final String DELETE_REPORT = "/operation/delete_report";
 
 
     @Resource
@@ -262,4 +263,29 @@ public class OpreationController {
             return new JsonResponse(JsonResponseStatusEnum.ERROR, e.getMessage());
         }
     }
+
+    /**
+     * 删除日志
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = DELETE_REPORT, method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public JsonResponse delete_report(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String fileName = request.getParameter("fileName");
+            response.setCharacterEncoding("utf-8");
+            String path = InitApplicationMethod.REPORTS_PATH + File.separator + fileName;
+            if (StringUtil.deleteFile(path)) {
+                return new JsonResponse("删除成功");
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return new JsonResponse(JsonResponseStatusEnum.ERROR, e.getMessage());
+        }
+        return new JsonResponse(JsonResponseStatusEnum.ERROR, "文件不存在,删除失败");
+    }
+
 }

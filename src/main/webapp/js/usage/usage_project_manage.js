@@ -151,10 +151,10 @@ UsageProjectManage.update = function (id, projectId, e) {
 
     //修改应用信息
     $('.p-add-project .js-ok').unbind('click').bind('click', function () {
-        var boardroom = UsageProjectManage.checkProjectForm();
-        if (boardroom != null) {
-            boardroom.id = id;
-            Public.putRest('/boardroom', boardroom, function (resp) {
+        var usge = UsageProjectManage.checkProjectForm();
+        if (usge != null) {
+            usge.id = id;
+            Public.putRest('/usage', usge, function (resp) {
                 Public.msg('修改成功');
                 $('.p-add-project').dialog('destroy');
                 //重新加载数据
@@ -176,7 +176,7 @@ UsageProjectManage.show = function () {
 UsageProjectManage.deletes = function (id, ip, projectId, e) {
     Public.stopPropagation(e);
     Public.comfirm('确定要删除用户ip为' + ip + ',的信息吗', function () {
-        Public.deleteRest('/usage/' + id + '?projectId=' + projectId, null, function () {
+        Public.deleteRest('/usage' + id + '?projectId=' + projectId, null, function () {
             Public.msg('删除成功');
             UsageProjectManage.loadData();
         });
@@ -218,10 +218,11 @@ UsageProjectManage.checkProjectForm = function () {
     var port = $('.p-add-project input[name="port"]').val();
     var description = $('.p-add-project input[name="description"]').val();
     var provider = $('.p-add-project input[name="provider"]').val();
+
     if (Public.isNull(name)) {
         Public.alert('应用名称不能为空');
         return null;
-    } else if (Public.isIp(ip)) {
+    } else if (!Public.isIp(ip)) {
         Public.alert('应用ip不合法');
         return null;
     } else if (Public.isInt(port)) {

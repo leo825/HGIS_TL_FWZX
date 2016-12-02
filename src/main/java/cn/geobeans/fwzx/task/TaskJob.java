@@ -38,7 +38,7 @@ public class TaskJob {
     /**
      * 检测应用状态的任务
      * */
-    public void chekckProjectStateTask() {
+    public void checkProjectStateTask() {
         try {
             List<ProjectModel> projectList = projectService.findList();
             for (int i = 0; !StringUtil.isListEmpty(projectList) && i < projectList.size(); i++) {

@@ -33,7 +33,7 @@ public class RouteServiceImpl implements RouteService {
         String sql = "INSERT INTO FWZX_ROUTE(ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,REG_TIME) VALUES(?,?,?,?,?,?,TO_DATE(?,'yyyy-mm-dd hh24:mi:ss'))";
         int result = -1;
         try {
-            if (getListByNameOrProjectName(model.getServerName(),model.getProjectId()).size() == 0) {
+            if (getRouteByNameAndProjectName(model.getServerName(),model.getProjectId()).size() == 0) {
                 result = jdbcTemplate.update(sql, new PreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps) throws SQLException {
@@ -149,5 +149,18 @@ public class RouteServiceImpl implements RouteService {
         }
         return list;
     }
+
+    public List<Map<String, Object>> getRouteByNameAndProjectName(String name, String projectId){
+        String sql = "";
+        List<Map<String, Object>> list = null;
+        try{
+            sql = "SELECT ID,PROJECT_ID,SERVER_NAME,SERVER_ADDR,DATA_RETURN_TYPE,DESCRIPTION,TO_CHAR(REG_TIME,'yyyy-mm-dd hh24:mi:ss') FROM FWZX_ROUTE WHERE SERVER_NAME=? AND PROJECT_ID=? ORDER BY REG_TIME DESC";
+            list = jdbcTemplate.queryForList(sql, new Object[]{name, projectId});
+        }catch (Exception e){
+            logger.error(e);
+        }
+        return list;
+    }
+
 
 }

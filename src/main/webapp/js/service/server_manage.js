@@ -2,7 +2,9 @@
  * 应用管理
  * @type {{}}
  */
-var ServerManage = {};
+var ServerManage = {
+    oldService: {}
+};
 /**
  * 初始化
  */
@@ -37,7 +39,7 @@ ServerManage.loadData = function () {
         pageSize: Public.LIMIT,
         columns: [[
             {field: 'id', title: 'ID', hidden: true},
-            {field: 'name', title: '接口名称', width: 200,sortable:true,sorter:'mysort'},
+            {field: 'name', title: '接口名称', width: 200, sortable: true, sorter: 'mysort'},
             {
                 field: 'serverAddress', title: '接口地址', width: 300, formatter: function (value, row) {
                 var serverAddress = row.serverAddress;
@@ -79,8 +81,7 @@ ServerManage.loadData = function () {
 };
 
 
-
-function mysort(a,b){
+function mysort(a, b) {
     return (a > b ? 1 : -1);
 }
 
@@ -124,11 +125,18 @@ ServerManage.add = function () {
     $('.p-add-service .js-ok').unbind('click').bind('click', function () {
         var service = ServerManage.checkServiceForm();
         if (service != null) {
-            Public.postRest('/service', service, function (resp) {
-                Public.msg('添加成功');
-                $('.p-add-service').dialog('destroy');
-                //重新加载数据
-                ServerManage.loadData();
+            Public.getRest('/service/get_route?serverName=' + service.serverName + '&projectId=' + service.projectId, function (dicts) {
+                if (dicts != null && dicts.length > 0) {
+                    Public.alert(service.serverName+'已经存在于应用中，同一应用中接口名称不可重复');
+                    return null;
+                } else {
+                    Public.postRest('/service', service, function (resp) {
+                        Public.msg('添加成功');
+                        $('.p-add-service').dialog('destroy');
+                        //重新加载数据
+                        ServerManage.loadData();
+                    });
+                }
             });
         }
     });
@@ -188,24 +196,27 @@ ServerManage.update = function (id, e) {
     Public.stopPropagation(e);
     Public.createDialog('修改接口', '', 'p-add-service', 400, 300);
     $('.p-add-service .p-dialog-content').load('partials/service/update_service.html', function () {
-        oldService = ServerManage.showServiceInfo(id);
+        ServerManage.showServiceInfo(id);
     });
 
     //修改应用信息
     $('.p-add-service .js-ok').unbind('click').bind('click', function () {
         var service = ServerManage.checkServiceForm();
+        delete ServerManage.oldService.regTime;
+        var oldService = ServerManage.oldService;
         if (service != null) {
-            if(Public.compObj(service,oldService)){
+            service.id = id;
+            if (Public.Compare(service, oldService)) {
                 Public.alert('没有做任何修改');
                 return null;
             }
-            service.id = id;
             Public.putRest('/service', service, function (resp) {
                 Public.msg('修改成功');
                 $('.p-add-service').dialog('destroy');
                 //重新加载数据
                 ServerManage.loadData();
             });
+            ServerManage.oldService = {};
         }
     });
 };
@@ -267,7 +278,7 @@ ServerManage.checkServiceForm = function () {
         Public.alert("接口返回类型不能为空");
         return null;
     } else {
-        if(!Public.isApi(serverAddr)){
+        if (!Public.isApi(serverAddr)) {
             Public.alert("接口地址的格式应如下所示：http://192.168.0.101:7001/PGIS/XMLPort");
             return null;
         }
@@ -346,12 +357,12 @@ ServerManage.loadProjects = function (projectId) {
     Public.getRest('/project', function (dicts) {
         if (dicts != null && dicts.length > 0) {
             var html = [];
-            if(Public.isNull(projectId)){
+            if (Public.isNull(projectId)) {
                 html.push('<option value="">空</option>');
-            }else{
+            } else {
                 for (var i = 0, j = dicts.length; i < j; i++) {
                     var dict = dicts[i];
-                    if(projectId == dict.id){
+                    if (projectId == dict.id) {
                         html.push('<option value="' + dict.id + '">' + dict.name + '</option>');
                     }
                 }
@@ -385,9 +396,8 @@ ServerManage.showServiceInfo = function (id) {
         $('.p-add-service input[name="dataReturnType"]').val(service.dataReturnType);
         $('.p-add-service input[name="description"]').val(service.description);
         ServerManage.loadProjects(projectId);
-        return service;
+        ServerManage.oldService = service;
     });
-
 };
 
 /**

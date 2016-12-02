@@ -120,9 +120,8 @@
     <!--<task:scheduler id="qbScheduler" pool-size="10" />-->
     <!--配置需要执行任务的列表-->
     <task:scheduled-tasks>
-        <task:scheduled ref="taskJob" method="chekckProjectStateTask" cron = "*/${chekck-project-period} * * * * ?"/>
+        <task:scheduled ref="taskJob" method="checkProjectStateTask" cron = "*/${check-project-period} * * * * ?"/>
     </task:scheduled-tasks>
-
 
     <!--动路路由的节点-->
     <camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring"/>

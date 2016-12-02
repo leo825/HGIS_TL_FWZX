@@ -488,96 +488,6 @@ Public.pagerFilter = function (data) {
     return data;
 };
 
-/**
- * 比较两个对象是否相等，不包含原形上的属性计较
- * @obj1
- * @obj2
- * */
-Public.compObj = function (obj1, obj2) {
-    if ((obj1 && typeof obj1 === "object") && ((obj2 && typeof obj2 === "object"))) {
-        var count1 = modeler.propertyLength(obj1);
-        var count2 = modeler.propertyLength(obj2);
-        if (count1 == count2) {
-            for (var ob in obj1) {
-                if (obj1.hasOwnProperty(ob) && obj2.hasOwnProperty(ob)) {
-                    if (obj1[ob].constructor == Array && obj2[ob].constructor == Array)//如果属性是数组
-                    {
-                        if (!modeler.compArray(obj1[ob], obj2[ob])) {
-                            return false;
-                        }
-                        ;
-                    }
-                    else if (typeof obj1[ob] === "string" && typeof obj2[ob] === "string")//纯属性
-                    {
-                        if (obj1[ob] !== obj2[ob]) {
-                            return false;
-                        }
-                    }
-                    else if (typeof obj1[ob] === "object" && typeof obj2[ob] === "object")//属性是对象
-                    {
-                        if (!modeler.compObj(obj1[ob], obj2[ob])) {
-                            return false;
-                        }
-                    }
-                    else {
-                        return false;
-                    }
-                }
-                else {
-                    return false;
-                }
-            }
-        }
-        else {
-            return false;
-        }
-    }
-    return true;
-};
-
-/**
- * 获得对象上的属性个数，不包含对象原形上的属性
- * @obj
- * */
-Public.propertyLength = function (obj)//
-{
-    var count = 0;
-    if (obj && typeof obj === "object") {
-        for (var ooo in obj) {
-            if (obj.hasOwnProperty(ooo)) {
-                count++;
-            }
-        }
-        return count;
-    } else {
-        throw new Error("argunment can not be null;");
-    }
-};
-
-/**
- * 比较数组是否相同
- * @array1
- * @array2
- * */
-Public.compArray = function (array1, array2) {
-    if ((array1 && typeof array1 === "object" && array1.constructor === Array) && (array2 && typeof array2 === "object" && array2.constructor === Array)) {
-        if (array1.length == array2.length) {
-            for (var i = 0; i < array1.length; i++) {
-                var ggg = modeler.compObj(array1[i], array2[i]);
-                if (!ggg) {
-                    return false;
-                }
-            }
-        }
-        else {
-            return false;
-        }
-    }
-    else {
-        throw new Error("argunment is  error ;");
-    }
-    return true;
-};
 
 /**
  * 获取字符串的长度，包括空格
@@ -732,4 +642,80 @@ Public.clearCookie = function () {
         for (var i = keys.length; i--;)
             document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString();
     }
+};
+
+/**
+ * 是否未obj对象
+ * @object
+ * */
+Public.isObj = function (object) {
+    return object && typeof (object) == 'object' && Object.prototype.toString.call(object).toLowerCase() == "[object object]";
+};
+
+/**
+ * 是否是数组
+ * @object
+ * */
+Public.isArray = function (object) {
+    return object && typeof (object) == 'object' && object.constructor == Array;
+};
+
+/**
+ * 获取对象属性个数
+ * @object
+ * */
+Public.getLength = function (object) {
+    var count = 0;
+    for (var i in object) count++;
+    return count;
+};
+
+/**
+ * 比较两个对象是否相同
+ * @objA
+ * @objB
+ * */
+Public.Compare = function (objA, objB) {
+    if (!Public.isObj(objA) || !Public.isObj(objB)) return false; //判断类型是否正确
+    if (Public.getLength(objA) != Public.getLength(objB)) return false; //判断长度是否一致
+    return Public.CompareObj(objA, objB, true);//默认为true
+};
+
+/**
+ * 比较两个对象是否相同
+ * @objA
+ * @objB
+ * @flag
+ * */
+Public.CompareObj = function (objA, objB, flag) {
+    for (var key in objA) {
+        if (!flag) //跳出整个循环
+            break;
+        if (!objB.hasOwnProperty(key)) {
+            flag = false;
+            break;
+        }
+        if (!Public.isArray(objA[key])) { //子级不是数组时,比较属性值
+            if (objB[key] != objA[key]) {
+                flag = false;
+                break;
+            }
+        } else {
+            if (!Public.isArray(objB[key])) {
+                flag = false;
+                break;
+            }
+            var oA = objA[key], oB = objB[key];
+            if (oA.length != oB.length) {
+                flag = false;
+                break;
+            }
+            for (var k in oA) {
+                if (!flag) //这里跳出循环是为了不让递归继续
+                    break;
+                flag = Public.CompareObj(oA[k], oB[k], flag);
+            }
+        }
+    }
+    return flag;
 };

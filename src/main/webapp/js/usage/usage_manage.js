@@ -141,7 +141,7 @@ UsageManage.add = function () {
  */
 UsageManage.update = function (id, e) {
     Public.stopPropagation(e);
-    Public.createDialog('修改应用', '', 'p-add-usage', 300, 300);
+    Public.createDialog('修改调用者', '', 'p-add-usage', 300, 300);
     $('.p-add-usage .p-dialog-content').load('partials/usage/update_usage.html', function () {
         UsageManage.showUsageInfo(id);
     });
@@ -286,7 +286,6 @@ UsageManage.loadProjectsCheckData = function () {
                 var dict = dicts[i];
                 html.push('<input name="projectList" type="checkbox" value="' + dict.id + '">' + dict.name + '</input>');
             }
-
             $(".projectsCheck").html(html.join(""));
         } else {
             $(el).html('');

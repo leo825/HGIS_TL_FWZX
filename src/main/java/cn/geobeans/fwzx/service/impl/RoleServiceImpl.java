@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -139,18 +140,15 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleModel> getListByNameAndDescription(String name, String description) {
         String sql = "SELECT ID,NAME,DESCRIPTION FROM FWZX_ROLE WHERE 1=1";
-        List<RoleModel> list = null;
-        List<String> params = new ArrayList<String>();
+        List<RoleModel> list = new ArrayList<>();
         try {
             if (!StringUtil.isNull(name)) {
-                sql = sql + " AND NAME=?";
-                params.add(name);
+                sql = sql + " AND NAME="+name;
             }
             if (!StringUtil.isNull(description)) {
-                sql = sql + " AND DESCRIPTION LIKE '%?%'";
-                params.add(description);
+                sql = sql + " AND DESCRIPTION LIKE '%"+description+"%'";
             }
-            list = jdbcTemplate.query(sql, params.toArray(), new BeanPropertyRowMapper<RoleModel>(RoleModel.class));
+            list = (List<RoleModel>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<RoleModel>(RoleModel.class));
         } catch (Exception e) {
             return null;
         }

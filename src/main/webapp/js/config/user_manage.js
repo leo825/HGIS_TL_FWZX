@@ -34,7 +34,7 @@ UserManage.loadData = function () {
         url += '?' + params.join('&');
     }
     //加载用户用户表格数据
-    $('.js-user-role-table').datagrid({
+    $('.js-user-table').datagrid({
         //url:'json/permission-datagrid.json',
         url: url,
         pagination:true,
@@ -70,7 +70,7 @@ UserManage.loadData = function () {
         }
     });
     
-    $('.js-user-role-table').datagrid({loadFilter:UserManage.pagerFilter});
+    $('.js-user-table').datagrid({loadFilter:UserManage.pagerFilter});
 
 };
 
@@ -78,7 +78,7 @@ UserManage.loadData = function () {
  * 分页过滤器
  * */
 UserManage.pagerFilter = function(data){
-    var dg = $('.js-user-role-table');
+    var dg = $('.js-user-table');
     var opts = dg.datagrid('options');
     var pager = dg.datagrid('getPager');
     pager.pagination({
@@ -267,14 +267,14 @@ UserManage.addRole = function (id,e) {
  * 获取查询参数列表
  */
 UserManage.getSearchParams = function () {
-    var description = $('.p-add-role .js-description').val();
-    var name = $('.p-add-role .js-name').val();
+    var account = $('.js-user-manage .js-account').val();
+    var nickname = $('.js-user-manage .js-nickname').val();
     var params = [];
-    if(!Public.isNull(name)){
-        params.push('name='+encodeURI(name));
+    if(!Public.isNull(account)){
+        params.push('account='+encodeURI(account));
     }
-    if(!Public.isNull(description)){
-        params.push('description='+encodeURI(description));
+    if(!Public.isNull(nickname)){
+        params.push('nickname='+encodeURI(nickname));
     }
     return params;
 };
