@@ -1,10 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Administrator
- * Date: 2016/9/22
- * Time: 17:03
- * To change this template use File | Settings | File Templates.
- */
 package cn.geobeans.fwzx.init;
 
 import cn.geobeans.common.enums.OperateDescriptionEnum;
@@ -28,24 +21,18 @@ import net.sf.json.JSONObject;
 import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.http.HttpMessage;
-import org.apache.camel.model.OnExceptionDefinition;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-
-import org.springframework.stereotype.*;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.io.*;
-import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-
-import static oracle.sql.DatumWithConnection.assertNotNull;
 import static org.apache.camel.builder.Builder.constant;
 
 /**
@@ -202,7 +189,6 @@ public class InitApplicationMethod {
             camelContext.addRoutes(route);
             result = 1;
         } catch (Exception e) {
-            System.out.println("--------------------异常---------------------------");
             logger.error(e);
         }
         return result;
@@ -380,8 +366,6 @@ public class InitApplicationMethod {
         @Override
         public void process(Exchange exchange) {
             try {
-                System.out.println("-----------来了-----------------");
-
                 String ip = (String) exchange.getIn().getHeader("ip");
                 String serverName = (String) exchange.getIn().getHeader("serverName");
                 String projectName = (String) exchange.getIn().getHeader("projectName");
@@ -420,7 +404,6 @@ public class InitApplicationMethod {
                     addOperationLog(ip, serverName, projectName, OperateResultEnum.FAILD.toString(), userName, String.valueOf(responseCode));
                 }
             } catch (IOException e) {
-                System.out.println("-----------------异常信息222222------------------");
                 logger.error(e);
             }
         }
