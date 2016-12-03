@@ -28,6 +28,7 @@ import net.sf.json.JSONObject;
 import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.http.HttpMessage;
+import org.apache.camel.model.OnExceptionDefinition;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -38,11 +39,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.io.*;
+import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import static oracle.sql.DatumWithConnection.assertNotNull;
 import static org.apache.camel.builder.Builder.constant;
 
 /**
@@ -117,7 +120,6 @@ public class InitApplicationMethod {
         }
     }
 
-
     /**
      * 初始化数据库数据
      */
@@ -181,16 +183,26 @@ public class InitApplicationMethod {
         try {
             final ProjectModel tempProject = projectService.get(routeModel.getProjectId());
             RouteBuilder route = new RouteBuilder() {
-                public void configure() throws Exception {
-                    from("servlet:///" + tempProject.getName() + "/" + routeModel.getServerName()).process(new ProcessBegin(routeModel.getServerName(), tempProject.getName(), routeModel.getDataReturnType()))
+                public void configure(){
+                    //处理访问过程中出现的访问超时异常
+                    onException(Exception.class)
+                            .handled(true).transform()
+                            .simple("${exception.message}, cannot process this message.")
+                            .process(new ProcessError());
+
+                    from("servlet:///" + tempProject.getName() + "/" + routeModel.getServerName())
+                            .process(new ProcessBegin(routeModel.getServerName(), tempProject.getName(), routeModel.getDataReturnType()))
                             .choice()
                             .when(header("rightful").isEqualTo(false)).process(new ProcessLegal())
-                            .otherwise().to(routeModel.getServerAddr() + "?throwExceptionOnFailure=false").process(new ProcessEnd());//throwExceptionOnFailure=false，如果后表面不加上这个条件则会抛出异常导致下面无法执行，无法捕捉404异常
+                            .otherwise()
+                            .to(routeModel.getServerAddr() + "?throwExceptionOnFailure=false")
+                            .process(new ProcessEnd());//throwExceptionOnFailure=false，如果后表面不加上这个条件则会抛出异常导致下面无法执行，无法捕捉404异常
                 }
             };
             camelContext.addRoutes(route);
             result = 1;
         } catch (Exception e) {
+            System.out.println("--------------------异常---------------------------");
             logger.error(e);
         }
         return result;
@@ -303,10 +315,37 @@ public class InitApplicationMethod {
                 }
             } catch (Exception e) {
                 logger.error(e);
+
             }
         }
     }
 
+
+    /**
+     * 处理访问过程中异常处理的processer
+     *
+     * */
+    private class ProcessError implements Processor{
+
+        @Override
+        public void process(Exchange exchange) {
+            JSONObject json = new JSONObject();
+            String ip = (String) exchange.getIn().getHeader("ip");
+            String serverName = (String) exchange.getIn().getHeader("serverName");
+            String projectName = (String) exchange.getIn().getHeader("projectName");
+            String operateResult = OperateResultEnum.FAILD.toString();
+            String userName = (String) exchange.getIn().getHeader("userName");
+            String operateDescription = (String) exchange.getIn().getBody();
+            try{
+                json.put("result", operateResult);
+                json.put("data", operateDescription);
+                exchange.getOut().setBody(json);
+                addOperationLog(ip, serverName, projectName, operateResult, userName, operateDescription);
+            }catch (Exception e){
+                logger.error(e);
+            }
+        }
+    }
 
     /**
      * 非法访问的processor处理
@@ -329,6 +368,7 @@ public class InitApplicationMethod {
                 addOperationLog(ip, serverName, projectName, operateResult, userName, operateDescription);
             } catch (Exception e) {
                 logger.error(e);
+
             }
         }
     }
@@ -340,6 +380,8 @@ public class InitApplicationMethod {
         @Override
         public void process(Exchange exchange) {
             try {
+                System.out.println("-----------来了-----------------");
+
                 String ip = (String) exchange.getIn().getHeader("ip");
                 String serverName = (String) exchange.getIn().getHeader("serverName");
                 String projectName = (String) exchange.getIn().getHeader("projectName");
@@ -351,6 +393,7 @@ public class InitApplicationMethod {
 
                 int responseCode = (int) exchange.getIn().getHeader(Exchange.HTTP_RESPONSE_CODE);//是否200返回
                 JSONObject json = new JSONObject();
+
                 if (responseCode == 200) {
                     InputStream inputStream = (InputStream) exchange.getIn().getBody();
                     if ("xml".equals(dataTransformType) && "json".equals(dataReturnType)) {
@@ -376,7 +419,8 @@ public class InitApplicationMethod {
                     exchange.getOut().setBody(json);
                     addOperationLog(ip, serverName, projectName, OperateResultEnum.FAILD.toString(), userName, String.valueOf(responseCode));
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
+                System.out.println("-----------------异常信息222222------------------");
                 logger.error(e);
             }
         }
