@@ -8,10 +8,7 @@ import cn.geobeans.fwzx.model.OperationModel;
 import cn.geobeans.fwzx.model.ProjectModel;
 import cn.geobeans.fwzx.model.RouteModel;
 import cn.geobeans.fwzx.model.UsageModel;
-import cn.geobeans.fwzx.service.OperationService;
-import cn.geobeans.fwzx.service.ProjectService;
-import cn.geobeans.fwzx.service.RouteService;
-import cn.geobeans.fwzx.service.UsageService;
+import cn.geobeans.fwzx.service.*;
 import cn.geobeans.fwzx.util.HttpUtil;
 import cn.geobeans.fwzx.util.StringUtil;
 import cn.geobeans.fwzx.util.XmlJsonUtil;
@@ -33,6 +30,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+
 import static org.apache.camel.builder.Builder.constant;
 
 /**
@@ -64,6 +62,8 @@ public class InitApplicationMethod {
     private OperationService operationService;
     @Resource
     private UsageService usageService;
+    @Resource
+    private UsageProjectService usageProjectService;
 
 
     public void buildRoute(final ProjectModel project) {
@@ -170,15 +170,15 @@ public class InitApplicationMethod {
         try {
             final ProjectModel tempProject = projectService.get(routeModel.getProjectId());
             RouteBuilder route = new RouteBuilder() {
-                public void configure(){
+                public void configure() {
                     //处理访问过程中出现的访问超时异常
                     onException(Exception.class)
                             .handled(true).transform()
-                            .simple("${exception.message}, cannot process this message.")
+                            .simple("${exception.message},")
                             .process(new ProcessError());
 
                     from("servlet:///" + tempProject.getName() + "/" + routeModel.getServerName())
-                            .process(new ProcessBegin(routeModel.getServerName(), tempProject.getName(), routeModel.getDataReturnType()))
+                            .process(new ProcessBegin(routeModel, tempProject))
                             .choice()
                             .when(header("rightful").isEqualTo(false)).process(new ProcessLegal())
                             .otherwise()
@@ -255,17 +255,15 @@ public class InitApplicationMethod {
      */
     private class ProcessBegin implements Processor {
 
-        private String serverName;
-        private String projectName;
-        private String dataReturnType;
+        private RouteModel route;
+        private ProjectModel project;
 
         public ProcessBegin() {
         }
 
-        public ProcessBegin(String serverName, String projectName, String dataReturnType) {
-            this.serverName = serverName;
-            this.projectName = projectName;
-            this.dataReturnType = dataReturnType;
+        public ProcessBegin(RouteModel route, ProjectModel project) {
+            this.route = route;
+            this.project = project;
         }
 
         @Override
@@ -277,9 +275,9 @@ public class InitApplicationMethod {
                 UsageModel u = usageService.getByIp(ip);
 
                 exchange.getOut().setHeader("ip", ip);
-                exchange.getOut().setHeader("serverName", this.serverName);
-                exchange.getOut().setHeader("projectName", this.projectName);
-                exchange.getOut().setHeader("dataReturnType", this.dataReturnType);
+                exchange.getOut().setHeader("serverName", route.getServerName());
+                exchange.getOut().setHeader("projectName", project.getName());
+                exchange.getOut().setHeader("dataReturnType", route.getDataReturnType());
                 exchange.getOut().setHeader("dataTransformType", request.getParameter("dataTransformType"));//返回数据类型
                 //此时ip不存在系统中因此ip不合法
                 if (u == null) {
@@ -287,6 +285,11 @@ public class InitApplicationMethod {
                     exchange.getOut().setHeader("userName", "未知");
                     exchange.getOut().setHeader("operateResult", OperateResultEnum.FAILD.toString());
                     exchange.getOut().setHeader("operateDescription", OperateDescriptionEnum.IP_NOT_ALLOW.toString());
+                } else if (!usageProjectService.isUsageProjectExist(u.getId(), project.getId())) {
+                    exchange.getOut().setHeader("rightful", false);
+                    exchange.getOut().setHeader("userName", u.getName());
+                    exchange.getOut().setHeader("operateResult", OperateResultEnum.FAILD.toString());
+                    exchange.getOut().setHeader("operateDescription", OperateDescriptionEnum.PERMISSION_DENIED.toString());
                 } else {
                     if ("GET".equals(request.getMethod())) {
                         params = request.getQueryString();
@@ -309,9 +312,8 @@ public class InitApplicationMethod {
 
     /**
      * 处理访问过程中异常处理的processer
-     *
-     * */
-    private class ProcessError implements Processor{
+     */
+    private class ProcessError implements Processor {
 
         @Override
         public void process(Exchange exchange) {
@@ -321,13 +323,13 @@ public class InitApplicationMethod {
             String projectName = (String) exchange.getIn().getHeader("projectName");
             String operateResult = OperateResultEnum.FAILD.toString();
             String userName = (String) exchange.getIn().getHeader("userName");
-            String operateDescription = (String) exchange.getIn().getBody();
-            try{
+            String operateDescription = (String) exchange.getIn().getBody() + OperateDescriptionEnum.REQUEST_UNREACHABLE.toString();
+            try {
                 json.put("result", operateResult);
                 json.put("data", operateDescription);
                 exchange.getOut().setBody(json);
                 addOperationLog(ip, serverName, projectName, operateResult, userName, operateDescription);
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.error(e);
             }
         }

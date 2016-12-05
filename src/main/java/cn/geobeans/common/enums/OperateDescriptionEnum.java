@@ -12,7 +12,11 @@ package cn.geobeans.common.enums;
  */
 public enum OperateDescriptionEnum {
 
-    IP_NOT_ALLOW("IP不被系统允许"), REQUEST_UNREACHABLE("访问地址不可到达"), OPERATE_SUCCESS("访问正常"), RESPONSE_DATA_ERROR("返回数据异常");
+    IP_NOT_ALLOW("IP不被系统允许"),
+    REQUEST_UNREACHABLE("访问地址不可到达"),
+    OPERATE_SUCCESS("访问正常"),
+    RESPONSE_DATA_ERROR("返回数据异常"),
+    PERMISSION_DENIED("没有访问此应用的权限");
 
     private final String text;
 

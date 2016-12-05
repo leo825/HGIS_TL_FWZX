@@ -285,7 +285,7 @@ ServerManage.checkServiceForm = function () {
         var obj = {};
         obj.serverName = serverName;
         obj.projectId = projectId;
-        obj.serverAddr = serverAddr;
+        obj.serverAddr = Public.trim(serverAddr);
         obj.dataReturnType = dataReturnType;
         obj.description = description;
         return obj;
