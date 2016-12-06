@@ -384,7 +384,7 @@ public class InitApplicationMethod {
                     InputStream inputStream = (InputStream) exchange.getIn().getBody();
                     if ("xml".equals(dataTransformType) && "json".equals(dataReturnType)) {
                         String jsonStr = IOUtils.toString(inputStream);
-                        String xmlStr = XmlJsonUtil.json2Xml("{\"document\":" + jsonStr + "}");
+                        String xmlStr = XmlJsonUtil.json2Xml(jsonStr, "UTF-8", "root");
                         exchange.getOut().setBody(xmlStr);
                     } else if ("json".equals(dataTransformType) && "xml".equals(dataReturnType)) {
                         String xmlStr = IOUtils.toString(inputStream);
