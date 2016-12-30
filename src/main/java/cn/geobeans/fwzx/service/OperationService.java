@@ -1,9 +1,9 @@
 package cn.geobeans.fwzx.service;
 
+import cn.geobeans.fwzx.model.Operation;
+
 import java.util.List;
 import java.util.Map;
-
-import cn.geobeans.fwzx.model.OperationModel;
 
 /**
  * @author liuxi
@@ -19,7 +19,7 @@ public interface OperationService {
      * @param model
      * @return
      */
-    public int insert(OperationModel model);
+    public int insert(Operation model);
 
     /**
      * 通过删除一个接口对象
@@ -35,14 +35,14 @@ public interface OperationService {
      * @param id
      * @return OperationModel
      */
-    public OperationModel get(String id);
+    public Operation get(String id);
 
     /**
      * 查找所有的对象
      *
      * @return List < OperationModel >
      */
-    public List<OperationModel> findList();
+    public List<Operation> findList();
 
     /**
      * 获取服务访问总次数

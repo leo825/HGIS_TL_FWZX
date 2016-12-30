@@ -1,8 +1,9 @@
 package cn.geobeans.fwzx.service;
 
+import cn.geobeans.fwzx.model.Project;
+import cn.geobeans.fwzx.model.Usage;
+
 import java.util.List;
-import cn.geobeans.fwzx.model.ProjectModel;
-import cn.geobeans.fwzx.model.UsageModel;
 
 /**
  * @author liuxi
@@ -18,7 +19,7 @@ public interface UsageProjectService {
      * @param project
      * @return int
      */
-    public int insert(UsageModel usage, ProjectModel project);
+    public int insert(Usage usage, Project project);
 
     /**
      * 通过删除一个使用者应用对象
@@ -27,14 +28,14 @@ public interface UsageProjectService {
      * @param project
      * @return int
      */
-    public int delete(UsageModel usage, ProjectModel project);
+    public int delete(Usage usage, Project project);
 
     /**
      * 更新使用者应用数据
      *
      * @return int
      */
-    public int update(UsageModel oldUsage, ProjectModel oldProject, UsageModel newUsage, ProjectModel newProject);
+    public int update(Usage oldUsage, Project oldProject, Usage newUsage, Project newProject);
 
     /**
      * 通过usageId查找所有应用
@@ -42,7 +43,7 @@ public interface UsageProjectService {
      * @param usageId
      * @return List< ProjectModel >
      */
-    public List<ProjectModel> getProjectListByUsageId(String usageId);
+    public List<Project> getProjectListByUsageId(String usageId);
 
     /**
      * 通过usageId查找所有应用
@@ -50,7 +51,7 @@ public interface UsageProjectService {
      * @param projectId
      * @return List< UsageModel >
      */
-    public List<UsageModel> getUsageListByProjectId(String projectId);
+    public List<Usage> getUsageListByProjectId(String projectId);
 
 
     /**
@@ -70,6 +71,6 @@ public interface UsageProjectService {
      * @param projectId 应用的id
      * @return List< UsageModel >
      */
-    public List<UsageModel> getUsageListByParams(String ip, String name, String projectId);
+    public List<Usage> getUsageListByParams(String ip, String name, String projectId);
 
 }

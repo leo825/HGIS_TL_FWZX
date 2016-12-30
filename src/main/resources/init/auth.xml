@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitys package="sys.auth.model">
+	<initEntity exist="1" class="ControllerResources" method="controllerResService.add">
+		<entity name="系统资源" sn="root" psn="" className="" orderNum="0">
+			<entity name="组织机构管理" sn="org_root" className="" orderNum="1"  />
+			<entity name="学校信息管理" sn="school_root" className="" orderNum="2"  />
+			<entity name="权限管理" sn="atuh_root" className="" orderNum="3"  />
+		</entity>
+	</initEntity>
+	
+	<!-- 
+	private String name;
+	private String sn;
+	private MenuPos menuPos;
+	private String href;
+	private String icon;
+	private int orderNum;
+	private String psn;
+	private int display;
+	 -->
+	<initEntity exist="0" class="MenuResources" method="menuResService.add">
+		<entity name="系统菜单" sn="root" href="" menuPos="4" icon="" display="1" psn="" orderNum="0">
+			<entity name="顶部根菜单" sn="top_root" href="" icon="" display="1" psn="root" menuPos="4" orderNum="0"  />
+			<entity name="左边导航根菜单" sn="left_root" href="" icon="" display="1" psn="root" menuPos="4" orderNum="1">
+				<entity name="组织机构管理" sn="org_root" href="" icon="" display="1" psn="left_root" menuPos="0" orderNum="1"  />
+				<entity name="学校信息管理" sn="school_root" href="" icon="" display="1" psn="left_root" menuPos="0" orderNum="2"  />
+				<entity name="权限管理" sn="auth_root" href="" icon="" display="1" psn="left_root" menuPos="0" orderNum="3"  />
+			</entity>.
+		</entity>
+	</initEntity>
+	
+</entitys>

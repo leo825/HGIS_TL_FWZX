@@ -2,8 +2,8 @@ package cn.geobeans.fwzx.service;
 
 import java.util.List;
 
-import cn.geobeans.fwzx.model.ResourceModel;
-import cn.geobeans.fwzx.model.RoleModel;
+import cn.geobeans.fwzx.model.Resource;
+import cn.geobeans.fwzx.model.Role;
 
 /**
  *@author liuxi 
@@ -17,7 +17,7 @@ public interface RoleService {
 	 * @param model
 	 * @return 
 	 * */
-	public int insert(RoleModel model);
+	public int insert(Role model);
 	
 	/**
 	 * 通过删除一个使用者对象
@@ -31,35 +31,35 @@ public interface RoleService {
 	 * @param id
 	 * @return RoleModel
 	 * */	
-	public RoleModel get(String id);
+	public Role get(String id);
 	
 	/**
 	 * 更新操作对象
 	 * @param model
 	 * @return int
 	 * */
-	public int update(RoleModel model);
+	public int update(Role model);
 	
 	
 	/**
 	 * 查找所有的对象
 	 * @return List < RoleModel >
 	 * */
-	public List<RoleModel> findList();
+	public List<Role> findList();
 	
 	/**
 	 * 根据角色名查找对象
 	 * @param roleName
 	 * @return RoleModel
 	 * */
-	public RoleModel getRoleByName(String roleName);
+	public Role getRoleByName(String roleName);
 	
 	/**
 	 * 通过角色id获取
 	 * @param roleId
 	 * @retuan List< ResourceModel >
 	 * */
-	public List<ResourceModel> getResourceByRoleId(String roleId);
+	public List<Resource> getResourceByRoleId(String roleId);
 	
 	/**
 	 * 通过名称和描述获取列表
@@ -67,5 +67,5 @@ public interface RoleService {
 	 * @param description
 	 * @retrun List< RoleModel >
 	 * */
-	public List<RoleModel> getListByNameAndDescription(String name, String description);
+	public List<Role> getListByNameAndDescription(String name, String description);
 }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitys package="sys.org.model">
+	<initEntity exist="0" class="OrgType" method="orgTypeService.add">
+		<entity name="学校" sn="XX"/>
+		<entity name="分校" sn="FX"/>
+		<entity name="校领导办" sn="XLDB"/>
+		<entity name="行政部门" sn="XZBM"/>
+		<entity name="教学部门" sn="JXBM"/>
+		<entity name="专业" sn="ZY"/>
+		<entity name="班级" sn="BJ"/>
+	</initEntity>
+	
+	<initEntity package="sys.init.dto" exist="0" class="InitOrgTypeRuleDto" method="orgTypeService.addOrgTypeRule">
+		<entity psn="XX" csn="FX" num="90"/>
+		<entity psn="XX" csn="XLDB" num="90"/>
+		<entity psn="XX" csn="XZBM" num="90"/>
+		<entity psn="XX" csn="JXBM" num="90"/>
+		<entity psn="FX" csn="JXBM" num="90"/>
+		<entity psn="FX" csn="XZBM" num="90"/>
+		<entity psn="JXBM" csn="ZY" num="90"/>
+		<entity psn="JXBM" csn="BJ" num="90"/>
+		<entity psn="ZY" csn="BJ" num="90"/>
+	</initEntity>
+
+	<initEntity exist="0" class="Org" method="orgService.add">
+		<entity name="昭通学院" typeId="1" typeName="学校" managerType="0">
+			<entity name="学生处" typeId="4" typeName="行政部门" managerType="1"/>
+			<entity name="教务处" typeId="4" typeName="行政部门" managerType="2"/>
+			<entity name="中文系" typeId="5" typeName="教学部门" managerType="0">
+				<entity name="汉语言文学" typeId="6" typeName="专业" managerType="1">
+					<entity name="2009汉语言文学1班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2009汉语言文学2班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2010汉语言文学1班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2010汉语言文学2班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2011汉语言文学1班" typeId="7" typeName="班级" managerType="1"/>
+				</entity>
+			</entity>
+			<entity name="计科系" typeId="5" typeName="教学部门" managerType="1">
+				<entity name="计算机应用技术" typeId="6" typeName="专业" managerType="1">
+					<entity name="2009计算机应用技术1班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2009计算机应用技术2班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2010计算机应用技术1班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2010计算机应用技术2班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2011计算机应用技术1班" typeId="7" typeName="班级" managerType="1"/>
+				</entity>
+				<entity name="计算机信息管理" typeId="6" typeName="专业" managerType="1">
+					<entity name="2009计算机信息管理1班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2009计算机信息管理2班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2010计算机信息管理1班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2010计算机信息管理2班" typeId="7" typeName="班级" managerType="1"/>
+					<entity name="2011计算机信息管理1班" typeId="7" typeName="班级" managerType="1"/>
+				</entity>
+			</entity>
+		</entity>
+	</initEntity>
+
+	<initEntity exist="0" class="Person" method="personService.add">
+		<entity name="张三" sex="1"/>
+		<entity name="李四" sex="0"/>
+		<entity name="王五" sex="0"/>
+		<entity name="赵六" sex="0"/>
+		<entity name="曹操" sex="1"/>
+		<entity name="孙权" sex="1"/>
+		<entity name="刘备" sex="1"/>
+		<entity name="大乔" sex="0"/>
+		<entity name="小乔" sex="0"/>
+	</initEntity>
+
+	<initEntity exist="0" class="Position" method="positionService.add">
+		<entity name="校长" sn="XZ"/>
+		<entity name="副校长" sn="FXZ"/>
+		<entity name="处长" sn="CZ"/>
+		<entity name="副处长" sn="FCZ"/>
+		<entity name="科长" sn="KZ"/>
+		<entity name="辅导员" sn="FDY"/>
+		<entity name="班主任" sn="BZR"/>
+	</initEntity>
+
+	<initEntity exist="0" class="PersonOrgPos" method="personService.addPersonOrgPos">
+		<entity personId="1" orgId="2" posId="3"/>
+		<entity personId="2" orgId="3" posId="3"/>
+		<entity personId="3" orgId="4" posId="3"/>
+		<entity personId="4" orgId="5" posId="6"/>
+		<entity personId="5" orgId="6" posId="7"/>
+		<entity personId="6" orgId="7" posId="7"/>
+		<entity personId="7" orgId="8" posId="7"/>
+		<entity personId="9" orgId="10" posId="7"/>
+	</initEntity>
+</entitys>

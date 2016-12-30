@@ -3,7 +3,7 @@ package cn.geobeans.fwzx.service;
 import java.util.List;
 import java.util.Map;
 
-import cn.geobeans.fwzx.model.RouteModel;
+import cn.geobeans.fwzx.model.Route;
 
 /**
  *@author liuxi E-mail:15895982509@163.com
@@ -16,7 +16,7 @@ public interface RouteService {
 	 * @param model
 	 * @return 
 	 * */
-	public int insert(RouteModel model);
+	public int insert(Route model);
 	
 	/**
 	 * 通过删除一个接口对象
@@ -30,25 +30,25 @@ public interface RouteService {
 	 * @param id
 	 * @return RouteModel
 	 * */	
-	public RouteModel get(String id);
+	public Route get(String id);
 	
 	/**
 	 * 更新操作对象
 	 * @param model
 	 * @return int
 	 * */
-	public int update(RouteModel model);
+	public int update(Route model);
 
 	/**
 	 * 通过serverName来确定一个对象
 	 *
 	 * */
-	public RouteModel getByServerName(String serverName);
+	public Route getByServerName(String serverName);
 	/**
 	 * 查找所有的对象
 	 * @return List < RouteModel >
 	 * */
-	public List<RouteModel> findList();
+	public List<Route> findList();
 	
 	
 	/**

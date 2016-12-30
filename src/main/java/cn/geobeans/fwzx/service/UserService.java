@@ -1,10 +1,10 @@
 package cn.geobeans.fwzx.service;
 
-import java.util.List;
+import cn.geobeans.fwzx.model.Resource;
+import cn.geobeans.fwzx.model.Role;
+import cn.geobeans.fwzx.model.User;
 
-import cn.geobeans.fwzx.model.ResourceModel;
-import cn.geobeans.fwzx.model.RoleModel;
-import cn.geobeans.fwzx.model.UserModel;
+import java.util.List;
 
 /**
  *@author liuxi 
@@ -17,7 +17,7 @@ public interface UserService {
 	 * @param model
 	 * @return 
 	 * */
-	public int insert(UserModel model);
+	public int insert(User model);
 	
 	/**
 	 * 通过删除一个使用者对象
@@ -31,28 +31,28 @@ public interface UserService {
 	 * @param id
 	 * @return UserModel
 	 * */	
-	public UserModel get(String id);
+	public User get(String id);
 	
 	/**
 	 * 更新操作对象
 	 * @param model
 	 * @return int
 	 * */
-	public int update(UserModel model);
+	public int update(User model);
 	
 	
 	/**
 	 * 查找所有的对象
 	 * @return List < UserModel >
 	 * */
-	public List<UserModel> findList();
+	public List<User> findList();
 
 	/**
 	 * 通过账户查找用户
 	 * @param account
 	 * @return UserModel
 	 * */
-	public UserModel getUserByAccount(String account);
+	public User getUserByAccount(String account);
 	
 	
 	/**
@@ -60,14 +60,14 @@ public interface UserService {
 	 * @param userId
 	 * @return List< RoleModel >
 	 * */
-	public List<RoleModel> getRoleListByUserId(String userId);
+	public List<Role> getRoleListByUserId(String userId);
 	
 	/**
 	 * 通过id获取权限
 	 * @param userId
 	 * @return List < ResourceModel >
 	 * */
-	public List<ResourceModel> getResourceById(String userId);
+	public List<Resource> getResourceById(String userId);
 	
 	
 	/**
@@ -76,5 +76,5 @@ public interface UserService {
 	 * @param nickname
 	 * @return List< UserModel >
 	 * */
-	public List<UserModel> getUsersByParams(String account,String nickname);
+	public List<User> getUsersByParams(String account,String nickname);
 }

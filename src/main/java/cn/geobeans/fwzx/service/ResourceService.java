@@ -2,7 +2,7 @@ package cn.geobeans.fwzx.service;
 
 import java.util.List;
 
-import cn.geobeans.fwzx.model.ResourceModel;
+import cn.geobeans.fwzx.model.Resource;
 
 /**
  * @author liuxi
@@ -17,7 +17,7 @@ public interface ResourceService {
      * @param model
      * @return
      */
-    public int insert(ResourceModel model);
+    public int insert(Resource model);
 
     /**
      * 通过删除一个使用者对象
@@ -33,7 +33,7 @@ public interface ResourceService {
      * @param id
      * @return ResourceModel
      */
-    public ResourceModel get(String id);
+    public Resource get(String id);
 
     /**
      * 更新操作对象
@@ -41,7 +41,7 @@ public interface ResourceService {
      * @param model
      * @return int
      */
-    public int update(ResourceModel model);
+    public int update(Resource model);
 
 
     /**
@@ -49,7 +49,7 @@ public interface ResourceService {
      *
      * @return List < ResourceModel >
      */
-    public List<ResourceModel> findList();
+    public List<Resource> findList();
 
     /**
      * 通过资源名获取资源
@@ -57,7 +57,7 @@ public interface ResourceService {
      * @param resourceName
      * @return ResourceModel
      */
-    public ResourceModel getResourceByName(String resourceName);
+    public Resource getResourceByName(String resourceName);
 
 
 }

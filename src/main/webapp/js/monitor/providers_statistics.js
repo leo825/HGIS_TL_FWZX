@@ -64,7 +64,7 @@ var ProvidersStatistics = {
 	                //yAxis: 1,
 	                data: [1, 2, 3, 4, 5, 1, 0, 0, 0, 0, 0, 0],
 	                tooltip: {
-	                    valueSuffix: ' 位'
+	                    valueSuffix: ' 个应用'
 	                }
 
 	            }, {
@@ -72,7 +72,7 @@ var ProvidersStatistics = {
 	                type: 'spline',
 	                data: [1, 1, 3, 4, 2, 1, 0, 0, 0, 0, 0, 0],
 	                tooltip: {
-	                    valueSuffix: ' 个'
+	                    valueSuffix: ' 位'
 	                }
 	            }],
 	            exporting:{
@@ -110,7 +110,7 @@ var ProvidersStatistics = {
 	            }
 	        },
 	        series: [{
-	            name: 'Brands',
+	            name: '百分比',
 	            colorByPoint: true,
 	            data: [{
 	                name: 'company1',

@@ -185,16 +185,16 @@
         //初始化系统
         Index.init();
         <%
-			List<ResourceModel> resources = null;
-			UserModel user = null;
+			List<Resource> resources = null;
+			User user = null;
 			String nickname = null;
 			String id = null;
 			try{
-			    user = (UserModel) session.getAttribute("user");
+			    user = (User) session.getAttribute("user");
 			    if (user != null){
                 id = user.getId();
                 nickname = user.getNickname();
-                resources =  (List<ResourceModel>) session.getAttribute("resources");//获取资源
+                resources =  (List<Resource>) session.getAttribute("resources");//获取资源
                 for(int i = 0; i < resources.size(); i++){
                 %>
                         RESOURCES.push("<%=resources.get(i).getName()%>");

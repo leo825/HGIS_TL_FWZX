@@ -1,11 +1,9 @@
 package cn.geobeans.fwzx.service;
 
+import cn.geobeans.fwzx.model.Resource;
+import cn.geobeans.fwzx.model.Role;
+
 import java.util.List;
-import java.util.Map;
-
-
-import cn.geobeans.fwzx.model.ResourceModel;
-import cn.geobeans.fwzx.model.RoleModel;
 
 /**
  * @author liuxi
@@ -22,7 +20,7 @@ public interface RoleResourceService {
      * @param resource
      * @return int
      */
-    public int insert(RoleModel role, ResourceModel resource);
+    public int insert(Role role, Resource resource);
 
     /**
      * 通过role和resource删除关联
@@ -31,7 +29,7 @@ public interface RoleResourceService {
      * @param resource
      * @return int
      */
-    public int delete(RoleModel role, ResourceModel resource);
+    public int delete(Role role, Resource resource);
 
     /**
      * 更新角色资源权限数据
@@ -42,7 +40,7 @@ public interface RoleResourceService {
      * @param newResouce
      * @return int
      */
-    public int update(RoleModel oldRole, ResourceModel oldResource, RoleModel newRole, ResourceModel newResouce);
+    public int update(Role oldRole, Resource oldResource, Role newRole, Resource newResouce);
 
     /**
      * 通过roleId查找所有应用
@@ -50,7 +48,7 @@ public interface RoleResourceService {
      * @param roleId
      * @return List< ResourceModel >
      */
-    public List<ResourceModel> getResourceListByRoleId(String roleId);
+    public List<Resource> getResourceListByRoleId(String roleId);
 
     /**
      * 通过resourceId查找所有角色
@@ -58,7 +56,7 @@ public interface RoleResourceService {
      * @param resourceId
      * @return List< RoleModel >
      */
-    public List<RoleModel> getRoleListByResourceId(String resourceId);
+    public List<Role> getRoleListByResourceId(String resourceId);
 
     /**
      * 查看数据库中是否存在此记录
@@ -67,7 +65,7 @@ public interface RoleResourceService {
      * @param resource
      * @return boolean
      */
-    public boolean isRoleResourceExist(RoleModel role, ResourceModel resource);
+    public boolean isRoleResourceExist(Role role, Resource resource);
 
     /**
      * 通过roleId删除下面的所有资源权限

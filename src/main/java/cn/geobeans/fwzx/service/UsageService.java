@@ -2,7 +2,7 @@ package cn.geobeans.fwzx.service;
 
 import java.util.List;
 
-import cn.geobeans.fwzx.model.UsageModel;
+import cn.geobeans.fwzx.model.Usage;
 
 /**
  * @author liuxi
@@ -17,7 +17,7 @@ public interface UsageService {
 	 * @param model
 	 * @return
 	 * */
-	public int insert(UsageModel model);
+	public int insert(Usage model);
 
 	/**
 	 * 通过删除一个使用者对象
@@ -33,7 +33,7 @@ public interface UsageService {
 	 * @param id
 	 * @return UsageModel
 	 * */
-	public UsageModel get(String id);
+	public Usage get(String id);
 
 	/**
 	 * 更新操作对象
@@ -41,21 +41,21 @@ public interface UsageService {
 	 * @param model
 	 * @return int
 	 * */
-	public int update(UsageModel model);
+	public int update(Usage model);
 
 	/**
 	 * 查找所有的对象
 	 * 
 	 * @return List < UsageModel >
 	 * */
-	public List<UsageModel> findList();
+	public List<Usage> findList();
 
 	/**
 	 * 通过IP来获取
 	 * @param ip
 	 * @return UsageModel
 	 **/
-	public UsageModel getByIp(String ip);
+	public Usage getByIp(String ip);
 	
 	/**
 	 * 通过ip或者name获取List
@@ -63,6 +63,6 @@ public interface UsageService {
 	 * @param name
 	 * @return List < UsageModel >
 	 * */
-	public List<UsageModel> getListByParms(String ip,String name);
+	public List<Usage> getListByParms(String ip,String name);
 
 }

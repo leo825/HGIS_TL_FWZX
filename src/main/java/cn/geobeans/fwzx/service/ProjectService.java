@@ -1,9 +1,9 @@
 package cn.geobeans.fwzx.service;
 
+import cn.geobeans.fwzx.model.Project;
+
 import java.util.List;
 import java.util.Map;
-
-import cn.geobeans.fwzx.model.ProjectModel;
 
 /**
  * @author liuxi E-mail:15895982509@163.com
@@ -17,7 +17,7 @@ public interface ProjectService {
      * @param model
      * @return
      */
-    public int insert(ProjectModel model);
+    public int insert(Project model);
 
     /**
      * 通过删除一个应用对象
@@ -33,7 +33,7 @@ public interface ProjectService {
      * @param id
      * @return ProgramModel
      */
-    public ProjectModel get(String id);
+    public Project get(String id);
 
     /**
      * 更新操作对象
@@ -41,14 +41,14 @@ public interface ProjectService {
      * @param model
      * @return int
      */
-    public int update(ProjectModel model);
+    public int update(Project model);
 
     /**
      * 查找所有的对象
      *
      * @return List < ProgramModel >
      */
-    public List<ProjectModel> findList();
+    public List<Project> findList();
 
     /**
      * 通过name和provider获取所有符合的应用
@@ -68,7 +68,7 @@ public interface ProjectService {
     /**
      * 通过应用名来获取应用
      */
-    public ProjectModel getProjectByName(String name);
+    public Project getProjectByName(String name);
 
     /**
      * 统计每个月提供应用的数量
@@ -98,12 +98,12 @@ public interface ProjectService {
     /**
      * 更新应用状态
      */
-    public int updataProjectState(ProjectModel project);
+    public int updataProjectState(Project project);
 
 
     /**
      * 更新应用的审核状态
      */
 
-    public int updateProjectCheckState(ProjectModel project);
+    public int updateProjectCheckState(Project project);
 }
