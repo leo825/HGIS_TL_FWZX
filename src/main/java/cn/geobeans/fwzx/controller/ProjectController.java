@@ -26,10 +26,10 @@
 //import java.util.Map;
 //
 ///**
-// * @author liuxi
-// * @version 创建时间:2016-5-1上午10:38:21
-// * @parameter E-mail:15895982509@163.com
-// */
+//* @author liuxi
+//* @version 创建时间:2016-5-1上午10:38:21
+//* @parameter E-mail:15895982509@163.com
+//*/
 //@Controller
 //@RequestMapping("/rest")
 //public class ProjectController {
@@ -65,7 +65,7 @@
 //    @ResponseBody
 //    public JsonResponse save(@RequestBody Project project) {
 //        try {
-//            int result = service.insert(project);
+//            int result = service.add(project);
 //            if (result > -1) {
 //                return new JsonResponse(project);
 //            }
@@ -230,7 +230,7 @@
 //        int total = 0;
 //
 //        try {
-//            List<Map<String, Object>> listAll = service.getListByNameOrProvider(name, provider, userId);
+//            List<Map<String, Object>> listAll = service.getListByParams(name, provider, userId);
 //            for (int i = 0; listAll != null && i < listAll.size(); i++) {
 //                JSONObject json = new JSONObject();
 //                json.put("id", listAll.get(i).get("ID"));

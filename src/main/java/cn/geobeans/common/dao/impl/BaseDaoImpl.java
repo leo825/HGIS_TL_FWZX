@@ -112,7 +112,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
 
-    public Object loadEntity(int id, Class clz) {
+    public Object loadEntity(String id, Class clz) {
         return (Object) getSession().load(clz, id);
     }
 
@@ -386,9 +386,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         return this.queryObject(hql, null, alias);
     }
 
-    public int getMaxOrder(Integer pid, String clz) {
-        String hql = "select max(o.orderNum) from " + clz + " o where o.parent.id=" + pid;
-        if (pid == null || pid == 0) hql = "select max(o.orderNum) from " + clz + " o where o.parent is null";
+    public int getMaxOrder(String pid, String clz) {
+        String hql = "select max(o.orderNum) from " + clz + " o where o.parent.id='" + pid+"'";
+        if (pid == null) hql = "select max(o.orderNum) from " + clz + " o where o.parent is null";
         Object obj = this.queryObject(hql);
         if (obj == null) return 0;
         return (Integer) obj;
@@ -401,10 +401,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         return (Integer) obj;
     }
 
-    public void updateSort(Integer[] ids, String clz) {
+    public void updateSort(String[] ids, String clz) {
         int index = 1;
         String hql = "update " + clz + " m set m.orderNum=? where m.id=?";
-        for (Integer id : ids) {
+        for (String id : ids) {
             this.updateByHql(hql, new Object[]{index++, id});
         }
     }

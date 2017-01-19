@@ -34,7 +34,7 @@
        <!-- 打开Spring的Annotation支持 -->
        <context:annotation-config/>
        <!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
-       <context:component-scan base-package="cn.geobeans.fwzx.model,cn.geobeans.fwzx.dao"/>
+       <context:component-scan base-package="cn.geobeans.*"/>
        <!-- 静态资源(js、image等)的访问 -->
        <mvc:default-servlet-handler/>
        <!-- 可通过注解控制事务 -->
@@ -53,6 +53,8 @@
               <property name="packagesToScan">
                      <list>
                             <value>cn.geobeans.fwzx.model</value>
+                            <value>cn.geobeans.org.model</value>
+                            <value>cn.geobeans.auth.model</value>
                      </list>
               </property>
               <property name="hibernateProperties">

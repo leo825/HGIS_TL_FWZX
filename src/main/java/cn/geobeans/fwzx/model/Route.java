@@ -19,7 +19,7 @@ import java.util.Date;
  * 路由
  */
 @Entity
-@Table(name = "FWZX_ROUTE")
+@Table(name = "fwzx_route")
 public class Route implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,7 +62,7 @@ public class Route implements Serializable {
     @Id
     @GenericGenerator(name = "idGenerator", strategy = "assigned")
     @GeneratedValue(generator = "idGenerator")
-    @Column(name = "ID")
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -72,7 +72,7 @@ public class Route implements Serializable {
     }
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "PROJECT_ID")/*这里不能定义被关联的列*/
+    @JoinColumn(name = "project_id")/*这里不能定义被关联的列*/
     public Project getProject() {
         return project;
     }
@@ -81,7 +81,7 @@ public class Route implements Serializable {
         this.project = project;
     }
 
-    @Column(name = "SERVER_NAME")
+    @Column(name = "server_name")
     @NotEmpty(message = "接口的名称不能为空")
     public String getServerName() {
         return serverName;
@@ -91,7 +91,7 @@ public class Route implements Serializable {
         this.serverName = serverName;
     }
 
-    @Column(name = "SERVER_ADDR")
+    @Column(name = "server_addr")
     @NotEmpty(message = "接口的名称不能为空")
     public String getServerAddr() {
         return serverAddr;
@@ -101,7 +101,7 @@ public class Route implements Serializable {
         this.serverAddr = serverAddr;
     }
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -110,7 +110,7 @@ public class Route implements Serializable {
         this.description = description;
     }
 
-    @Column(name = "DATA_RETURN_TYPE")
+    @Column(name = "data_return_type")
     public String getDataReturnType() {
         return dataReturnType;
     }
@@ -119,7 +119,7 @@ public class Route implements Serializable {
         this.dataReturnType = dataReturnType;
     }
 
-    @Column(name = "REG_TIME")
+    @Column(name = "reg_time")
     @Temporal(TemporalType.TIMESTAMP)
     public Date getRegTime() {
         return regTime;

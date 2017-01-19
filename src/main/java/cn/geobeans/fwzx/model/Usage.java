@@ -18,7 +18,7 @@ import java.util.List;
  * 调用者
  */
 @Entity
-@Table(name = "FWZX_USAGE")
+@Table(name = "fwzx_usage")
 public class Usage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public class Usage implements Serializable {
     @Id
     @GenericGenerator(name = "idGenerator", strategy = "assigned")
     @GeneratedValue(generator = "idGenerator")
-    @Column(name = "ID")
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -59,7 +59,7 @@ public class Usage implements Serializable {
     }
 
 
-    @Column(name = "IP")
+    @Column(name = "ip",unique = true)
     @NotEmpty(message = "使用者ip不能为空")
     public String getIp() {
         return ip;
@@ -69,7 +69,7 @@ public class Usage implements Serializable {
         this.ip = ip;
     }
 
-    @Column(name = "NAME")
+    @Column(name = "name")
     @NotEmpty(message = "使用者归属不能为空")
     public String getName() {
         return name;
@@ -79,7 +79,7 @@ public class Usage implements Serializable {
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -89,9 +89,9 @@ public class Usage implements Serializable {
     }
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "FWZX_USAGE_PROJECT",
-            joinColumns = {@JoinColumn(name = "USAGE_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "PROJECT_ID")})
+    @JoinTable(name = "fwzx_usage_project",
+            joinColumns = {@JoinColumn(name = "usage_id")},
+            inverseJoinColumns = {@JoinColumn(name = "project_id")})
     public List<Project> getProjectList() {
         return projectList;
     }

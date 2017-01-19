@@ -1,89 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<entitys package="sys.org.model">
+<entitys package="cn.geobeans.org.model">
+
 	<initEntity exist="0" class="OrgType" method="orgTypeService.add">
-		<entity name="学校" sn="XX"/>
-		<entity name="分校" sn="FX"/>
-		<entity name="校领导办" sn="XLDB"/>
-		<entity name="行政部门" sn="XZBM"/>
-		<entity name="教学部门" sn="JXBM"/>
-		<entity name="专业" sn="ZY"/>
-		<entity name="班级" sn="BJ"/>
-	</initEntity>
-	
-	<initEntity package="sys.init.dto" exist="0" class="InitOrgTypeRuleDto" method="orgTypeService.addOrgTypeRule">
-		<entity psn="XX" csn="FX" num="90"/>
-		<entity psn="XX" csn="XLDB" num="90"/>
-		<entity psn="XX" csn="XZBM" num="90"/>
-		<entity psn="XX" csn="JXBM" num="90"/>
-		<entity psn="FX" csn="JXBM" num="90"/>
-		<entity psn="FX" csn="XZBM" num="90"/>
-		<entity psn="JXBM" csn="ZY" num="90"/>
-		<entity psn="JXBM" csn="BJ" num="90"/>
-		<entity psn="ZY" csn="BJ" num="90"/>
+		<entity id="1" name="海关总署缉私局" sn="HGZS_JSJ"/>
+		<entity id="2" name="广州海关缉私局" sn="GZ_HGJSJ"/>
+		<entity id="3" name="深圳海关缉私局" sn="SZ_HGJSJ"/>
+		<entity id="4" name="北京海关缉私局" sn="BJ_HGJSJ"/>
+		<entity id="5" name="天津海关缉私局" sn="TJ_HGJSJ"/>
 	</initEntity>
 
-	<initEntity exist="0" class="Org" method="orgService.add">
-		<entity name="昭通学院" typeId="1" typeName="学校" managerType="0">
-			<entity name="学生处" typeId="4" typeName="行政部门" managerType="1"/>
-			<entity name="教务处" typeId="4" typeName="行政部门" managerType="2"/>
-			<entity name="中文系" typeId="5" typeName="教学部门" managerType="0">
-				<entity name="汉语言文学" typeId="6" typeName="专业" managerType="1">
-					<entity name="2009汉语言文学1班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2009汉语言文学2班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2010汉语言文学1班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2010汉语言文学2班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2011汉语言文学1班" typeId="7" typeName="班级" managerType="1"/>
-				</entity>
-			</entity>
-			<entity name="计科系" typeId="5" typeName="教学部门" managerType="1">
-				<entity name="计算机应用技术" typeId="6" typeName="专业" managerType="1">
-					<entity name="2009计算机应用技术1班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2009计算机应用技术2班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2010计算机应用技术1班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2010计算机应用技术2班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2011计算机应用技术1班" typeId="7" typeName="班级" managerType="1"/>
-				</entity>
-				<entity name="计算机信息管理" typeId="6" typeName="专业" managerType="1">
-					<entity name="2009计算机信息管理1班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2009计算机信息管理2班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2010计算机信息管理1班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2010计算机信息管理2班" typeId="7" typeName="班级" managerType="1"/>
-					<entity name="2011计算机信息管理1班" typeId="7" typeName="班级" managerType="1"/>
-				</entity>
+
+	<initEntity exist="0" class="OrgTypeRule" method="orgTypeService.addOrgTypeRule">
+		<entity id="1" pid="1" cid="2" num="90"/>
+		<entity id="2" pid="1" cid="4" num="90"/>
+		<entity id="3" pid="1" cid="5" num="90"/>
+		<entity id="4" pid="2" cid="3" num="90"/>
+	</initEntity>
+
+	<initEntity exist="0" class="Org" method="orgService.addInitOrg">
+		<entity id="1" name="海关总署缉私局"  orderNum="1" typeId="1" typeName="海关总署缉私局" managerType="0">
+			<entity id="2" name="北京海关缉私局" orderNum="1" typeId="4" typeName="北京海关缉私局" managerType="1"/>
+			<entity id="3" name="天津海关缉私局" orderNum="2" typeId="5" typeName="天津海关缉私局" managerType="2"/>
+			<entity id="4" name="广州海关缉私局" orderNum="3" typeId="2" typeName="广州海关缉私局" managerType="0">
+				<entity id="5" name="深圳海关缉私局" orderNum="1" typeId="3" typeName="深圳海关缉私局" managerType="1"/>
 			</entity>
 		</entity>
 	</initEntity>
 
+
 	<initEntity exist="0" class="Person" method="personService.add">
-		<entity name="张三" sex="1"/>
-		<entity name="李四" sex="0"/>
-		<entity name="王五" sex="0"/>
-		<entity name="赵六" sex="0"/>
-		<entity name="曹操" sex="1"/>
-		<entity name="孙权" sex="1"/>
-		<entity name="刘备" sex="1"/>
-		<entity name="大乔" sex="0"/>
-		<entity name="小乔" sex="0"/>
+		<entity id="1" name="张局长" sex="1"/>
+		<entity id="2" name="李副局长" sex="1"/>
+		<entity id="3" name="王处长" sex="1"/>
+		<entity id="4" name="赵副处长" sex="0"/>
+		<entity id="5" name="孙科长" sex="0"/>
 	</initEntity>
 
 	<initEntity exist="0" class="Position" method="positionService.add">
-		<entity name="校长" sn="XZ"/>
-		<entity name="副校长" sn="FXZ"/>
-		<entity name="处长" sn="CZ"/>
-		<entity name="副处长" sn="FCZ"/>
-		<entity name="科长" sn="KZ"/>
-		<entity name="辅导员" sn="FDY"/>
-		<entity name="班主任" sn="BZR"/>
+		<entity id="1" name="局长" sn="JZ"/>
+		<entity id="2" name="副局长" sn="FJZ"/>
+		<entity id="3" name="处长" sn="CZ"/>
+		<entity id="4" name="副处长" sn="FCZ"/>
+		<entity id="5" name="科长" sn="KZ"/>
 	</initEntity>
 
+
 	<initEntity exist="0" class="PersonOrgPos" method="personService.addPersonOrgPos">
-		<entity personId="1" orgId="2" posId="3"/>
-		<entity personId="2" orgId="3" posId="3"/>
-		<entity personId="3" orgId="4" posId="3"/>
-		<entity personId="4" orgId="5" posId="6"/>
-		<entity personId="5" orgId="6" posId="7"/>
-		<entity personId="6" orgId="7" posId="7"/>
-		<entity personId="7" orgId="8" posId="7"/>
-		<entity personId="9" orgId="10" posId="7"/>
+		<entity id="1" personId="1" orgId="1" posId="1"/>
+		<entity id="2" personId="2" orgId="2" posId="2"/>
+		<entity id="3" personId="3" orgId="3" posId="3"/>
+		<entity id="4" personId="4" orgId="4" posId="4"/>
+		<entity id="5" personId="5" orgId="5" posId="5"/>
 	</initEntity>
 </entitys>

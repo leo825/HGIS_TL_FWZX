@@ -6,7 +6,6 @@ import cn.geobeans.fwzx.model.Project;
 import com.leo.util.StringUtil;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,24 +13,24 @@ import java.util.List;
  */
 
 @Repository("projectDao")
-public class ProjectDaoImpl extends BaseDaoImpl<Project> implements ProjectDao{
+public class ProjectDaoImpl extends BaseDaoImpl<Project> implements ProjectDao {
     /**
      * 根据过滤条件name和provider获取所有符合的应用
      *
-     * @param projectName     应用的名称
+     * @param name     应用的名称
      * @param provider 应用的提供者
      * @return 返回符合过滤条件的应用的List
      */
     @Override
-    public List<Project> getListByNameOrProvider(String projectName, String provider) {
-        String hql = "select project from Project project where";
-        if(!StringUtil.isNull(projectName)){
-            hql += " project.name=?";
+    public List<Project> getListByParams(String name, String provider) {
+        String hql = "select project from Project project where 1=1";
+        if (!StringUtil.isNull(name)) {
+            hql += " and project.name='" + name + "'";
         }
-        if(!StringUtil.isNull(provider)){
-            hql += " project.provider=?";
+        if (!StringUtil.isNull(provider)) {
+            hql += " and project.provider='" + provider + "'";
         }
-        return super.list(hql,projectName,provider);
+        return super.list(hql);
     }
 
     /**
@@ -41,17 +40,28 @@ public class ProjectDaoImpl extends BaseDaoImpl<Project> implements ProjectDao{
      */
     @Override
     public List<String> getAllProviders() {
-        return null;
+        String hql = "select distinct project.provider from Project project";
+        return super.listObj(hql);
     }
 
     /**
-     * 精确获取某个时间的所有应用
+     * 精确获取某个时间的某个提供者提供的所有应用
      *
-     * @param date 时间，格式为：yyyy-MM-dd
-     * @return 返回应用的List
+     * @param year     某一年
+     * @param month    某一月,0表示这个参数为空
+     * @param provider 某一个提供者
+     * @return 返回符合条件的应用列表
      */
     @Override
-    public List<Project> getProjectsByDate(Date date) {
-        return null;
+    public List<Project> getProjectsByParams(int year, int month, String provider) {
+        String hql = "select project from Project project where year(project.regTime)=?";
+        if (month != 0) {
+            hql += " and month(project.regTime)=" + month;
+        }
+        if (!StringUtil.isNull(provider)) {
+            hql += " and project.provider='" + provider + "'";
+        }
+        return super.list(hql, year);
     }
+
 }

@@ -3,7 +3,6 @@ package cn.geobeans.fwzx.service;
 import cn.geobeans.fwzx.model.Project;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author liuxi E-mail:15895982509@163.com
@@ -12,98 +11,95 @@ import java.util.Map;
 public interface ProjectService {
 
     /**
-     * 插入一个外部应用对象
+     * 添加一个应用
      *
-     * @param model
-     * @return
+     * @param model 一个应用实例
      */
-    public int insert(Project model);
+    public void add(Project model);
+
 
     /**
-     * 通过删除一个应用对象
+     * 通过应用id删除一个应用
      *
-     * @param id
-     * @return
+     * @param id 应用id
      */
-    public int delete(String id);
+    public void delete(String id);
 
     /**
-     * 通过id查找一个对象
+     * 通过id获取一个应用实例
      *
-     * @param id
-     * @return ProgramModel
+     * @param id 应用id
+     * @return 返回一个应用实例
      */
-    public Project get(String id);
+    public Project load(String id);
 
     /**
-     * 更新操作对象
-     *
-     * @param model
-     * @return int
+     * 更新一个应用
+     * @param model 更新的应用
      */
-    public int update(Project model);
+    public void update(Project model);
+
 
     /**
-     * 查找所有的对象
-     *
-     * @return List < ProgramModel >
+     * 获取所有的应用
+     * @return 返回一个应用列表
      */
     public List<Project> findList();
 
     /**
-     * 通过name和provider获取所有符合的应用
-     *
-     * @return List < ProjectModel >
+     * 根据过滤条件name和provider获取所有符合的应用
+     * @param name 应用名称
+     * @param provider 应用提供者
+     * @return 返回应用符合条件的应用的列表
      */
-    public List<Map<String, Object>> getListByNameOrProvider(String name, String provider, String userId);
+
+    public List<Project> getListByParams(String name, String provider);
 
 
     /**
      * 获取所有的提供者
      *
-     * @return List
+     * @return 返回应用提供者列表
      */
     public List<String> getAllProviders();
 
-    /**
-     * 通过应用名来获取应用
-     */
-    public Project getProjectByName(String name);
 
     /**
-     * 统计每个月提供应用的数量
+     * 统计某年某月提供的应用数量
+     * @param year 某一年
+     * @param month 某一月
+     * @return 返回某年某月应用的的数量
      */
-    public int getProjectCountByMonth(String yearMonth);
+    public int getProjectCountByYearMonth(int year,int month);
 
     /**
-     * 统计每个月提供者数量
+     * 统计某年某月提供者数量
+     * @param year 某一年
+     * @param month 某一月
+     * @return 返回某年某月提供者数量
      */
-    public int getProviderCountByMonth(String yearMonth);
+    public int getProviderCountByYearMonth(int year, int month);
 
     /**
-     * 某年某个用户提供应用比例
+     * 某年某个用户提供应用所占的比例
+     * @param year 某一年
+     * @param provider 应用提供者
+     * @return 返回某个提供者提供应用所占的百分比
      */
-    public float getPercentOfProjectByYear(String year, String provider);
+    public float getPercentOfProjectByYear(int year, String provider);
 
     /**
      * 获取某一年的提供者
+     * @param year 某一年
+     * @return 返回提供者的列表
      */
-    public List<String> getProvidersByYear(String year);
+    public List<String> getProvidersByYear(int year);
 
     /**
-     * 通过名称获取应用被使用的百分比
+     * 通过应用id获取应用被使用者使用的百分比
+     * @param projectId 应用的id
+     * @return
      */
     public float getPercentOfUsages(String projectId);
 
-    /**
-     * 更新应用状态
-     */
-    public int updataProjectState(Project project);
-
-
-    /**
-     * 更新应用的审核状态
-     */
-
-    public int updateProjectCheckState(Project project);
 }

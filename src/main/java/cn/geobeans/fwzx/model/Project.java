@@ -20,7 +20,7 @@ import java.util.List;
  * 服务
  */
 @Entity
-@Table(name = "FWZX_PROJECT")
+@Table(name = "fwzx_project")
 public class Project implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -117,7 +117,7 @@ public class Project implements Serializable {
     @Id
     @GenericGenerator(name = "idGenerator", strategy = "assigned")
     @GeneratedValue(generator = "idGenerator")
-    @Column(name = "ID")
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -127,7 +127,7 @@ public class Project implements Serializable {
     }
 
 
-    @Column(name = "IP")
+    @Column(name = "ip")
     @NotEmpty(message = "应用ip不能为空")
     public String getIp() {
         return ip;
@@ -137,7 +137,7 @@ public class Project implements Serializable {
         this.ip = ip;
     }
 
-    @Column(name = "NAME", unique = true)
+    @Column(name = "name", unique = true)
     @NotEmpty(message = "应用名称不能为空")
     public String getName() {//unique 定义唯一约束，即不允许应用名重复
         return name;
@@ -147,7 +147,7 @@ public class Project implements Serializable {
         this.name = name;
     }
 
-    @Column(name = "PORT")
+    @Column(name = "port")
     public Integer getPort() {
         return port;
     }
@@ -156,7 +156,7 @@ public class Project implements Serializable {
         this.port = port;
     }
 
-    @Column(name = "STATE")
+    @Column(name = "state")
     public String getState() {
         return state;
     }
@@ -165,7 +165,7 @@ public class Project implements Serializable {
         this.state = state;
     }
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -174,7 +174,7 @@ public class Project implements Serializable {
         this.description = description;
     }
 
-    @Column(name = "REG_TIME")
+    @Column(name = "reg_time")
     @Temporal(TemporalType.TIMESTAMP)
     public Date getRegTime() {
         return regTime;
@@ -184,7 +184,7 @@ public class Project implements Serializable {
         this.regTime = regTime;
     }
 
-    @Column(name = "PROVIDER")
+    @Column(name = "provider")
     @NotEmpty(message = "应用的提供方不能为空")
     public String getProvider() {
         return provider;
@@ -194,7 +194,7 @@ public class Project implements Serializable {
         this.provider = provider;
     }
 
-    @Column(name = "FILE_NAME")
+    @Column(name = "file_name")
     public String getFileName() {
         return fileName;
     }
@@ -203,7 +203,7 @@ public class Project implements Serializable {
         this.fileName = fileName;
     }
 
-    @Column(name = "FILE_PATH")
+    @Column(name = "file_path")
     public String getFilePath() {
         return filePath;
     }
@@ -212,7 +212,7 @@ public class Project implements Serializable {
         this.filePath = filePath;
     }
 
-    @Column(name = "CHECK_STATE")
+    @Column(name = "check_state")
     public String getCheckState() {
         return checkState;
     }
@@ -221,7 +221,7 @@ public class Project implements Serializable {
         this.checkState = checkState;
     }
 
-    @Column(name = "TEST_URL")
+    @Column(name = "test_url")
     public String getTestUrl() {
         return testUrl;
     }
@@ -231,9 +231,9 @@ public class Project implements Serializable {
     }
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "FWZX_USAGE_PROJECT",
-            joinColumns = {@JoinColumn(name = "PROJECT_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "USAGE_ID")})
+    @JoinTable(name = "fwzx_usage_project",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "usage_id")})
     private List<Usage> getUsageList() {
         return usageList;
     }
@@ -249,5 +249,23 @@ public class Project implements Serializable {
 
     public void setRouteList(List<Route> routeList) {
         this.routeList = routeList;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id='" + id + '\'' +
+                ", ip='" + ip + '\'' +
+                ", name='" + name + '\'' +
+                ", port=" + port +
+                ", state='" + state + '\'' +
+                ", description='" + description + '\'' +
+                ", regTime=" + regTime +
+                ", provider='" + provider + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", checkState='" + checkState + '\'' +
+                ", testUrl='" + testUrl + '\'' +
+                '}';
     }
 }

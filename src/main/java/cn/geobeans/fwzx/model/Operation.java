@@ -21,7 +21,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "FWZX_OPERATION")
+@Table(name = "fwzx_operation")
 public class Operation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -83,7 +83,7 @@ public class Operation implements Serializable {
     @Id
     @GenericGenerator(name = "idGenerator", strategy = "assigned")
     @GeneratedValue(generator = "idGenerator")
-    @Column(name = "ID")
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -92,7 +92,7 @@ public class Operation implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "IP")
+    @Column(name = "ip")
     @NotEmpty(message = "操作的ip不能为空")
     public String getIp() {
         return ip;
@@ -102,7 +102,7 @@ public class Operation implements Serializable {
         this.ip = ip;
     }
 
-    @Column(name = "SERVER_NAME")
+    @Column(name = "server_name")
     @NotEmpty(message = "操作的接口名称不能为空")
     public String getServerName() {
         return serverName;
@@ -112,7 +112,7 @@ public class Operation implements Serializable {
         this.serverName = serverName;
     }
 
-    @Column(name = "PROJECT_NAME")
+    @Column(name = "project_name")
     @NotEmpty(message = "操作的服务名称不能为空")
     public String getProjectName() {
         return projectName;
@@ -122,7 +122,7 @@ public class Operation implements Serializable {
         this.projectName = projectName;
     }
 
-    @Column(name = "RESULT")
+    @Column(name = "result")
     @NotEmpty(message = "操作的结果不能为空")
     public String getResult() {
         return result;
@@ -132,7 +132,7 @@ public class Operation implements Serializable {
         this.result = result;
     }
 
-    @Column(name = "OPERATE_TIME")
+    @Column(name = "operate_time")
     @Temporal(TemporalType.TIMESTAMP)
     public Date getOperateTime() {
         return operateTime;
@@ -142,7 +142,7 @@ public class Operation implements Serializable {
         this.operateTime = operateTime;
     }
 
-    @Column(name = "USER_NAME")
+    @Column(name = "user_name")
     @NotEmpty(message = "操作ip的归属不能为空")
     public String getUserName() {
         return userName;
@@ -152,7 +152,7 @@ public class Operation implements Serializable {
         this.userName = userName;
     }
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }

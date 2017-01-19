@@ -12,9 +12,9 @@
 //import javax.annotation.Resource;
 //
 ///**
-// * @author liuxi E-mail:15895982509@163.com
-// * @version 创建时间:2016-3-27下午5:00:01
-// */
+//* @author liuxi E-mail:15895982509@163.com
+//* @version 创建时间:2016-3-27下午5:00:01
+//*/
 //
 //@Controller
 //@RequestMapping("/http")

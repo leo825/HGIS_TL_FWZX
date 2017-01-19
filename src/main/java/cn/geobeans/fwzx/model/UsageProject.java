@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 
 @Entity
-@Table(name = "FWZX_USAGE_PROJECT")
+@Table(name = "fwzx_usage_project")
 public class UsageProject implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,7 +33,7 @@ public class UsageProject implements Serializable {
     @Id
     @GenericGenerator(name = "idGenerator", strategy = "assigned")
     @GeneratedValue(generator = "idGenerator")
-    @Column(name = "ID")
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -42,7 +42,7 @@ public class UsageProject implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "USAGE_ID")
+    @Column(name = "usage_id")
     @NotEmpty(message = "中间表中usageId不能为空")
     public String getUsageId() {
         return usageId;
@@ -52,7 +52,7 @@ public class UsageProject implements Serializable {
         this.usageId = usageId;
     }
 
-    @Column(name = "PROJECT_ID")
+    @Column(name = "project_id")
     @NotEmpty(message = "中间表中projectId不能为空")
     public String getProjectId() {
         return projectId;
